@@ -12,6 +12,6 @@ Hi. I'm Moiz.
 - I love solving CTF challenges → [/writeups/](/writeups/)  
 - I write about things I find interesting → [/blog/](/blog/)  
 - I hold a few certs (CEH, CRTP).  
-- Reach out → [Email](mailto:rizzziom@gmail.com) | [linkedIn](https://www.linkedin.com/in/moiz-bootwala/)
+- Reach out → [Email](mailto:rizzziom@gmail.com) | [LinkedIn](https://www.linkedin.com/in/moiz-bootwala/)
 
 Bye  ╰•‿•╯

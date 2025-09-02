@@ -54,32 +54,34 @@
         <div class="writeups-grid">
           {{ range first 3 $all }}
             {{ $page := . }}
-            <article class="writeup-card">
-              {{ with .Params.cover.image }}
-                <figure class="card-cover">
-                  {{ $image := $page.Resources.Get . }}
-                  {{ if $image }}
-                    <img src="{{ $image.RelPermalink }}" alt="{{ $page.Params.cover.alt }}">
-                  {{ else }}
-                    <img src="{{ printf "%s%s" $page.RelPermalink . }}" alt="{{ $page.Params.cover.alt }}">
-                  {{ end }}
-                </figure>
-              {{ end }}
-              <div class="card-content">
-                <header class="card-header">
-                  <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-                  {{ with .Params.platform }}
-                    <span class="platform-tag">{{ . }}</span>
-                  {{ end }}
-                </header>
-                <div class="card-summary">
-                  <p>{{ .Summary }}</p>
+            <a href="{{ .RelPermalink }}">
+              <article class="writeup-card">
+                {{ with .Params.cover.image }}
+                  <figure class="card-cover">
+                    {{ $image := $page.Resources.Get . }}
+                    {{ if $image }}
+                      <img src="{{ $image.RelPermalink }}" alt="{{ $page.Params.cover.alt }}">
+                    {{ else }}
+                      <img src="{{ printf "%s%s" $page.RelPermalink . }}" alt="{{ $page.Params.cover.alt }}">
+                    {{ end }}
+                  </figure>
+                {{ end }}
+                <div class="card-content">
+                  <header class="card-header">
+                    <h3>{{ .Title }}</h3>
+                    {{ with .Params.platform }}
+                      <span class="platform-tag">{{ . }}</span>
+                    {{ end }}
+                  </header>
+                  <div class="card-summary">
+                    <p>{{ .Summary }}</p>
+                  </div>
+                  <footer class="card-footer">
+                    <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>
+                  </footer>
                 </div>
-                <footer class="card-footer">
-                  <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>
-                </footer>
-              </div>
-            </article>
+              </article>
+            </a>
           {{ end }}
         </div>
       </section>

@@ -1,0 +1,122 @@
+baseURL = "http://127.0.0.1:1313/"
+languageCode = "en-us"
+title = "ziomsec"
+theme = "PaperMod"
+enableRobotsTXT = true
+canonifyURLs = true
+
+[pagination]
+  pagerSize = 10
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS"]
+  page = ["HTML"]
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  series = "series"
+
+[params]
+  env = "production"
+  defaultTheme = "auto"
+  search = true
+  disableThemeToggle = false
+  ShowBreadCrumbs = true
+  ShowReadingTime = false
+  ShowPostNavLinks = false
+  ShowCodeCopyButtons = true
+  ShowToc = true
+  ShowRssButtonInSectionTermList = true
+  rssLimit = 30
+  comments = false
+  hideFooter = true
+  assets = {favicon = "/favicon.png"}
+
+  [params.cover]
+    linkFullImages = true
+    relative = true
+    hidden = false
+    hiddenInList = false
+    hiddenInSingle = false
+    responsiveImages = true
+
+  [params.homeInfoParams]
+    Title = "hello friend"
+    Content = ""
+
+  [[params.socialIcons]]
+    name = "rss"
+    url = "/index.xml"
+
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 10
+
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 20
+
+  [[menu.main]]
+    identifier = "writeups"
+    name = "Writeups"
+    url = "/writeups/"
+    weight = 30
+
+  [[menu.main]]
+    identifier = "blog"
+    name = "Blog"
+    url = "/blog/"
+    weight = 40
+
+  [[menu.main]]
+    identifier = "search"
+    name = "Search"
+    url = "/search/"
+    weight = 50
+
+  [[menu.main]]
+    identifier = "tryhackme"
+    name = "TryHackMe"
+    url = "/writeups/tryhackme/"
+    parent = "writeups"
+    weight = 31
+
+  [[menu.main]]
+    identifier = "hackthebox"
+    name = "HackTheBox"
+    url = "/writeups/hackthebox/"
+    parent = "writeups"
+    weight = 32
+
+  [[menu.main]]
+    identifier = "vulnhub"
+    name = "VulnHub"
+    url = "/writeups/vulnhub/"
+    parent = "writeups"
+    weight = 33
+
+  [[menu.main]]
+    identifier = "misc"
+    name = "Misc"
+    url = "/writeups/misc/"
+    parent = "writeups"
+    weight = 34
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.tableOfContents]
+    endLevel = 4
+    ordered = false
+    startLevel = 2
+  [markup.highlight]
+    codeFences = true
+    noClasses = false

@@ -1,0 +1,1 @@
+This repository contains my personal website built with Hugo and PaperMod. It hosts my writeups, blogs, and notes on infosec, red/purple teaming, and more.

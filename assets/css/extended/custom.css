@@ -1,0 +1,808 @@
+/* =================================================================
+   HOMEPAGE STYLES
+   ================================================================= */
+
+.homepage-greeting {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    text-align: center;
+}
+
+.homepage-greeting p {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    margin: 0;
+    line-height: 1.2;
+    color: var(--primary);
+    font-family: var(--font-mono, 'Times New Roman', 'Cambria', monospace);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 2s ease-out;
+}
+
+.dark .homepage-greeting p {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =================================================================
+   WRITEUPS LAYOUT STYLES
+   ================================================================= */
+
+/* Main writeups container (with sidebar layout) */
+.writeups-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.writeups-main {
+    min-width: 0; /* Prevents grid item from overflowing */
+}
+
+.writeups-sidebar {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+}
+
+/* Full-width writeups container */
+.writeups-full-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Latest writeups section */
+.latest-writeups-fullwidth {
+    margin-top: 3rem;
+    margin-bottom: 4rem;
+}
+
+.latest-writeups-fullwidth h2 {
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+    color: var(--primary);
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 0.5rem;
+    text-align: center;
+}
+
+/* Writeups grid - dynamic layout that adjusts to content */
+.writeups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+    margin-bottom: 3rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    justify-items: center;
+}
+
+/* Override for when we want equal distribution with up to 3 cards */
+.writeups-grid .writeup-card {
+    width: 100%;
+    max-width: 380px;
+}
+
+/* =================================================================
+   CARD COMPONENTS
+   ================================================================= */
+
+/* Writeup cards */
+.writeup-card {
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.writeup-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    border-color: var(--primary);
+}
+
+.card-cover img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+.card-header {
+    margin-bottom: 1rem;
+}
+
+.card-header h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+    line-height: 1.3;
+}
+
+.card-header h3 a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.card-header h3 a:hover {
+    color: var(--primary-hover);
+}
+
+.card-summary p {
+    margin: 0 0 1rem 0;
+    color: var(--secondary);
+    line-height: 1.5;
+    font-size: 0.9rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.card-footer .date {
+    color: var(--secondary);
+    font-size: 0.85rem;
+}
+
+/* =================================================================
+   CATEGORIES & NAVIGATION
+   ================================================================= */
+
+/* Categories widget for blog sidebar */
+.categories-widget {
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.categories-widget h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    color: var(--primary);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+}
+
+/* Categories section - full width layout */
+.categories-section {
+    margin-top: 4rem;
+    margin-bottom: 3rem;
+}
+
+.categories-section h2 {
+    margin-bottom: 2rem;
+    font-size: 1.6rem;
+    color: var(--primary);
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 0.5rem;
+    text-align: center;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.category-card {
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.category-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    border-color: var(--primary);
+}
+
+.category-card-content h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.category-name {
+    font-weight: 500;
+}
+
+.category-count {
+    color: var(--secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* =================================================================
+   SUBCATEGORY PAGES LAYOUT
+   ================================================================= */
+
+.subcategory-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.category-writeups {
+    margin-top: 3rem;
+}
+
+.category-writeups h2 {
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    color: var(--primary);
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 0.5rem;
+}
+
+/* Simple writeups list */
+.writeups-simple-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.writeup-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.2s ease;
+}
+
+.writeup-list-item:last-child {
+    border-bottom: none;
+}
+
+.writeup-list-item:hover {
+    background: var(--theme);
+}
+
+.writeup-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: color 0.2s ease;
+}
+
+.writeup-link:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+.writeup-date {
+    color: var(--secondary);
+    font-size: 0.9rem;
+    font-weight: 400;
+    white-space: nowrap;
+}
+
+.empty-category {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--secondary);
+    font-style: italic;
+}
+
+/* =================================================================
+   PLATFORM TAGS & METADATA
+   ================================================================= */
+
+.platform-tag {
+    display: inline-block;
+    background: var(--theme);
+    color: var(--primary);
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag {
+    background: var(--theme);
+    color: var(--secondary);
+    border: 1px solid var(--border);
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* =================================================================
+   BLOG SIDEBAR STYLES
+   ================================================================= */
+
+/* All blogs list in sidebar */
+.all-blogs-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.blog-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.2s ease;
+}
+
+.blog-list-item:last-child {
+    border-bottom: none;
+}
+
+.blog-list-item:hover {
+    background: rgba(var(--primary-rgb), 0.05);
+}
+
+.blog-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    flex: 1;
+    margin-right: 1rem;
+    transition: color 0.2s ease;
+}
+
+.blog-link:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+.blog-date {
+    color: var(--secondary);
+    font-size: 0.8rem;
+    white-space: nowrap;
+    font-weight: 400;
+}
+
+/* Latest posts cards at bottom */
+.latest-posts-bottom {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border);
+}
+
+.latest-posts-bottom h2 {
+    margin-bottom: 2rem;
+    color: var(--primary);
+    font-size: 1.8rem;
+}
+
+.latest-posts-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+}
+
+.bottom-post-card {
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bottom-post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    border-color: var(--primary);
+}
+
+.bottom-card-cover {
+    margin: 0;
+}
+
+.bottom-card-cover img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.bottom-card-content {
+    padding: 1.5rem;
+}
+
+.bottom-card-header {
+    margin-bottom: 1rem;
+}
+
+.bottom-card-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+.bottom-card-header h3 a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.bottom-card-header h3 a:hover {
+    color: var(--primary-hover);
+}
+
+.bottom-card-summary {
+    margin-bottom: 1rem;
+}
+
+.bottom-card-summary p {
+    margin: 0;
+    color: var(--secondary);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.bottom-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.bottom-card-footer .date {
+    color: var(--secondary);
+    font-size: 0.85rem;
+}
+
+/* =================================================================
+   RSS BUTTON STYLES
+   ================================================================= */
+
+/* Header RSS button */
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+.header-left {
+    flex: 1;
+}
+
+.header-right {
+    flex-shrink: 0;
+    margin-top: 0.5rem;
+}
+
+.rss-button-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background: var(--primary);
+    color: var(--theme);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid var(--primary);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rss-button-top:hover {
+    background: var(--theme);
+    color: var(--primary);
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.rss-button-top svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+/* Full-width RSS button */
+.rss-button-fullwidth-container {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.rss-button-fullwidth {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    width: 100%;
+    padding: 1rem 2rem;
+    background: var(--primary);
+    color: var(--theme);
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 1px solid var(--primary);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.5px;
+}
+
+.rss-button-fullwidth:hover {
+    background: var(--theme);
+    color: var(--primary);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.rss-button-fullwidth svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* Dark mode adjustments for RSS buttons */
+.dark .rss-button-top,
+.dark .rss-button-fullwidth {
+    background: var(--primary);
+    color: var(--theme);
+}
+
+.dark .rss-button-top:hover {
+    background: var(--theme);
+    color: var(--primary);
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+.dark .rss-button-fullwidth:hover {
+    background: var(--theme);
+    color: var(--primary);
+    box-shadow: 0 6px 12px rgba(255, 255, 255, 0.1);
+}
+
+/* =================================================================
+   RESPONSIVE DESIGN
+   ================================================================= */
+
+/* Tablet and below */
+@media (max-width: 768px) {
+    /* Homepage */
+    .homepage-greeting {
+        min-height: 50vh;
+    }
+    
+    .homepage-greeting p {
+        font-size: clamp(2.5rem, 10vw, 4rem);
+        letter-spacing: 0.05em;
+    }
+    
+    /* Writeups layout */
+    .writeups-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .writeups-sidebar {
+        position: static;
+        order: -1;
+    }
+    
+    .writeups-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem;
+        max-width: none;
+    }
+    
+    .writeups-full-container {
+        padding: 0 1rem;
+    }
+    
+    /* Categories */
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .category-card {
+        padding: 1rem;
+    }
+    
+    .latest-writeups-fullwidth h2,
+    .categories-section h2 {
+        font-size: 1.5rem;
+    }
+    
+    /* Subcategory pages */
+    .subcategory-container {
+        padding: 0 1rem;
+    }
+    
+    .writeup-item {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+    
+    .writeup-item-image {
+        width: 100%;
+        height: 150px;
+        order: -1;
+    }
+    
+    .writeup-meta {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+    
+    /* Blog layout */
+    .latest-posts-cards {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .bottom-post-card {
+        max-width: none;
+    }
+    
+    .bottom-card-cover img {
+        height: 150px;
+    }
+    
+    .bottom-card-content {
+        padding: 1.2rem;
+    }
+    
+    .all-blogs-list ul {
+        max-height: 300px;
+    }
+    
+    /* RSS buttons */
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .header-right {
+        margin-top: 0;
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    .rss-button-top {
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+    }
+    
+    .rss-button-top svg {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .rss-button-fullwidth {
+        font-size: 0.9rem;
+        padding: 0.8rem 1.5rem;
+        letter-spacing: 0.3px;
+    }
+    
+    .rss-button-fullwidth svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    /* Layout adjustments */
+    .writeups-container {
+        gap: 1.5rem;
+    }
+    
+    .writeups-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .card-content {
+        padding: 1rem;
+    }
+    
+    .categories-widget {
+        padding: 1rem;
+    }
+    
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Subcategory pages */
+    .writeup-item {
+        padding: 1rem;
+    }
+    
+    .writeup-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    /* RSS buttons */
+    .header-content {
+        gap: 0.8rem;
+    }
+    
+    .rss-button-top {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .rss-button-fullwidth-container {
+        margin-top: 1rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .rss-button-fullwidth {
+        font-size: 0.85rem;
+        padding: 0.7rem 1rem;
+        letter-spacing: 0.2px;
+    }
+    
+    .rss-button-fullwidth svg {
+        width: 16px;
+        height: 16px;
+    }
+}

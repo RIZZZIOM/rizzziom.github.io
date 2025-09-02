@@ -1,0 +1,120 @@
+{{ define "main" }}
+<main class="main">
+  {{ if eq .RelPermalink "/writeups/" }}
+    <!-- Main writeups landing page layout -->
+    <div class="writeups-full-container">
+      <!-- Main content area - full width -->
+      <article class="post-single">
+        <header class="post-header">
+          <div class="header-content">
+            <div class="header-left">
+              <h1 class="post-title">{{ .Title }}</h1>
+              {{ with .Params.description }}<div class="post-description">{{ . }}</div>{{ end }}
+            </div>
+            <div class="header-right">
+              <!-- RSS Button for Writeups -->
+              <a href="{{ .RelPermalink }}index.xml" class="rss-button-top" title="Subscribe to {{ .Title }} RSS feed">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 11a9 9 0 0 1 9 9"></path>
+                  <path d="M4 4a16 16 0 0 1 16 16"></path>
+                  <circle cx="5" cy="19" r="1"></circle>
+                </svg>
+                RSS Feed
+              </a>
+            </div>
+          </div>
+        </header>
+        <div class="post-content">
+          {{ .Content }}
+        </div>
+      </article>
+
+      {{ $all := (where site.RegularPages "Section" "writeups").ByDate.Reverse }}
+
+      <!-- Categories section - above latest writeups -->
+      {{ if .Sections }}
+        <section class="categories-section">
+          <h2>Browse by Category</h2>
+          <div class="categories-grid">
+            {{ range .Sections }}
+              <a href="{{ .RelPermalink }}" class="category-card">
+                <div class="category-card-content">
+                  <h3 class="category-name">{{ .Title }}</h3>
+                  <span class="category-count">{{ len .RegularPages }} writeups</span>
+                </div>
+              </a>
+            {{ end }}
+          </div>
+        </section>
+      {{ end }}
+
+      <!-- Latest writeups section - full width -->
+      <section class="latest-writeups-fullwidth">
+        <h2>Latest Writeups</h2>
+        <div class="writeups-grid">
+          {{ range first 3 $all }}
+            {{ $page := . }}
+            <article class="writeup-card">
+              {{ with .Params.cover.image }}
+                <figure class="card-cover">
+                  {{ $image := $page.Resources.Get . }}
+                  {{ if $image }}
+                    <img src="{{ $image.RelPermalink }}" alt="{{ $page.Params.cover.alt }}">
+                  {{ else }}
+                    <img src="{{ printf "%s%s" $page.RelPermalink . }}" alt="{{ $page.Params.cover.alt }}">
+                  {{ end }}
+                </figure>
+              {{ end }}
+              <div class="card-content">
+                <header class="card-header">
+                  <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+                  {{ with .Params.platform }}
+                    <span class="platform-tag">{{ . }}</span>
+                  {{ end }}
+                </header>
+                <div class="card-summary">
+                  <p>{{ .Summary }}</p>
+                </div>
+                <footer class="card-footer">
+                  <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>
+                </footer>
+              </div>
+            </article>
+          {{ end }}
+        </div>
+      </section>
+    </div>
+  {{ else }}
+    <!-- Subcategory pages (tryhackme, hackthebox, vulnhub, misc) -->
+    <div class="subcategory-container">
+      <article class="post-single">
+        <header class="post-header">
+          <h1 class="post-title">{{ .Title }}</h1>
+          {{ with .Params.description }}<div class="post-description">{{ . }}</div>{{ end }}
+        </header>
+        <div class="post-content">
+          {{ .Content }}
+        </div>
+      </article>
+
+      {{ if .RegularPages }}
+        <section class="category-writeups">
+          <h2>Index of {{ .Title }}</h2>
+          <ul class="writeups-simple-list">
+            {{ range .RegularPages.ByDate.Reverse }}
+              <li class="writeup-list-item">
+                <a href="{{ .RelPermalink }}" class="writeup-link">{{ .Title }}</a>
+                <span class="writeup-date">{{ .Date.Format "January 2, 2006" }}</span>
+              </li>
+            {{ end }}
+          </ul>
+        </section>
+      {{ else }}
+        <div class="empty-category">
+          <p>No writeups available in this category yet. Check back soon!</p>
+        </div>
+      {{ end }}
+    </div>
+  {{ end }}
+</main>
+{{ end }}

@@ -1,0 +1,30 @@
+# === Backup/tmp/log files ===
+*~
+*.swp
+*.bak
+*.tmp
+*.log
+
+# === Hugo build output ===
+public/
+resources/
+hugo_stats.json
+.hugo_build.lock
+
+# === OS junk ===
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# === VS junk ===
+.vscode
+*.code-workspace
+
+# === Obsidian junk ===
+.obsidian
+
+# === Environment and local config ===
+.env
+.env.local
+*.local

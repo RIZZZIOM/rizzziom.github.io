@@ -5,7 +5,7 @@ showToc: false
 ShowBreadCrumbs: false
 ---
 
-Hi. I'm Moiz.  
+Hi. I'm Moiz Bootwala.  
 
 - I like infosec, coffee, gym, and many other things.  
 - I build tools for fun → [GitHub](https://github.com/RIZZZIOM)  

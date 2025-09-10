@@ -115,6 +115,7 @@ ssh -i private.key oscp@TARGET
 ![](images/14.png)
 
 I got initial access to the system.
+
 ## Privilege Escalation
 
 The challenge description mentioned that the flag was present inside the */root* directory. So, I tried downloaded **linux smart enumeration** script from **github** to enumerate privilege escalation vectors.
@@ -151,7 +152,8 @@ The **bash -p** command starts a new instance of the Bash shell in "privileged" 
 With root access, I captured the flag from the *root* directory.
 
 ![](images/18.png)
-# CLOSURE
+
+## Closure
 
 Here's a short summary of how I pwned the system:
 - I found a username from the webpage: *oscp*.

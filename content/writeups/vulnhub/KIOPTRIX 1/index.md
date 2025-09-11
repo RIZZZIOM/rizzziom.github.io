@@ -13,7 +13,7 @@ cover:
   alt: "Kioptrix-1 cover"
 platform: "VulnHub"
 ---
-The object of Kioptix 1 is to acquire root access via any means possible.
+The objective of Kioptix 1 is to acquire root access via any means possible.
 <!--more-->
 To download Kioptrix level 1, click on the link given below:
 - https://www.vulnhub.com/entry/kioptrix-level-1-1,22

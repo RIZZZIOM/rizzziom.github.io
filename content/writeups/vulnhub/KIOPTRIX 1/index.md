@@ -1,6 +1,6 @@
 ---
 title: "Kioptrix 1"
-date: 2024-05-1
+date: 2024-05-01
 draft: false
 summary: "Writeup for Kioptrix level 1 of the Kioptrix series challenge on VulnHub."
 tags: ["linux", "http", "smb"]

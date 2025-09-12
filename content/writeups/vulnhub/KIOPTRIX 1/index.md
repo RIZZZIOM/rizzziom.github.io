@@ -8,7 +8,7 @@ categories: ["writeups"]
 series: []
 showToc: true
 cover:
-  image: "images/cover.png"
+  image: "https://cdn.ziomsec.com/kioptrix1/cover.png"
   caption: "Kioptrix 1 VulnHub Challenge"
   alt: "Kioptrix-1 cover"
 platform: "VulnHub"
@@ -40,14 +40,14 @@ nmap -A -p- TARGET --min-rate 10000
 | 139      | smb         |
 | 443      | https       |
 
-![](images/1.png)
-![](images/2.png)
+![](https://cdn.ziomsec.com/kioptrix1/1.png)
+![](https://cdn.ziomsec.com/kioptrix1/2.png)
 
 ## Exploitation Apache For Root Access
 
 I accessed the web application running on port 80 through my browser but found nothing interesting.
 
-![](images/3.png)
+![](https://cdn.ziomsec.com/kioptrix1/3.png)
 
 I then ran a scan using **nikto**. It revealed an outdated **Apache mod_ssl** version running on the server.
 
@@ -55,7 +55,7 @@ I then ran a scan using **nikto**. It revealed an outdated **Apache mod_ssl** ve
 nikto -h http://TARGET
 ```
 
-![](images/4.png)
+![](https://cdn.ziomsec.com/kioptrix1/4.png)
 
 I searched for any exploits for these versions and found the below repository:
 - https://github.com/heltonWernik/OpenLuck
@@ -151,7 +151,7 @@ $ ./a.out
 
 The `nikto` scan provided insights into the platform type and Apache version, leaving me with two options: `0x6a` and `0x6b`. After attempting both, I successfully gained access as root using `0x6b`.
 
-![](images/5.png)
+![](https://cdn.ziomsec.com/kioptrix1/5.png)
 
 ```bash
 $ ./a.out 0x6b 192.168.1.104 443 -c 40
@@ -284,7 +284,7 @@ The nmap scan revealed an SMB service running on the target. To delve deeper and
 enum4linux TARGET
 ```
 
-![](images/6.png)
+![](https://cdn.ziomsec.com/kioptrix1/6.png)
 
 **enum4linux** did not reveal anything interesting, so I switched to **metasploit** and searched for **auxiliary** modules to gather SMB information.
 
@@ -292,11 +292,11 @@ enum4linux TARGET
 > search auxiliary scanner smb
 ```
 
-![](images/7.png)
+![](https://cdn.ziomsec.com/kioptrix1/7.png)
 
 I used the module: `auxiliary/scanner/smb/smb_scanner` to detect the SMB version.
 
-![](images/8.png)
+![](https://cdn.ziomsec.com/kioptrix1/8.png)
 
 After identifying the SMB version, I looked for its exploits
 
@@ -304,16 +304,16 @@ After identifying the SMB version, I looked for its exploits
 > search exploit samba 2.2
 ```
 
-![](images/9.png)
+![](https://cdn.ziomsec.com/kioptrix1/9.png)
 
 I then used the `linux/samba/trans2open` module to exploit the vulnerability and get root access.
 > Alternatively, https://www.exploit-db.com/exploits/10 could also be used.
 
-![](images/10.png)
+![](https://cdn.ziomsec.com/kioptrix1/10.png)
 
 > The *Meterpreter* shell failed to spawn so I used a generic shell instead.
 
-![](images/11.png)
+![](https://cdn.ziomsec.com/kioptrix1/11.png)
 
 Finally, the flag could be found in the */var/mail* directory.
 
@@ -321,7 +321,7 @@ Finally, the flag could be found in the */var/mail* directory.
 cat /var/mail/root
 ```
 
-![](images/12.png)
+![](https://cdn.ziomsec.com/kioptrix1/12.png)
 
 ## Closure
 

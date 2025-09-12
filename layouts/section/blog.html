@@ -37,11 +37,15 @@
             <article class="bottom-post-card">
               {{ with .Params.cover.image }}
                 <figure class="bottom-card-cover">
-                  {{ $image := $page.Resources.Get . }}
-                  {{ if $image }}
-                    <img src="{{ $image.RelPermalink }}" alt="{{ $page.Params.cover.alt }}">
+                  {{ if hasPrefix . "https" }}
+                    <img src="{{ . }}" alt="{{ $page.Params.cover.alt }}">
                   {{ else }}
-                    <img src="{{ printf "%s%s" $page.RelPermalink . }}" alt="{{ $page.Params.cover.alt }}">
+                    {{ $image := $page.Resources.Get . }}
+                    {{ if $image }}
+                      <img src="{{ $image.RelPermalink }}" alt="{{ $page.Params.cover.alt }}">
+                    {{ else }}
+                      <img src="{{ printf "%s%s" $page.RelPermalink . }}" alt="{{ $page.Params.cover.alt }}">
+                    {{ end }}
                   {{ end }}
                 </figure>
               {{ end }}

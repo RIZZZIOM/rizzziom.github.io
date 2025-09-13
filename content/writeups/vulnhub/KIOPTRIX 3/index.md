@@ -90,7 +90,7 @@ export TERM=xterm
 python -c 'import pty; pty.spawn("/bin/bash")'
 ```
 
-## Getting User Access
+### Getting User Access
 
 I navigated to the *home* directory and discovered two additional users.
 

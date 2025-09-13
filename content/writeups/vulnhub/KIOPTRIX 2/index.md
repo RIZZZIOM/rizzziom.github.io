@@ -3,7 +3,7 @@ title: "Kioptrix 2"
 date: 2024-05-05
 draft: false
 summary: "Writeup for Kioptrix level 2 of the Kioptrix series challenge on VulnHub."
-tags: ["linux", "command injection", "kernel exploit"]
+tags: ["kioptrix", "linux", "command injection", "kernel exploit"]
 categories: ["writeups"]
 series: []
 showToc: true

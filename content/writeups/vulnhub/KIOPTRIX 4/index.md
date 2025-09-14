@@ -3,7 +3,7 @@ title: "Kioptrix 4"
 date: 2024-05-15
 draft: false
 summary: "Writeup for Kioptrix level 4 of the Kioptrix series challenge on VulnHub."
-tags: ["linux", "sql injection", "suid"]
+tags: ["kioptrix", "linux", "sql injection", "suid"]
 categories: ["writeups"]
 series: []
 showToc: true

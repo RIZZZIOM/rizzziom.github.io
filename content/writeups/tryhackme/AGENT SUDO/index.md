@@ -3,7 +3,7 @@ title: "Agent Sudo"
 date: 2024-07-02
 draft: false
 summary: "Writeup for Agent Sudo CTF challenge on TryHackMe."
-tags: ["linux", "sudo", "stegonography", "hash crack"]
+tags: ["linux", "sudo", "steganography", "hash crack"]
 categories: ["writeups"]
 series: []
 showToc: true

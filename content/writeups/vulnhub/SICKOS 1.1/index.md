@@ -101,7 +101,6 @@ nikto -useproxy http://TARGET:3128 -h http://TARGET
 
 The scan identified a **Shellshock** vulnerability on the server.
 
-> [!INFO] About Shellshock
 > **Shellshock** (also known as Bashdoor) is a security bug in the Bash (Bourne Again Shell) command-line shell, widely used in Unix-based systems such as Linux and macOS. Discovered in September 2014, Shellshock allows attackers to execute arbitrary commands on vulnerable systems.
 
 - https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/cgi

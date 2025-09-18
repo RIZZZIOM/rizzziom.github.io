@@ -3,4 +3,4 @@ title: "Home"
 draft: false
 ---
 
-infosec, coffee, curiosity.
+Breaking. Learning. Sharing.

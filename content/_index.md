@@ -3,4 +3,4 @@ title: "Home"
 draft: false
 ---
 
-Breaking. Learning. Sharing.
+Break. Document. Repeat.

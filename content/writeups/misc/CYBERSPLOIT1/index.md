@@ -148,7 +148,7 @@ $ cat proof.txt
 
 Here's a summary of how I pwned the machine:
 - I found the username to be hardcoded in the html page.
-- I performed web fuzzing and found `/robot.txt`
+- I performed web fuzzing and found `/robots.txt`
 - I found the password in base64 encoded format in `/robots.txt`.
 - I used the username and password to get initial access.
 - I found the first flag in my home directory.

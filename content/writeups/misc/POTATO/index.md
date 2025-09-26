@@ -8,7 +8,7 @@ categories: ["writeups"]
 series: []
 showToc: true
 cover:
-  image: "https://cdn.ziomsec.com/potato/5.webp"
+  image: "https://cdn.ziomsec.com/potato/4.webp"
   caption: "Potato Proving Grounds Challenge"
   alt: "Potato cover"
 platform: "Misc"

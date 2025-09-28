@@ -1,6 +1,6 @@
 ---
 title: "Funbox Easy Enum"
-date: 2024-12-1
+date: 2024-12-01
 draft: false
 summary: "Writeup for the Funbox Easy Enum proving grounds CTF challenge."
 tags: ["linux", "sudo", "hardcoded creds"]

@@ -1,6 +1,6 @@
 ---
 title: "Two Million"
-date: 2024-09-55
+date: 2024-09-15
 draft: false
 summary: "Writeup for Two Million HackTheBox challenge."
 tags: ["linux", "api", "command injection", "kernel exploit"]

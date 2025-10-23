@@ -34,33 +34,35 @@
         <div class="latest-posts-cards">
           {{ range first 3 $all }}
             {{ $page := . }}
-            <article class="bottom-post-card">
-              {{ with .Params.cover.image }}
-                <figure class="bottom-card-cover">
-                  {{ if hasPrefix . "https" }}
-                    <img src="{{ . }}" alt="{{ $page.Params.cover.alt }}">
-                  {{ else }}
-                    {{ $image := $page.Resources.Get . }}
-                    {{ if $image }}
-                      <img src="{{ $image.RelPermalink }}" alt="{{ $page.Params.cover.alt }}">
+            <a href="{{ .RelPermalink }}">
+              <article class="bottom-post-card">
+                {{ with .Params.cover.image }}
+                  <figure class="bottom-card-cover">
+                    {{ if hasPrefix . "https" }}
+                      <img src="{{ . }}" alt="{{ $page.Params.cover.alt }}">
                     {{ else }}
-                      <img src="{{ printf "%s%s" $page.RelPermalink . }}" alt="{{ $page.Params.cover.alt }}">
+                      {{ $image := $page.Resources.Get . }}
+                      {{ if $image }}
+                        <img src="{{ $image.RelPermalink }}" alt="{{ $page.Params.cover.alt }}">
+                      {{ else }}
+                        <img src="{{ printf "%s%s" $page.RelPermalink . }}" alt="{{ $page.Params.cover.alt }}">
+                      {{ end }}
                     {{ end }}
-                  {{ end }}
-                </figure>
-              {{ end }}
-              <div class="bottom-card-content">
-                <header class="bottom-card-header">
-                  <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-                </header>
-                <div class="bottom-card-summary">
-                  <p>{{ .Summary | truncate 120 }}</p>
+                  </figure>
+                {{ end }}
+                <div class="bottom-card-content">
+                  <header class="bottom-card-header">
+                    <h3>{{ .Title }}</h3>
+                  </header>
+                  <div class="bottom-card-summary">
+                    <p>{{ .Summary | truncate 120 }}</p>
+                  </div>
+                  <footer class="bottom-card-footer">
+                    <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>
+                  </footer>
                 </div>
-                <footer class="bottom-card-footer">
-                  <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>
-                </footer>
-              </div>
-            </article>
+              </article>
+            </a>
           {{ end }}
         </div>
       </section>

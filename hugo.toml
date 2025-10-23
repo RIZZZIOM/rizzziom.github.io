@@ -82,6 +82,12 @@ canonifyURLs = true
     weight = 50
 
   [[menu.main]]
+    identifier = "tags"
+    name = "Tags"
+    url = "/tags/"
+    weight = 60
+
+  [[menu.main]]
     identifier = "tryhackme"
     name = "TryHackMe"
     url = "/writeups/tryhackme/"

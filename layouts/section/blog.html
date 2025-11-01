@@ -1,18 +1,19 @@
 {{ define "main" }}
 <main class="main">
-  <!-- Main blog landing page layout -->
-  <div class="writeups-container">
-    <!-- Main content area -->
-    <div class="writeups-main">
-      <article class="post-single">
-        <header class="post-header">
-          <h1 class="post-title">{{ .Title }}</h1>
-          {{ with .Params.description }}<div class="post-description">{{ . }}</div>{{ end }}
-          
-          <!-- RSS Button for Blog - Full width below title -->
-          <div class="rss-button-fullwidth-container">
-            <a href="{{ .RelPermalink }}index.xml" class="rss-button-fullwidth" title="Subscribe to {{ .Title }} RSS feed">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Blog landing page layout -->
+  <div class="blog-full-container">
+    <!-- Header with centered title and RSS button on right -->
+    <article class="post-single">
+      <header class="post-header">
+        <div class="header-content">
+          <div class="header-center">
+            <h1 class="post-title">{{ .Title }}</h1>
+            {{ with .Params.description }}<div class="post-description">{{ . }}</div>{{ end }}
+          </div>
+          <div class="header-right">
+            <!-- RSS Button for Blog -->
+            <a href="{{ .RelPermalink }}index.xml" class="rss-button-top" title="Subscribe to {{ .Title }} RSS feed">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 11a9 9 0 0 1 9 9"></path>
                 <path d="M4 4a16 16 0 0 1 16 16"></path>
                 <circle cx="5" cy="19" r="1"></circle>
@@ -20,70 +21,85 @@
               RSS Feed
             </a>
           </div>
-        </header>
-        <div class="post-content">
-          {{ .Content }}
         </div>
-      </article>
-
-      {{ $all := .RegularPages.ByDate.Reverse }}
-
-      <!-- Latest Posts Cards Section - Moved to bottom -->
-      <section class="latest-posts-bottom">
-        <h2>Latest Posts</h2>
-        <div class="latest-posts-cards">
-          {{ range first 3 $all }}
-            {{ $page := . }}
-            <a href="{{ .RelPermalink }}">
-              <article class="bottom-post-card">
-                {{ with .Params.cover.image }}
-                  <figure class="bottom-card-cover">
-                    {{ if hasPrefix . "https" }}
-                      <img src="{{ . }}" alt="{{ $page.Params.cover.alt }}">
-                    {{ else }}
-                      {{ $image := $page.Resources.Get . }}
-                      {{ if $image }}
-                        <img src="{{ $image.RelPermalink }}" alt="{{ $page.Params.cover.alt }}">
-                      {{ else }}
-                        <img src="{{ printf "%s%s" $page.RelPermalink . }}" alt="{{ $page.Params.cover.alt }}">
-                      {{ end }}
-                    {{ end }}
-                  </figure>
-                {{ end }}
-                <div class="bottom-card-content">
-                  <header class="bottom-card-header">
-                    <h3>{{ .Title }}</h3>
-                  </header>
-                  <div class="bottom-card-summary">
-                    <p>{{ .Summary | truncate 120 }}</p>
-                  </div>
-                  <footer class="bottom-card-footer">
-                    <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>
-                  </footer>
-                </div>
-              </article>
-            </a>
-          {{ end }}
-        </div>
-      </section>
-    </div>
-
-    <!-- Sidebar with all blogs list -->
-    <aside class="writeups-sidebar">
-      <div class="categories-widget">
-        <h3>All Blogs</h3>
-        <div class="all-blogs-list">
-          <ul>
-            {{ range $all }}
-              <li class="blog-list-item">
-                <a href="{{ .RelPermalink }}" class="blog-link">{{ .Title }}</a>
-                <span class="blog-date">{{ .Date.Format "2006-01-02" }}</span>
-              </li>
-            {{ end }}
-          </ul>
-        </div>
+      </header>
+      <div class="post-content">
+        {{ .Content }}
       </div>
-    </aside>
+    </article>
+
+    {{ $paginator := .Paginate (.RegularPages.ByDate.Reverse) }}
+
+    <!-- Latest 3 blogs in grid layout -->
+    <section class="latest-blogs-section">
+      <h2>Latest Posts</h2>
+      <div class="latest-blogs-grid">
+        {{ range first 3 .RegularPages.ByDate.Reverse }}
+          {{ $page := . }}
+          <a href="{{ .RelPermalink }}">
+            <article class="blog-card">
+              {{ with .Params.cover.image }}
+                <figure class="card-cover">
+                  {{ if hasPrefix . "https" }}
+                    <img src="{{ . }}" alt="{{ $page.Params.cover.alt }}">
+                  {{ else }}
+                    {{ $image := $page.Resources.Get . }}
+                    {{ if $image }}
+                      <img src="{{ $image.RelPermalink }}" alt="{{ $page.Params.cover.alt }}">
+                    {{ else }}
+                      <img src="{{ printf "%s%s" $page.RelPermalink . }}" alt="{{ $page.Params.cover.alt }}">
+                    {{ end }}
+                  {{ end }}
+                </figure>
+              {{ end }}
+              <div class="card-content">
+                <header class="card-header">
+                  <h3>{{ .Title }}</h3>
+                </header>
+                <div class="card-summary">
+                  <p>{{ .Summary | truncate 120 }}</p>
+                </div>
+                <footer class="card-footer">
+                  <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>
+                </footer>
+              </div>
+            </article>
+          </a>
+        {{ end }}
+      </div>
+    </section>
+
+    <!-- Index of all blogs with pagination -->
+    <section class="blog-index-section">
+      <h2>Index Of Blogs</h2>
+      <ul class="blog-index-list">
+        {{ range $paginator.Pages }}
+        <a href="{{ .RelPermalink }}" class="blog-index-item-link">
+          <li class="blog-index-item">
+            <span class="blog-index-title">{{ .Title }}</span>
+            <span class="blog-index-date">{{ .Date.Format "January 2, 2006" }}</span>
+          </li>
+        </a>
+        {{ end }}
+      </ul>
+      
+      <!-- Pagination Navigation -->
+      {{ if gt $paginator.TotalPages 1 }}
+      <nav class="pagination" role="navigation">
+        {{ if $paginator.HasPrev }}
+          <a class="pagination-prev" href="{{ $paginator.Prev.URL }}" rel="prev">← Previous</a>
+        {{ end }}
+        
+        <span class="pagination-info">
+          Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}
+        </span>
+        
+        {{ if $paginator.HasNext }}
+          <a class="pagination-next" href="{{ $paginator.Next.URL }}" rel="next">Next →</a>
+        {{ end }}
+      </nav>
+      {{ end }}
+    </section>
   </div>
 </main>
 {{ end }}

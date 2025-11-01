@@ -71,6 +71,8 @@
 .latest-writeups-fullwidth {
     margin-top: 3rem;
     margin-bottom: 4rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .latest-writeups-fullwidth h2 {
@@ -91,13 +93,13 @@
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
-    justify-items: center;
 }
 
 /* Override for when we want equal distribution with up to 3 cards */
 .writeups-grid .writeup-card {
     width: 100%;
     max-width: 380px;
+    height: 100%;
 }
 
 /* =================================================================

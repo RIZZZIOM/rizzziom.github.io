@@ -91,13 +91,13 @@
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
-    justify-items: center;
 }
 
 /* Override for when we want equal distribution with up to 3 cards */
 .writeups-grid .writeup-card {
     width: 100%;
     max-width: 380px;
+    justify-self: center;
 }
 
 /* =================================================================

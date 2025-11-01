@@ -283,6 +283,16 @@
     overflow: hidden;
 }
 
+.writeup-list-item-link {
+    text-decoration: none;
+    display: block;
+    color: inherit;
+}
+
+.writeup-list-item-link:last-child .writeup-list-item {
+    border-bottom: none;
+}
+
 .writeup-list-item {
     display: flex;
     justify-content: space-between;
@@ -292,11 +302,7 @@
     transition: background-color 0.2s ease;
 }
 
-.writeup-list-item:last-child {
-    border-bottom: none;
-}
-
-.writeup-list-item:hover {
+.writeup-list-item-link:hover .writeup-list-item {
     background: var(--theme);
 }
 
@@ -308,7 +314,7 @@
     transition: color 0.2s ease;
 }
 
-.writeup-link:hover {
+.writeup-list-item-link:hover .writeup-link {
     color: var(--primary-hover);
     text-decoration: underline;
 }

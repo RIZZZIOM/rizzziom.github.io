@@ -108,10 +108,12 @@
           <h2>Index of {{ .Title }}</h2>
           <ul class="writeups-simple-list">
             {{ range .RegularPages.ByDate.Reverse }}
-              <li class="writeup-list-item">
-                <a href="{{ .RelPermalink }}" class="writeup-link">{{ .Title }}</a>
-                <span class="writeup-date">{{ .Date.Format "January 2, 2006" }}</span>
-              </li>
+            <a href="{{ .RelPermalink }}" class="writeup-list-item-link">
+                <li class="writeup-list-item">
+                  <span class="writeup-link">{{ .Title }}</span>
+                  <span class="writeup-date">{{ .Date.Format "January 2, 2006" }}</span>
+                </li>
+              </a>
             {{ end }}
           </ul>
         </section>

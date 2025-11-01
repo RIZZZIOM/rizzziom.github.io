@@ -41,25 +41,6 @@
    WRITEUPS LAYOUT STYLES
    ================================================================= */
 
-/* Main writeups container (with sidebar layout) */
-.writeups-container {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 5rem;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-.writeups-main {
-    min-width: 0; /* Prevents grid item from overflowing */
-}
-
-.writeups-sidebar {
-    position: sticky;
-    top: 2rem;
-    height: fit-content;
-}
-
 /* Full-width writeups container */
 .writeups-full-container {
     max-width: 1400px;
@@ -178,22 +159,6 @@
 /* =================================================================
    CATEGORIES & NAVIGATION
    ================================================================= */
-
-/* Categories widget for blog sidebar */
-.categories-widget {
-    background: var(--entry);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.5rem;
-}
-
-.categories-widget h3 {
-    margin: 0 0 1rem 0;
-    font-size: 1.1rem;
-    color: var(--primary);
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 0.5rem;
-}
 
 /* Categories section - full width layout */
 .categories-section {
@@ -349,22 +314,6 @@
     letter-spacing: 0.05em;
 }
 
-.tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.tag {
-    background: var(--theme);
-    color: var(--secondary);
-    border: 1px solid var(--border);
-    padding: 0.2rem 0.5rem;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 500;
-}
-
 /* =================================================================
    BLOG LAYOUT STYLES
    ================================================================= */
@@ -515,103 +464,6 @@
 .blog-index-section .pagination {
     max-width: 1000px;
     margin: 0 auto;
-}
-
-/* =================================================================
-   PLATFORM TAGS & METADATA
-   ================================================================= */
-
-/* Latest posts cards at bottom */
-.latest-posts-bottom {
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 2px solid var(--border);
-}
-
-.latest-posts-bottom h2 {
-    margin-bottom: 2rem;
-    color: var(--primary);
-    font-size: 1.8rem;
-}
-
-.latest-posts-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    max-width: 1200px;
-}
-
-.bottom-post-card {
-    background: var(--entry);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.bottom-post-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    border-color: var(--primary);
-}
-
-.bottom-card-cover {
-    margin: 0;
-}
-
-.bottom-card-cover img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-}
-
-.bottom-card-content {
-    padding: 1.5rem;
-}
-
-.bottom-card-header {
-    margin-bottom: 1rem;
-}
-
-.bottom-card-header h3 {
-    margin: 0;
-    font-size: 1.2rem;
-    line-height: 1.3;
-    font-weight: 600;
-}
-
-.bottom-card-header h3 a {
-    color: var(--primary);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.bottom-card-header h3 a:hover {
-    color: var(--primary-hover);
-}
-
-.bottom-card-summary {
-    margin-bottom: 1rem;
-}
-
-.bottom-card-summary p {
-    margin: 0;
-    color: var(--secondary);
-    line-height: 1.6;
-    font-size: 0.95rem;
-}
-
-.bottom-card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: auto;
-}
-
-.bottom-card-footer .date {
-    color: var(--secondary);
-    font-size: 0.85rem;
 }
 
 /* =================================================================
@@ -804,16 +656,6 @@
     }
     
     /* Writeups layout */
-    .writeups-container {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    
-    .writeups-sidebar {
-        position: static;
-        order: -1;
-    }
-    
     .writeups-grid {
         grid-template-columns: 1fr !important;
         gap: 1.5rem;
@@ -842,24 +684,6 @@
     /* Subcategory pages */
     .subcategory-container {
         padding: 0 1rem;
-    }
-    
-    .writeup-item {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        padding: 1.5rem;
-    }
-    
-    .writeup-item-image {
-        width: 100%;
-        height: 150px;
-        order: -1;
-    }
-    
-    .writeup-meta {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: flex-start;
     }
     
     /* Blog layout */
@@ -962,10 +786,6 @@
 /* Mobile */
 @media (max-width: 480px) {
     /* Layout adjustments */
-    .writeups-container {
-        gap: 1.5rem;
-    }
-    
     .writeups-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
@@ -975,22 +795,8 @@
         padding: 1rem;
     }
     
-    .categories-widget {
-        padding: 1rem;
-    }
-    
     .categories-grid {
         grid-template-columns: 1fr;
-    }
-    
-    /* Subcategory pages */
-    .writeup-item {
-        padding: 1rem;
-    }
-    
-    .writeup-meta {
-        flex-direction: column;
-        gap: 0.5rem;
     }
     
     /* RSS buttons */

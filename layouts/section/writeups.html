@@ -107,7 +107,8 @@
         <section class="category-writeups">
           <h2>Index of {{ .Title }}</h2>
           <ul class="writeups-simple-list">
-            {{ range .RegularPages.ByDate.Reverse }}
+            {{ $paginator := .Paginate (.RegularPages.ByDate.Reverse) }}
+            {{ range $paginator.Pages }}
             <a href="{{ .RelPermalink }}" class="writeup-list-item-link">
                 <li class="writeup-list-item">
                   <span class="writeup-link">{{ .Title }}</span>
@@ -116,6 +117,23 @@
               </a>
             {{ end }}
           </ul>
+          
+          <!-- Pagination Navigation -->
+          {{ if gt $paginator.TotalPages 1 }}
+          <nav class="pagination" role="navigation">
+            {{ if $paginator.HasPrev }}
+              <a class="pagination-prev" href="{{ $paginator.Prev.URL }}" rel="prev">← Previous</a>
+            {{ end }}
+            
+            <span class="pagination-info">
+              Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}
+            </span>
+            
+            {{ if $paginator.HasNext }}
+              <a class="pagination-next" href="{{ $paginator.Next.URL }}" rel="next">Next →</a>
+            {{ end }}
+          </nav>
+          {{ end }}
         </section>
       {{ else }}
         <div class="empty-category">

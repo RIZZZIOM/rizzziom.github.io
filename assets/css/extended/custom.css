@@ -621,6 +621,69 @@
 }
 
 /* =================================================================
+   PAGINATION STYLES
+   ================================================================= */
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    gap: 1rem;
+}
+
+.pagination-prev,
+.pagination-next {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1.2rem;
+    background: var(--primary);
+    color: var(--theme);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid var(--primary);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pagination-prev:hover,
+.pagination-next:hover {
+    background: var(--theme);
+    color: var(--primary);
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.pagination-info {
+    color: var(--secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* Dark mode adjustments for pagination */
+.dark .pagination-prev,
+.dark .pagination-next {
+    background: var(--primary);
+    color: var(--theme);
+}
+
+.dark .pagination-prev:hover,
+.dark .pagination-next:hover {
+    background: var(--theme);
+    color: var(--primary);
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* =================================================================
    RESPONSIVE DESIGN
    ================================================================= */
 
@@ -750,6 +813,25 @@
         width: 18px;
         height: 18px;
     }
+
+    /* Pagination */
+    .pagination {
+        flex-direction: column;
+        gap: 0.8rem;
+        padding: 1rem;
+    }
+    
+    .pagination-prev,
+    .pagination-next {
+        width: 100%;
+        justify-content: center;
+        font-size: 0.85rem;
+    }
+    
+    .pagination-info {
+        font-size: 0.85rem;
+        order: -1;
+    }
 }
 
 /* Mobile */
@@ -812,3 +894,4 @@
         height: 16px;
     }
 }
+

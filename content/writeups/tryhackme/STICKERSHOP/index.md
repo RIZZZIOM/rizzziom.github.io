@@ -3,7 +3,7 @@ title: "Stickershop"
 date: 2025-02-26
 draft: false
 summary: "Writeup for Stickershop CTF challenge on TryHackMe."
-tags: ["web", "ssrf"]
+tags: ["web", "xss"]
 categories: ["writeups"]
 series: []
 showToc: true

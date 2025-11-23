@@ -133,7 +133,7 @@ I then captured the root flag from *root*'s home directory.
 
 ![](https://cdn.ziomsec.com/glitch/19.webp)
 
-## Gaining Shell As Root By Exploiting SUID On Doas
+### Gaining Shell As Root By Exploiting SUID On Doas
 
 The exploitation of **pkexec** was most likely an unintended way of gaining root access. So I again listed the binaries with **SUID** bits and this time, used the `doas` binary for privilege escalation.
 

@@ -1,6 +1,6 @@
 ---
 title: "Backtrack"
-date: 2025-12-01
+date: 2025-11-29
 draft: false
 summary: "Writeup for Backtrack CTF challenge on TryHackMe."
 tags: ["linux", "hardcoded creds", "rce", "lfi", "sudo", "tty pushback", "file upload"]

@@ -20,8 +20,8 @@ To access the machine, click on the link given below:
 - https://tryhackme.com/room/k2room
 
 > This writeup covers the solution for base camp.
-> - middle camp writeup: https://ziomsec.com/writeups/tryhackme/k2-middlecamp/
-> - summit writeup: https://ziomsec.com/writeups/tryhackme/k2-summit/
+> - middle camp writeup: https://ziomsec.com/writeups/tryhackme/k2---middle-camp/
+> - summit writeup: https://ziomsec.com/writeups/tryhackme/k2---summit/
 
 ## Reconnaissance
 

@@ -1,6 +1,6 @@
 ---
 title: "Sakura"
-date: 2025-12-13
+date: 2025-12-12
 draft: false
 summary: "Writeup for Sakura CTF challenge on TryHackMe."
 tags: ["osint"]

@@ -239,7 +239,7 @@ That is why testing Kubernetes becomes extremely important so that we can catch 
 
 This is where Kubernetes testing comes in. Tools like **[Kube-bench](https://github.com/aquasecurity/kube-bench)**, **[Trivy](https://github.com/aquasecurity/trivy)** and **[Falco](https://github.com/falcosecurity/falco)** help us automate validation and detect issues before they turn into breaches.
 
-### Benchmarking Our Cluster With Kube-bench
+### Practical 2 - Benchmarking Our Cluster With Kube-bench
 
 **Scenario**: *Perform a CIS kubernetes benchmarking assessment against an intentionally vulnerable Kubernetes cluster.*
 

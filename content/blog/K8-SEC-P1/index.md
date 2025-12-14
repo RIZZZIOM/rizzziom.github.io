@@ -3,7 +3,7 @@ title: "Kubernetes Security #1"
 date: 2025-12-14
 draft: false
 summary: "Understanding the fundamentals of Kubernetes & why testing it is important."
-tags: ["kubernetest testing"]
+tags: ["kubernetes testing"]
 categories: ["blog"]
 series: ["kubernetes"]
 showToc: true

@@ -11,7 +11,7 @@ showToc: true
 
 This blog is the first of the Kubernetes Security series where I'll talk about what Kubernetes is and why is it important for us to test it.
 <!--more-->
-**==Throughout the blog/series, I use 3 tools:==**
+**Throughout the blog/series, I use 3 tools:**
 - [docker](https://www.docker.com/get-started/) - container runtime
 - [minikube](https://minikube.sigs.k8s.io/docs/start/) - local single node cluster
 - [kubectl](https://kubernetes.io/docs/reference/kubectl/) - tool to interact with cluster
@@ -37,7 +37,7 @@ Tools like Kubernetes offer the following features:
 
 ### Practical 1 - Experiencing The Power Of K8s
 
-**Scenario**: *Spin up 10 docker containers running `alpine 3.20`.*
+**Scenario**: *Spin up 5 docker containers running `alpine 3.20`.*
 
 - Traditional way of doing this using `docker` would be:
 

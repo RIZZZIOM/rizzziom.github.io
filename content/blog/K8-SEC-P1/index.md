@@ -216,9 +216,9 @@ The **Control Plane** consists of 4 components:
 - **Etcd** → A **key-value store** of the cluster state. Stores **only cluster-related data** (not application data). All decisions by scheduler, controller manager, etc., are based on data from etcd. 
 
 **Worker Nodes** are made up of 3 components:
-- **Kubelet** : Runs the containers (e.g., Docker). Must be installed to run containers inside pods.
-- **Kube-Proxy** : Responsible for starting pods and the containers inside them. Reads the configuration and ensures the containers run properly. Talks to both the node and the container runtime.
-- **Container Runtime** : Manages **network communication** between pods and services. Works like a load balancer, routes traffic efficiently. Sends requests to the **closest and most available** pod.
+- **Kubelet** → Runs the containers (e.g., Docker). Must be installed to run containers inside pods.
+- **Kube-Proxy** → Responsible for starting pods and the containers inside them. Reads the configuration and ensures the containers run properly. Talks to both the node and the container runtime.
+- **Container Runtime** → Manages **network communication** between pods and services. Works like a load balancer, routes traffic efficiently. Sends requests to the **closest and most available** pod.
 
 ## Why Test Kubernetes?
 

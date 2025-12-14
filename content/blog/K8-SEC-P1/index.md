@@ -241,9 +241,9 @@ This is where Kubernetes testing comes in. Tools like **[Kube-bench](https://git
 
 ### Practical 2 - Benchmarking Our Cluster With Kube-bench
 
-**Scenario**: *Perform a CIS kubernetes benchmarking assessment against an intentionally vulnerable Kubernetes cluster.*
+**Scenario**: *Perform a CIS kubernetes benchmarking assessment against Minikube's Kubernetes cluster.*
 
-- For the sake of simplicity, we can just use the Kubebench tool agains the standard cluster created using **`minikube`**
+- For the sake of simplicity, we can just use the Kubebench tool against the standard cluster created using **`minikube`**
 
 ```shell
 $ minikube start

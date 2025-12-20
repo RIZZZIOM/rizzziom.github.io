@@ -2,7 +2,7 @@
 title: "Abusing Discord For C2"
 date: 2025-12-20
 draft: false
-summary: "Creating discord bot for encrypted command execution."
+summary: "Creating Discord bot for encrypted command execution."
 tags: ["c&c"]
 categories: ["blog"]
 series: ["lots"]

@@ -30,44 +30,10 @@
 
     {{ $paginator := .Paginate (.RegularPages.ByDate.Reverse) }}
 
-    <!-- Latest 3 blogs in grid layout -->
-    <section class="latest-blogs-section">
-      <h2>Latest Posts</h2>
-      <div class="latest-blogs-grid">
-        {{ range first 3 .RegularPages.ByDate.Reverse }}
-          {{ $page := . }}
-          <a href="{{ .RelPermalink }}">
-            <article class="blog-card">
-              {{ with .Params.cover.image }}
-                <figure class="card-cover">
-                  {{ if hasPrefix . "https" }}
-                    <img src="{{ . }}" alt="{{ $page.Params.cover.alt }}">
-                  {{ else }}
-                    {{ $image := $page.Resources.Get . }}
-                    {{ if $image }}
-                      <img src="{{ $image.RelPermalink }}" alt="{{ $page.Params.cover.alt }}">
-                    {{ else }}
-                      <img src="{{ printf "%s%s" $page.RelPermalink . }}" alt="{{ $page.Params.cover.alt }}">
-                    {{ end }}
-                  {{ end }}
-                </figure>
-              {{ end }}
-              <div class="card-content">
-                <header class="card-header">
-                  <h3>{{ .Title }}</h3>
-                </header>
-                <div class="card-summary">
-                  <p>{{ .Summary | truncate 120 }}</p>
-                </div>
-                <footer class="card-footer">
-                  <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>
-                </footer>
-              </div>
-            </article>
-          </a>
-        {{ end }}
-      </div>
-    </section>
+    <!-- Browse by Series Button -->
+    <div style="display: flex; justify-content: center; margin: 2rem 0;">
+      <a href="/series/" class="browse-series-btn">Browse by Series</a>
+    </div>
 
     <!-- Index of all blogs with pagination -->
     <section class="blog-index-section">
@@ -82,18 +48,15 @@
         </a>
         {{ end }}
       </ul>
-      
       <!-- Pagination Navigation -->
       {{ if gt $paginator.TotalPages 1 }}
       <nav class="pagination" role="navigation">
         {{ if $paginator.HasPrev }}
           <a class="pagination-prev" href="{{ $paginator.Prev.URL }}" rel="prev">← Previous</a>
         {{ end }}
-        
         <span class="pagination-info">
           Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}
         </span>
-        
         {{ if $paginator.HasNext }}
           <a class="pagination-next" href="{{ $paginator.Next.URL }}" rel="next">Next →</a>
         {{ end }}

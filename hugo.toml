@@ -6,7 +6,7 @@ enableRobotsTXT = true
 canonifyURLs = true
 
 [pagination]
-  pagerSize = 10
+  pagerSize = 15
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]

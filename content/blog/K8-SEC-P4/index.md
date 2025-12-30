@@ -262,7 +262,7 @@ Once configured, the Kubelet will no longer accept unauthenticated requests.
 
 ## Closure
 
-This concludes the fourth and final post of the Kubernetes security series. Each hardening control discussed here exists because there is a corresponding attack path. Understanding how clusters are broken in practice makes it easier to reason about which controls actually matter in your environment. 
+This concludes the fourth and final post of the [Kubernetes security series](https://ziomsec.com/series/kubernetes/). Each hardening control discussed here exists because there is a corresponding attack path. Understanding how clusters are broken in practice makes it easier to reason about which controls actually matter in your environment. 
 
 Throughout the series, I covered the the security lifecycle across the following areas:
 - what Kubernetes is and why it needs to be tested

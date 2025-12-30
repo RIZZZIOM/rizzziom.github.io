@@ -690,7 +690,7 @@ kubectl delete -f cron-setup.yaml
 
 ## Closure
 
-This brings us to the end of the offensive part of Kubernetes Security. In the next blog, we will look at cluster hardening techniques and recommendations.
+This brings us to the end of the offensive part of Kubernetes Security. In the [next](https://ziomsec.com/blog/k8-sec-p4/) blog, we will look at cluster hardening techniques and recommendations.
 
 Until next time `^_^`
 

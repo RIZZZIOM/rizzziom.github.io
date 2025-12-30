@@ -738,7 +738,7 @@ During testing, we always check whether the control plane endpoint is private an
 
 ## Closure
 
-Those were some of the ways we can map out the cluster and gain initial foothold. Usually, when we get the foothold, we are limited to a standard user level. Hence, the next logical step would be to elevate privileges before we perform other post exploitation tactics. In the next blog, we'll look into post exploitation tactics including privilege escalation, credential access, lateral movement and persistence in clusters.
+Those were some of the ways we can map out the cluster and gain initial foothold. Usually, when we get the foothold, we are limited to a standard user level. Hence, the next logical step would be to elevate privileges before we perform other post exploitation tactics. In the [next](https://ziomsec.com/blog/k8-sec-p3/) blog, we'll look into post exploitation tactics including privilege escalation, credential access, lateral movement and persistence in clusters.
 
 Until next time :)
 

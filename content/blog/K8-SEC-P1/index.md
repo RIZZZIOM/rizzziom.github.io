@@ -308,7 +308,7 @@ $ kube-bench run
 
 ## Closure
 
-With this, we have a solid understanding of what Kubernetes is, why is it required, and why testing it is important. In the next blog, I'll talk about how we can perform reconnaissance and gain initial foothold in the cluster.
+With this, we have a solid understanding of what Kubernetes is, why is it required, and why testing it is important. In the [next](https://ziomsec.com/blog/k8-sec-p2/) blog, I'll talk about how we can perform reconnaissance and gain initial foothold in the cluster.
 
 Until next time :)
 

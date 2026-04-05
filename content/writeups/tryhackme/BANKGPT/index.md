@@ -27,7 +27,7 @@ Whenever staff discuss procedures, internal notes, or anything that should stay 
 
 ## Capturing The Flag
 
-I accessed the LLM chatbot and from the provided link
+I accessed the LLM chatbot from the link provided on the challenge page
 
 ![](https://cdn.ziomsec.com/bankgpt/1.webp)
 

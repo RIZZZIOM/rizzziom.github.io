@@ -1,6 +1,6 @@
 ---
-title: "About - Moiz Bootwala"
-description: "Moiz Bootwala is an offensive security professional focused on red and purple teaming. Creator of ziomsec.com — CTF writeups, security research, and open-source tools."
+title: "About"
+description: ""
 showToc: false
 author: "Moiz Bootwala"
 ShowBreadCrumbs: false
@@ -16,7 +16,7 @@ Browse around:
 
 Find me elsewhere:
 - [GitHub](https://github.com/RIZZZIOM) — Tools and projects
-- [X](https://x.com/rizzziom)
+- [X / Twitter](https://x.com/rizzziom)
 - [LinkedIn](https://www.linkedin.com/in/moiz-bootwala)
 - [Email](mailto:rizzziom@gmail.com)
 

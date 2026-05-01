@@ -7,6 +7,7 @@ tags: ["c&c"]
 categories: ["blog"]
 series: ["lots"]
 showToc: true
+author: "Moiz Bootwala"
 ---
 
 While researching phishing tradecraft, I came across the **[LOTS](https://lots-project.com/)** project and decided to explore it further by building a command-and-control (C&C) channel using **Discord**.

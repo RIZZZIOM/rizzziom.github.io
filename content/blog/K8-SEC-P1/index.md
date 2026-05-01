@@ -7,6 +7,7 @@ tags: ["kubernetes testing"]
 categories: ["blog"]
 series: ["kubernetes"]
 showToc: true
+author: "Moiz Bootwala"
 ---
 
 This blog is the first of the Kubernetes Security series where I'll talk about what Kubernetes is and why is it important for us to test it.

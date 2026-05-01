@@ -2,11 +2,12 @@
 title: "Domain Enumeration With LOLBas"
 date: 2026-01-07
 draft: false
-summary: "Enumerating Active Directory Using Native Tools."
+summary: "Enumerating Active Directory Using Native Tools Found On Windows."
 tags: ["living Off The Land", "Active Directory"]
 categories: ["blog"]
 series: ["lolbas"]
 showToc: true
+author: "Moiz Bootwala"
 ---
 
 On a recent client engagement, I found myself in a Windows environment with nothing but `cmd.exe` - no Powershell, no imported modules, no fancy tooling. That got me exploring how far I could go with domain enumeration using just native Windows binaries and inspired me to write this blog. This blog covers what's possible using `cmd.exe` and `powershell` without the AD module.

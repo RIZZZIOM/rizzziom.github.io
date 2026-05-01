@@ -7,6 +7,7 @@ tags: ["kubernetes testing"]
 categories: ["blog"]
 series: ["kubernetes"]
 showToc: true
+author: "Moiz Bootwala"
 ---
 
 This blog is the second of the Kubernetes Security series where I'll talk about cluster reconnaissance and gaining initial foothold. 

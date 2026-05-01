@@ -7,6 +7,7 @@ tags: ["kubernetes testing"]
 categories: ["blog"]
 series: ["kubernetes"]
 showToc: true
+author: "Moiz Bootwala"
 ---
 
 This blog is the fourth and final post in the Kubernetes Security series. I'll talk about cluster hardening in this post to conclude this series.

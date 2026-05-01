@@ -7,6 +7,7 @@ tags: ["kubernetes testing"]
 categories: ["blog"]
 series: ["kubernetes"]
 showToc: true
+author: "Moiz Bootwala"
 ---
 
 This blog is the third in the Kubernetes Security series, where I’ll talk about privilege escalation and other post-exploitation tactics within a cluster.

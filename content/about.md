@@ -15,7 +15,7 @@ Browse around:
  - [/blog/](/blog/) — Research notes and technical deep-dives
 
 Find me elsewhere:
-- [GitHub](https://github.com/RIZZZIOM) — Tools and projects
+- [GitHub](https://github.com/RIZZZIOM)
 - [X / Twitter](https://x.com/rizzziom)
 - [LinkedIn](https://www.linkedin.com/in/moiz-bootwala)
 - [Email](mailto:rizzziom@gmail.com)

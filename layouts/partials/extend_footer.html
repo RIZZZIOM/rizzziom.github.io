@@ -1,0 +1,4 @@
+{{- /* Cloudflare Web Analytics — privacy-friendly, not blocked by ad blockers */ -}}
+{{- if hugo.IsProduction | or (eq site.Params.env "production") }}
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "YOUR_CF_TOKEN"}'></script>
+{{- end }}

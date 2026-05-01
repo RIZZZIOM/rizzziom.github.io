@@ -65,9 +65,9 @@ canonifyURLs = false
   
   [params.analytics]
     [params.analytics.google]
-      SiteVerificationTag = ""
+      SiteVerificationTag = "G-XXXXXXXXXX"
     [params.analytics.bing]
-      SiteVerificationTag = ""
+      SiteVerificationTag = "G-XXXXXXXXXX"
 
 [menu]
   [[menu.main]]

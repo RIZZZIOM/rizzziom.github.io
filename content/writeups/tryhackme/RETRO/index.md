@@ -1,5 +1,5 @@
 ---
-title: "Retro"
+title: "Retro - TryHackMe Writeup"
 date: 2024-11-21
 draft: false
 summary: "Writeup for Retro CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Retro TryHackMe Challenge"
   alt: "Retro cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Can you time travel? If not, you might want to think about the next best thing.

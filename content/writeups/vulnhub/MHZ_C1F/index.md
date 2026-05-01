@@ -1,5 +1,5 @@
 ---
-title: "MHZ_C1F"
+title: "MHZ_C1F - VulnHub Writeup"
 date: 2024-10-17
 draft: false
 summary: "Writeup for MHZ_C1F CTF challenge on VulnHub."
@@ -12,6 +12,7 @@ cover:
   caption: "MHZ_C1F VulnHub Challenge"
   alt: "MHZ_C1F cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 **MHZC1F** is a boot2root challenge comprising of 2 flags. We are required to capture them both.

@@ -1,5 +1,5 @@
 ---
-title: "Lianyu"
+title: "Lianyu - TryHackMe Writeup"
 date: 2025-10-13
 draft: false
 summary: "Writeup for Lianyu CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Lianyu TryHackMe Challenge"
   alt: "Lianyu cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 A beginner level security challenge

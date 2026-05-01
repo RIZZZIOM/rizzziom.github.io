@@ -1,5 +1,5 @@
 ---
-title: "Funbox Easy Enum"
+title: "Funbox Easy Enum - Proving Grounds Writeup"
 date: 2024-12-01
 draft: false
 summary: "Writeup for the Funbox Easy Enum proving grounds CTF challenge."
@@ -12,6 +12,7 @@ cover:
   caption: "Funbox Easy Enum Proving Grounds Challenge"
   alt: "Funbox Easy Enum cover"
 platform: "Misc"
+author: "Moiz Bootwala"
 ---
 
 **Fun Box Easy Enum** is an easy CTF challenge on **Proving Grounds** that require us to capture 2 flags hidden in it.

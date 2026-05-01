@@ -1,5 +1,5 @@
 ---
-title: "Katana"
+title: "Katana - Proving Grounds Writeup"
 date: 2024-11-15
 draft: false
 summary: "Writeup for the Katana proving grounds CTF challenge."
@@ -12,6 +12,7 @@ cover:
   caption: "Katana Proving Grounds Challenge"
   alt: "Katana cover"
 platform: "Misc"
+author: "Moiz Bootwala"
 ---
 
 Katana is CTF challenge on **Offsec's Proving Grounds** and requires us to exploit certain vulnerabilities to capture 2 flags.

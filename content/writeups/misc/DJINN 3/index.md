@@ -1,5 +1,5 @@
 ---
-title: "Djinn3"
+title: "Djinn3 - Proving Grounds Writeup"
 date: 2024-11-25
 draft: false
 summary: "Writeup for the Djinn3 proving grounds CTF challenge."
@@ -12,6 +12,7 @@ cover:
   caption: "Djinn3 Proving Grounds Challenge"
   alt: "Djinn3 cover"
 platform: "Misc"
+author: "Moiz Bootwala"
 ---
 
 **DJinn3** is a CTF challenge on **proving grounds** and requires us to capture 2 flags by hacking into it.

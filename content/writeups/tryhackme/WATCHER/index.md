@@ -1,5 +1,5 @@
 ---
-title: "Watcher"
+title: "Watcher - TryHackMe Writeup"
 date: 2024-01-19
 draft: false
 summary: "Writeup for Watcher CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Watcher TryHackMe Challenge"
   alt: "Watcher cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 A boot2root Linux machine utilising web exploits along with some common privilege escalation techniques.

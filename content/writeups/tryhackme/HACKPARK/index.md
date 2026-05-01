@@ -1,5 +1,5 @@
 ---
-title: "Hackpark"
+title: "Hackpark - TryHackMe Writeup"
 date: 2025-11-11
 draft: false
 summary: "Writeup for Hackpark CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Hackpark TryHackMe Challenge"
   alt: "Hackpark cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Bruteforce a websites login with Hydra, identify and use a public exploit then escalate your privileges on this Windows machine!

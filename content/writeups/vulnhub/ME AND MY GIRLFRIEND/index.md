@@ -1,5 +1,5 @@
 ---
-title: "Me & My Girlfriend"
+title: "Me & My Girlfriend - VulnHub Writeup"
 date: 2025-04-30
 draft: false
 summary: "Writeup for 'Me & My Girlfriend' CTF challenge on VulnHub."
@@ -12,6 +12,7 @@ cover:
   caption: "Me & My Girlfriend VulnHub Challenge"
   alt: "Me & My Girlfriend cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 This VM tells us that there are a couple of lovers namely Alice and Bob, where the couple was originally very romantic, but since Alice worked at a private company, "*Ceban Corp*", something has changed from Alice's attitude towards Bob like something is "hidden", And Bob asks for our help to get what Alice is hiding and get full access to the company!

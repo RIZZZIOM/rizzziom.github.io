@@ -1,5 +1,5 @@
 ---
-title: "Lazy Admin"
+title: "Lazy Admin - TryHackMe Writeup"
 date: 2025-05-25
 draft: false
 summary: "Writeup for Lazy Admin CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Lazy Admin TryHackMe Challenge"
   alt: "Lazy Admin cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Easy linux machine to practice your skills

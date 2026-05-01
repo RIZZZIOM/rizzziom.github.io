@@ -1,5 +1,5 @@
 ---
-title: "Steel Mountain"
+title: "Steel Mountain - TryHackMe Writeup"
 date: 2025-08-01
 draft: false
 summary: "Writeup for Steel Mountain CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Steel Mountain TryHackMe Challenge"
   alt: "Steel Mountain cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Hack into a Mr. Robot themed Windows machine. Use metasploit for initial access, utilise powershell for Windows privilege escalation enumeration and learn a new technique to get Administrator access.

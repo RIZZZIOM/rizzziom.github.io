@@ -1,5 +1,5 @@
 ---
-title: "Silver Platter"
+title: "Silver Platter - TryHackMe Writeup"
 date: 2025-08-27
 draft: false
 summary: "Writeup for Silver Platter CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Silver Platter TryHackMe Challenge"
   alt: "Silver Platter cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Can you breach the server?

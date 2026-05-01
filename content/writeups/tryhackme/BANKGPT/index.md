@@ -1,5 +1,5 @@
 ---
-title: "BankGPT"
+title: "BankGPT - TryHackMe Writeup"
 date: 2026-01-28
 draft: false
 summary: "Writeup for BankGPT CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "BankGPT TryHackMe Challenge"
   alt: "BankGPT cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 A customer service assistant used by a banking system.

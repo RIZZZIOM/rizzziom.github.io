@@ -1,5 +1,5 @@
 ---
-title: "Mountaineer"
+title: "Mountaineer - TryHackMe Writeup"
 date: 2025-06-30
 draft: false
 summary: "Writeup for Mountaineer CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Mountaineer TryHackMe Challenge"
   alt: "Mountaineer cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Will you find the flags between all these mountains?

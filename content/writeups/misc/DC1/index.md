@@ -1,5 +1,5 @@
 ---
-title: "DC-1"
+title: "DC-1 - Proving Grounds Writeup"
 date: 2024-11-07
 draft: false
 summary: "Writeup for the DC-1 proving grounds CTF challenge."
@@ -12,6 +12,7 @@ cover:
   caption: "DC-1 Proving Grounds Challenge"
   alt: "DC-1 cover"
 platform: "Misc"
+author: "Moiz Bootwala"
 ---
 
 This challenge has 2 flags and require us to capture them both by hacking into the system.

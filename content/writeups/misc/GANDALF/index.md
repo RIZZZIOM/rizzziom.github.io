@@ -1,5 +1,5 @@
 ---
-title: "Gandalf"
+title: "Gandalf - Prompt Injection Writeup"
 date: 2025-07-27
 draft: false
 summary: "Writeup for the Gandalf prompt injection challenge."
@@ -12,6 +12,7 @@ cover:
   caption: "Gandalf AI Challenge"
   alt: "Gandalf cover"
 platform: "Misc"
+author: "Moiz Bootwala"
 ---
 
 **Gandalf** is a ChatGPT based chatbot. It has 7 levels where the goal of each level is to make **Gandalf** reveal the secret password.

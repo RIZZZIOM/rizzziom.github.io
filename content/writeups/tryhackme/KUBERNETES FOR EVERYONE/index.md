@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes For Everyone"
+title: "Kubernetes For Everyone - TryHackMe Writeup"
 date: 2025-12-07
 draft: false
 summary: "Writeup for Kubernetes For Everyone CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Kubernetes For Everyone TryHackMe Challenge"
   alt: "Kubernetes For Everyone cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 A Kubernetes hacking challenge for DevOps/SRE enthusiasts.

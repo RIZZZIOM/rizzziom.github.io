@@ -1,5 +1,5 @@
 ---
-title: "Lame"
+title: "Lame - HackTheBox Writeup"
 date: 2024-09-02
 draft: false
 summary: "Writeup for Lame HackTheBox challenge."
@@ -12,6 +12,7 @@ cover:
   caption: "Lame HackTheBox Challenge"
   alt: "Lame cover"
 platform: "HackTheBox"
+author: "Moiz Bootwala"
 ---
 
 Lame is a beginner level machine, requiring only one exploit to obtain root access. It contains 2 flags - `user.txt` and `root.txt`

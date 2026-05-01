@@ -1,5 +1,5 @@
 ---
-title: "Blaster"
+title: "Blaster - TryHackMe Writeup"
 date: 2025-10-01
 draft: false
 summary: "Writeup for Blaster CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Blaster TryHackMe Challenge"
   alt: "Blaster cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 A blast from the past!

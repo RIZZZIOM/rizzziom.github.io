@@ -1,5 +1,5 @@
 ---
-title: "HealthGPT"
+title: "HealthGPT - TryHackMe Writeup"
 date: 2026-02-10
 draft: false
 summary: "Writeup for HealthGPT CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "HealthGPT TryHackMe Challenge"
   alt: "HealthGPT cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 A safety-compliant AI assistant that has strict rules against revealing sensitive internal data.

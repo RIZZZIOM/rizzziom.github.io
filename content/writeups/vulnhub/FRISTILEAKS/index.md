@@ -1,5 +1,5 @@
 ---
-title: "Fristileaks"
+title: "Fristileaks - VulnHub Writeup"
 date: 2024-06-29
 draft: false
 summary: "Writeup for Fristileaks CTF challenge on VulnHub."
@@ -12,6 +12,7 @@ cover:
   caption: "Fristileaks VulnHub Challenge"
   alt: "Fristileaks cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 Fristileaks is an easy boot2root challenge. The goal of this challenge is to capture the flag from the */root* directory.

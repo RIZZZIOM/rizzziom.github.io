@@ -1,5 +1,5 @@
 ---
-title: "CyberSploit 1"
+title: "CyberSploit 1 - Proving Grounds Writeup"
 date: 2024-09-29
 draft: false
 summary: "Writeup for the CyberSploit1 proving grounds CTF challenge."
@@ -12,6 +12,7 @@ cover:
   caption: "CyberSploit1 Proving Grounds Challenge"
   alt: "CyberSploit1 cover"
 platform: "Misc"
+author: "Moiz Bootwala"
 ---
 
 **CyberSploit** is an easy CTF challenge on Offsec's Proving Ground Play. It requires us to capture 2 flags by exploiting different vulnerabilities and misconfigurations on the target.

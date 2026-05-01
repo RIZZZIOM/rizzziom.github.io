@@ -1,5 +1,5 @@
 ---
-title: "HappyCorp"
+title: "HappyCorp - VulnHub Writeup"
 date: 2024-06-17
 draft: false
 summary: "Writeup for HappyCorp CTF challenge on VulnHub. Boot to root box exploiting NFS, SUID bits, and privilege escalation techniques."
@@ -12,6 +12,7 @@ cover:
   caption: "HappyCorp VulnHub Challenge"
   alt: "HappyCorp cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 *HappyCorp* is a boot to root box that requires us to find 2 flags by exploiting different vulnerabilities ranging from improper configurations, SUID bits etc.

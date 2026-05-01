@@ -1,5 +1,5 @@
 ---
-title: "Weasel"
+title: "Weasel - TryHackMe Writeup"
 date: 2025-03-10
 draft: false
 summary: "Writeup for Weasel CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Weasel TryHackMe Challenge"
   alt: "Weasel cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 I think the data science team has been a bit fast and loose with their project resources.

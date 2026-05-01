@@ -1,5 +1,5 @@
 ---
-title: "Git Happens"
+title: "Git Happens - TryHackMe Writeup"
 date: 2024-08-29
 draft: false
 summary: "Writeup for Git Happens CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Git Happens TryHackMe Challenge"
   alt: "Git Happens cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Boss wanted me to create a prototype, so here it is! We even used something called "version control" that made deploying this really easy!

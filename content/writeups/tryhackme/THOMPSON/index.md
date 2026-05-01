@@ -1,5 +1,5 @@
 ---
-title: "Thompson"
+title: "Thompson - TryHackMe Writeup"
 date: 2024-04-29
 draft: false
 summary: "Writeup for Thompson CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Thompson TryHackMe Challenge"
   alt: "Thompson cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 boot2root machine for FIT and bsides guatemala CTF

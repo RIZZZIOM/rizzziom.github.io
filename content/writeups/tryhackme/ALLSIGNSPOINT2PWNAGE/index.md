@@ -1,5 +1,5 @@
 ---
-title: "AllSignsPoint2Pwnage"
+title: "AllSignsPoint2Pwnage - TryHackMe Writeup"
 date: 2025-11-20
 draft: false
 summary: "Writeup for AllSignsPoint2Pwnage CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "AllSignsPoint2Pwnage TryHackMe Challenge"
   alt: "AllSignsPoint2Pwnage cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 A room that contains a rushed Windows based Digital Sign system. Can you breach it?

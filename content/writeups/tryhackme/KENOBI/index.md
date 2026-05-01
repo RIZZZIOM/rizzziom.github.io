@@ -1,5 +1,5 @@
 ---
-title: "Kenobi"
+title: "Kenobi - TryHackMe Writeup"
 date: 2024-01-31
 draft: false
 summary: "Writeup for Kenobi CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Kenobi TryHackMe Challenge"
   alt: "Kenobi cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Walkthrough on exploiting a Linux machine. Enumerate Samba for shares, manipulate a vulnerable version of proftpd and escalate your privileges with path variable manipulation.

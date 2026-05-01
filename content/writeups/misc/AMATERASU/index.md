@@ -1,5 +1,5 @@
 ---
-title: "Amaterasu"
+title: "Amaterasu - Proving Grounds Writeup"
 date: 2024-10-10
 draft: false
 summary: "Writeup for Amaterasu proving grounds CTF challenge."
@@ -12,6 +12,7 @@ cover:
   caption: "Amaterasu Proving Grounds Challenge"
   alt: "Amaterasu cover"
 platform: "Misc"
+author: "Moiz Bootwala"
 ---
 
 **Amaterasu** is an CTF challenge on Offsec's proving grounds and requires us to find 2 flags by exploiting different vulnerabilities.

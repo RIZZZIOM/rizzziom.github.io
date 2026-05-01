@@ -1,5 +1,5 @@
 ---
-title: "Dpwwn 1"
+title: "Dpwwn 1 - VulnHub Writeup"
 date: 2024-05-25
 draft: false
 summary: "Writeup for Dpwwn 1 CTF on VulnHub. A boot to root challenge requiring us to capture the flag from the root directory."
@@ -12,6 +12,7 @@ cover:
   caption: "Dpwwn VulnHub Challenge"
   alt: "Dpwwn cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 **dpwwn1** is a boot to root challenge that requires us to obtain the contents of `dpwwn-01-FLAG.txt` under */root* Directory.

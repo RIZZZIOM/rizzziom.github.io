@@ -1,5 +1,5 @@
 ---
-title: "Flag Command"
+title: "Flag Command - HackTheBox Writeup"
 date: 2025-03-05
 draft: false
 summary: "Writeup for the Flag Command HackTheBox challenge."
@@ -12,6 +12,7 @@ cover:
   caption: "Flag Command HackTheBox Challenge"
   alt: "Flag Command cover"
 platform: "HackTheBox"
+author: "Moiz Bootwala"
 ---
 
 Flag Command is a web based challenge that requires us to play a game of escaping from an alien forest.

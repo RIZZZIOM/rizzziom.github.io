@@ -1,5 +1,5 @@
 ---
-title: "Dreaming"
+title: "Dreaming - TryHackMe Writeup"
 date: 2025-10-30
 draft: false
 summary: "Writeup for Dreaming CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Dreaming TryHackMe Challenge"
   alt: "Dreaming cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Solve the riddle that dreams have woven.

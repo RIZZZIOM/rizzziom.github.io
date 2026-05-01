@@ -1,5 +1,5 @@
 ---
-title: "Blog"
+title: "Blog - TryHackMe Writeup"
 date: 2025-08-09
 draft: false
 summary: "Writeup for Blog CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Blog TryHackMe Challenge"
   alt: "Blog cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Billy Joel made a Wordpress blog!

@@ -1,5 +1,5 @@
 ---
-title: "Cap"
+title: "Cap - HackTheBox Writeup"
 date: 2024-12-31
 draft: false
 summary: "Writeup for Cap HackTheBox challenge."
@@ -12,6 +12,7 @@ cover:
   caption: "Cap HackTheBox Challenge"
   alt: "Cap cover"
 platform: "HackTheBox"
+author: "Moiz Bootwala"
 ---
 
 **CAP** is a linux based CTF challenge on Hackthebox. This machine contains 2 flags and requires us to capture them by exploiting various vulnerabilities and misconfigurations ranging from IDOR to capabilities.

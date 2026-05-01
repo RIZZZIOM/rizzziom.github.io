@@ -1,5 +1,5 @@
 ---
-title: "Enterprise"
+title: "Enterprise - TryHackMe Writeup"
 date: 2024-03-18
 draft: false
 summary: "Writeup for Enterprise CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Enterprise TryHackMe Challenge"
   alt: "Enterprise cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 You just landed in an internal network. You scan the network and there's only the Domain Controller...

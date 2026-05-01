@@ -1,5 +1,5 @@
 ---
-title: "Alfred"
+title: "Alfred - TryHackMe Writeup"
 date: 2025-03-15
 draft: false
 summary: "Writeup for Alfred CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Alfred TryHackMe Challenge"
   alt: "Alfred cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Alfred involves exploiting Jenkins to gain an initial shell, then escalate our privileges by exploiting Windows authentication tokens.

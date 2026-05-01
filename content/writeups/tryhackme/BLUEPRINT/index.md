@@ -1,5 +1,5 @@
 ---
-title: "Blueprint"
+title: "Blueprint - TryHackMe Writeup"
 date: 2025-04-10
 draft: false
 summary: "Writeup for Blueprint CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Blueprint TryHackMe Challenge"
   alt: "Blueprint cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Hack into this Windows machine and escalate your privileges to Administrator.

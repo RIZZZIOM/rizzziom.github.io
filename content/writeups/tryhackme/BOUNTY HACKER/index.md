@@ -1,5 +1,5 @@
 ---
-title: "Bounty Hacker"
+title: "Bounty Hacker - TryHackMe Writeup"
 date: 2025-06-20
 draft: false
 summary: "Writeup for Bounty Hacker CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Bounty Hacker TryHackMe Challenge"
   alt: "Bounty Hacker cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 You were boasting on and on about your elite hacker skills in the bar and a few Bounty Hunters decided they'd take you up on claims! Prove your status is more than just a few glasses at the bar. I sense bell peppers & beef in your future!

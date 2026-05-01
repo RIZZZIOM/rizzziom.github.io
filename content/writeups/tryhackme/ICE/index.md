@@ -1,5 +1,5 @@
 ---
-title: "Ice"
+title: "Ice - TryHackMe Writeup"
 date: 2025-06-30
 draft: false
 summary: "Writeup for Ice CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Ice TryHackMe Challenge"
   alt: "Ice cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Deploy & hack into a Windows machine, exploiting a very poorly secured media server.

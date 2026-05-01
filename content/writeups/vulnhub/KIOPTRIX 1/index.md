@@ -1,5 +1,5 @@
 ---
-title: "Kioptrix 1"
+title: "Kioptrix 1 - VulnHub Writeup"
 date: 2024-05-01
 draft: false
 summary: "Writeup for Kioptrix level 1 of the Kioptrix series challenge on VulnHub."
@@ -12,6 +12,7 @@ cover:
   caption: "Kioptrix 1 VulnHub Challenge"
   alt: "Kioptrix-1 cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 The objective of Kioptix 1 is to acquire root access via any means possible.
 <!--more-->

@@ -1,5 +1,5 @@
 ---
-title: "Blue"
+title: "Blue - TryHackMe Writeup"
 date: 2025-06-10
 draft: false
 summary: "Writeup for Blue CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Blue TryHackMe Challenge"
   alt: "Blue cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Deploy & hack into a Windows machine, leveraging common misconfigurations issues.

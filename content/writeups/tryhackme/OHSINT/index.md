@@ -1,5 +1,5 @@
 ---
-title: "Ohsint"
+title: "Ohsint - TryHackMe Writeup"
 date: 2024-08-17
 draft: false
 summary: "Writeup for Ohsint CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Ohsint TryHackMe Challenge"
   alt: "Ohsint cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Are you able to use open source intelligence to solve this challenge?

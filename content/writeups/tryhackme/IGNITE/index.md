@@ -1,5 +1,5 @@
 ---
-title: "Ignite"
+title: "Ignite - TryHackMe Writeup"
 date: 2025-05-13
 draft: false
 summary: "Writeup for Ignite CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Ignite TryHackMe Challenge"
   alt: "Ignite cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 A new start-up has a few issues with their web server.

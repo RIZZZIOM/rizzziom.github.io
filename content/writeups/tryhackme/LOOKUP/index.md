@@ -1,5 +1,5 @@
 ---
-title: "Lookup"
+title: "Lookup - TryHackMe Writeup"
 date: 2024-03-11
 draft: false
 summary: "Writeup for Lookup CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Lookup TryHackMe Challenge"
   alt: "Lookup cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Test your enumeration skills on this boot-to-root machine.

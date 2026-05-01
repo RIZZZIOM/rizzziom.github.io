@@ -1,5 +1,5 @@
 ---
-title: "Ultratech"
+title: "Ultratech - TryHackMe Writeup"
 date: 2024-02-28
 draft: false
 summary: "Writeup for Ultratech CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Ultratech TryHackMe Challenge"
   alt: "Ultratech cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 You have been contracted by UltraTech to pentest their infrastructure. It is a grey-box kind of assessment, the only information you have is the company's name and their server's IP address.

@@ -1,5 +1,5 @@
 ---
-title: "Stickershop"
+title: "Stickershop - TryHackMe Writeup"
 date: 2025-02-26
 draft: false
 summary: "Writeup for Stickershop CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Stickershop TryHackMe Challenge"
   alt: "Stickershop cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Can you exploit the sticker shop in order to capture the flag?

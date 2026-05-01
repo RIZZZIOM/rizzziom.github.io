@@ -1,5 +1,5 @@
 ---
-title: "Tomghost"
+title: "Tomghost - TryHackMe Writeup"
 date: 2024-11-15
 draft: false
 summary: "Writeup for Tomghost CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Tomghost TryHackMe Challenge"
   alt: "Tomghost cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Identify recent vulnerabilities to try exploit the system or read files that you should not have access to.

@@ -1,5 +1,5 @@
 ---
-title: "Kioptrix 5"
+title: "Kioptrix 5 - VulnHub Writeup"
 date: 2024-05-20
 draft: false
 summary: "Writeup for Kioptrix level 5 of the Kioptrix series challenge on VulnHub."
@@ -12,6 +12,7 @@ cover:
   caption: "Kioptrix 5 VulnHub Challenge"
   alt: "Kioptrix 5 cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 This is the final level in the Kioptrix series and has the same goal as the rest - capture the flag present in the root directory by any means possible.

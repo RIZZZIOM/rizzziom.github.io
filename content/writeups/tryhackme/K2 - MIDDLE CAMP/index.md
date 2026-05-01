@@ -1,5 +1,5 @@
 ---
-title: "K2 - Middle Camp"
+title: "K2 - Middle Camp - TryHackMe Writeup"
 date: 2025-07-30
 draft: false
 summary: "Writeup for K2 - Middle Camp CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "K2 - Middle Camp TryHackMe Challenge"
   alt: "K2 - Middle Camp cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Are you able to make your way through the mountain?

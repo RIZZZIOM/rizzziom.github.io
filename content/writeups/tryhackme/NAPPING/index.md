@@ -1,5 +1,5 @@
 ---
-title: "Napping"
+title: "Napping - TryHackMe Writeup"
 date: 2025-12-29
 draft: false
 summary: "Writeup for Napping CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Napping TryHackMe Challenge"
   alt: "Napping cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Even Admins can fall asleep on the job

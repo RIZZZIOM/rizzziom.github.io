@@ -1,5 +1,5 @@
 ---
-title: "Daily Bugle"
+title: "Daily Bugle - TryHackMe Writeup"
 date: 2024-02-14
 draft: false
 summary: "Writeup for Daily Bugle CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Daily Bugle TryHackMe Challenge"
   alt: "Daily Bugle cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Compromise a Joomla CMS account via SQLi, practise cracking hashes and escalate your privileges by taking advantage of yum.

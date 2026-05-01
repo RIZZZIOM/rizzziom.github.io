@@ -1,5 +1,5 @@
 ---
-title: "Escalate Linux"
+title: "Escalate Linux - VulnHub Writeup"
 date: 2024-06-19
 draft: false
 summary: "Writeup for Escalate Linux CTF challenge on VulnHub."
@@ -12,6 +12,7 @@ cover:
   caption: "Escalate Linux VulnHub Challenge"
   alt: "Escalate Linux cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 *Escalate Linux* is an intentionally vulnerable linux machine designed to explore various post exploitation attack scenarios.

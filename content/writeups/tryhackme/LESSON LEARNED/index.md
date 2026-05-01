@@ -1,5 +1,5 @@
 ---
-title: "Lesson Learned?"
+title: "Lesson Learned? - TryHackMe Writeup"
 date: 2025-01-03
 draft: false
 summary: "Writeup for Lesson Learned CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Lesson Learned TryHackMe Challenge"
   alt: "Lesson Learned cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Get past the login screen and you will find the flag. There are no rabbit holes, no hidden files, just a login page and a flag. Good luck!

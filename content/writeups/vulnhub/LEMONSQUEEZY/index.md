@@ -1,5 +1,5 @@
 ---
-title: "Lemonsqueezy"
+title: "Lemonsqueezy - VulnHub Writeup"
 date: 2024-07-05
 draft: false
 summary: "Writeup for Lemonsqueezy CTF challenge on VulnHub."
@@ -12,6 +12,7 @@ cover:
   caption: "Lemonsqueezy VulnHub Challenge"
   alt: "Lemonsqueezy cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 LemonSqueezy is a beginner boot2root challenge. The goal of this challenge is to capture 2 flags by hacking into the system.

@@ -1,5 +1,5 @@
 ---
-title: "Jurassic Park"
+title: "Jurassic Park - TryHackMe Writeup"
 date: 2024-01-08
 draft: false
 summary: "Writeup for Jurassic Park CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Jurassic Park TryHackMe Challenge"
   alt: "Jurassic Park cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 A Jurassic Park CTF

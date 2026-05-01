@@ -1,5 +1,5 @@
 ---
-title: "Gamezone"
+title: "Gamezone - TryHackMe Writeup"
 date: 2025-09-22
 draft: false
 summary: "Writeup for Gamezone CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Gamezone TryHackMe Challenge"
   alt: "Gamezone cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 This room will cover SQLi, cracking a users hashed password, using SSH tunnels to reveal a hidden service and using a metasploit payload to gain root privileges.

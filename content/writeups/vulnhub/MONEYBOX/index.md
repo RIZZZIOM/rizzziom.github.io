@@ -1,5 +1,5 @@
 ---
-title: "Moneybox"
+title: "Moneybox - VulnHub Writeup"
 date: 2024-10-21
 draft: false
 summary: "Writeup for Moneybox CTF challenge on VulnHub."
@@ -12,6 +12,7 @@ cover:
   caption: "Moneybox VulnHub Challenge"
   alt: "Moneybox cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 Moneybox is a boot2root challenge from Vulnhub. It has 3 flags, and our goal is to capture all of them.

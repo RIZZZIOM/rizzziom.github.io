@@ -1,5 +1,5 @@
 ---
-title: "Kioptrix 2"
+title: "Kioptrix 2 - VulnHub Writeup"
 date: 2024-05-05
 draft: false
 summary: "Writeup for Kioptrix level 2 of the Kioptrix series challenge on VulnHub."
@@ -12,6 +12,7 @@ cover:
   caption: "Kioptrix 2 VulnHub Challenge"
   alt: "Kioptrix 2 cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 *Kioptrix-2* is the second challenge in the *Kioptrix* series. The object of the game is to acquire root access via any means possible.

@@ -1,5 +1,5 @@
 ---
-title: "Sakura"
+title: "Sakura - TryHackMe Writeup"
 date: 2025-12-12
 draft: false
 summary: "Writeup for Sakura CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Sakura TryHackMe Challenge"
   alt: "Sakura cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Use a variety of OSINT techniques to solve this room created by the OSINT Dojo.

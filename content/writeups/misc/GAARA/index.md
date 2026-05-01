@@ -1,5 +1,5 @@
 ---
-title: "Gaara"
+title: "Gaara - Proving Grounds Writeup"
 date: 2024-11-01
 draft: false
 summary: "Writeup for the Gaara proving grounds CTF challenge."
@@ -12,6 +12,7 @@ cover:
   caption: "Gaara Proving Grounds Challenge"
   alt: "Gaara cover"
 platform: "Misc"
+author: "Moiz Bootwala"
 ---
 
 **Gaara** is an easy CTF challenge on Offsec'c Proving Grounds and requires us to capture 2 flags hidden in the system.

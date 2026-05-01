@@ -1,5 +1,5 @@
 ---
-title: "Kioptrix 4"
+title: "Kioptrix 4 - VulnHub Writeup"
 date: 2024-05-15
 draft: false
 summary: "Writeup for Kioptrix level 4 of the Kioptrix series challenge on VulnHub."
@@ -12,6 +12,7 @@ cover:
   caption: "Kioptrix 4 VulnHub Challenge"
   alt: "Kioptrix 4 cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 *Kioptrix 4* is yet another challenge in the **kioptrix** series and is meant for beginners. The goal of this challenge is to obtain the flag from the root directory.

@@ -1,5 +1,5 @@
 ---
-title: "Chemistry"
+title: "Chemistry - HackTheBox Writeup"
 date: 2025-01-17
 draft: false
 summary: "Writeup for Chemistry HackTheBox challenge."
@@ -12,6 +12,7 @@ cover:
   caption: "Chemistry HackTheBox Challenge"
   alt: "Chemistry cover"
 platform: "HackTheBox"
+author: "Moiz Bootwala"
 ---
 
 **Chemistry** is a web‑focused Linux machine that centers on a web application and internal services. It requires careful enumeration and multi‑step escalation to capture user and root flags.

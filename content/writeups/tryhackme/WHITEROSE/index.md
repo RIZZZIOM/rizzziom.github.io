@@ -1,5 +1,5 @@
 ---
-title: "Whiterose"
+title: "Whiterose - TryHackMe Writeup"
 date: 2024-11-10
 draft: false
 summary: "Writeup for Whiterose CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Whiterose TryHackMe Challenge"
   alt: "Whiterose cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Yet another Mr. Robot themed challenge.

@@ -1,5 +1,5 @@
 ---
-title: "K2 - Summit"
+title: "K2 - Summit - TryHackMe Writeup"
 date: 2025-08-01
 draft: false
 summary: "Writeup for K2 - Summit CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "K2 - Summit TryHackMe Challenge"
   alt: "K2 - Summit cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Are you able to make your way through the mountain?

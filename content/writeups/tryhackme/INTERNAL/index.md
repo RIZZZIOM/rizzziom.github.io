@@ -1,5 +1,5 @@
 ---
-title: "Internal"
+title: "Internal - TryHackMe Writeup"
 date: 2025-11-23
 draft: false
 summary: "Writeup for Internal CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Internal TryHackMe Challenge"
   alt: "Internal cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 You have been assigned to a client that wants a penetration test conducted on an environment due to be released to production in three weeks.

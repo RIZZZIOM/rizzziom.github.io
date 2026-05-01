@@ -1,5 +1,5 @@
 ---
-title: "White Rabbit"
+title: "White Rabbit - TryHackMe Writeup"
 date: 2026-04-18
 draft: false
 summary: "Writeup for White Rabbit CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "White Rabbit TryHackMe Challenge"
   alt: "White Rabbit cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Hello, Mr Anderson. Care to put your prompt injection skills to the test?

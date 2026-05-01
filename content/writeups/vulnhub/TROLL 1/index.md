@@ -1,5 +1,5 @@
 ---
-title: "Troll 1"
+title: "Troll 1 - VulnHub Writeup"
 date: 2024-07-10
 draft: false
 summary: "Writeup for Troll 1 CTF challenge on VulnHub."
@@ -12,6 +12,7 @@ cover:
   caption: "Troll 1 VulnHub Challenge"
   alt: "Troll 1 cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 Troll is an easy boot2root challenge on vulnhub. The goal is simple, gain root and get Proof.txt from the /root directory.

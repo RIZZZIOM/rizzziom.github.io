@@ -1,5 +1,5 @@
 ---
-title: "Relevant"
+title: "Relevant - TryHackMe Writeup"
 date: 2025-09-01
 draft: false
 summary: "Writeup for Relevant CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Relevant TryHackMe Challenge"
   alt: "Relevant cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 You have been assigned to a client that wants a penetration test conducted on an environment due to be released to production in seven days.

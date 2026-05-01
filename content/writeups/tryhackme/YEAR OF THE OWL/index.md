@@ -1,5 +1,5 @@
 ---
-title: "Year Of The Owl"
+title: "Year Of The Owl - TryHackMe Writeup"
 date: 2025-05-01
 draft: false
 summary: "Writeup for Year Of The Owl CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Year Of The Owl TryHackMe Challenge"
   alt: "Year Of The Owl cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 The foolish owl sits on his throne...

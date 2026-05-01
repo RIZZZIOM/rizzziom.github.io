@@ -1,5 +1,5 @@
 ---
-title: "Skynet"
+title: "Skynet - TryHackMe Writeup"
 date: 2025-11-24
 draft: false
 summary: "Writeup for Skynet CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Skynet TryHackMe Challenge"
   alt: "Skynet cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 A vulnerable Terminator themed Linux machine.

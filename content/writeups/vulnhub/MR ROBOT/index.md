@@ -1,5 +1,5 @@
 ---
-title: "Mr Robot"
+title: "Mr Robot - VulnHub Writeup"
 date: 2024-07-15
 draft: false
 summary: "Writeup for Mr Robot CTF challenge on VulnHub."
@@ -12,6 +12,7 @@ cover:
   caption: "Mr Robot VulnHub Challenge"
   alt: "Mr Robot cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 **Mr-Robot** is an intermediate level boot2root CTF challenge. It has three keys hidden in different locations. Our goal is to find all three. Each key is progressively difficult to find. 

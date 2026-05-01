@@ -1,5 +1,5 @@
 ---
-title: "SickOS 1"
+title: "SickOS 1 - VulnHub Writeup"
 date: 2024-07-22
 draft: false
 summary: "Writeup for SickOS 1 CTF challenge on VulnHub."
@@ -12,6 +12,7 @@ cover:
   caption: "SickOS 1 VulnHub Challenge"
   alt: "SickOS 1 cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 SickOS is a boot2root challenge with the objective of compromising the machine and gaining root privilege on it.

@@ -1,5 +1,5 @@
 ---
-title: "Pickle Rick"
+title: "Pickle Rick - TryHackMe Writeup"
 date: 2024-08-05
 draft: false
 summary: "Writeup for Pickle Rick CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Pickle Rick TryHackMe Challenge"
   alt: "Pickle Rick cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 This Rick and Morty-themed challenge requires you to exploit a web server and find three ingredients to help Rick make his potion and transform himself back into a human from a pickle.

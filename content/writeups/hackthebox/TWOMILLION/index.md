@@ -1,5 +1,5 @@
 ---
-title: "Two Million"
+title: "Two Million - HackTheBox Writeup"
 date: 2024-09-15
 draft: false
 summary: "Writeup for Two Million HackTheBox challenge."
@@ -12,6 +12,7 @@ cover:
   caption: "Two Million HackTheBox Challenge"
   alt: "Two Million cover"
 platform: "HackTheBox"
+author: "Moiz Bootwala"
 ---
 
 TwoMillion is an Easy difficulty Linux box that was released to celebrate reaching 2 million users on HackTheBox. This challenge has 2 flags.

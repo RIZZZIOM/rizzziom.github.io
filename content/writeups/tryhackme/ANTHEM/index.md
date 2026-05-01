@@ -1,5 +1,5 @@
 ---
-title: "Anthem"
+title: "Anthem - TryHackMe Writeup"
 date: 2025-02-14
 draft: false
 summary: "Writeup for Anthem CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Anthem TryHackMe Challenge"
   alt: "Anthem cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Exploit a Windows machine in this beginner level challenge.

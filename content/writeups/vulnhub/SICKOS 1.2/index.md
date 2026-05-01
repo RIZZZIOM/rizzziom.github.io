@@ -1,5 +1,5 @@
 ---
-title: "SickOS 2"
+title: "SickOS 2 - VulnHub Writeup"
 date: 2024-07-26
 draft: false
 summary: "Writeup for SickOS 2 CTF challenge on VulnHub."
@@ -12,6 +12,7 @@ cover:
   caption: "SickOS 2 VulnHub Challenge"
   alt: "SickOS 2 cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 This is the second challenge in the SickOS series. The scope of SickOS2 is to gain the highest privilege on the system.

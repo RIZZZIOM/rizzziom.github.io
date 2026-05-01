@@ -1,5 +1,5 @@
 ---
-title: "Evil GPT"
+title: "Evil GPT - TryHackMe Writeup"
 date: 2025-07-15
 draft: false
 summary: "Writeup for Evil GPT CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Evil GPT TryHackMe Challenge"
   alt: "Evil GPT cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Put your LLM hacking skills to the test

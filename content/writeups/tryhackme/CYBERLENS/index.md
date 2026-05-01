@@ -1,5 +1,5 @@
 ---
-title: "CyberLens"
+title: "CyberLens - TryHackMe Writeup"
 date: 2025-03-25
 draft: false
 summary: "Writeup for CyberLens CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "CyberLens TryHackMe Challenge"
   alt: "CyberLens cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Can you exploit the CyberLens web server and discover the hidden flags?

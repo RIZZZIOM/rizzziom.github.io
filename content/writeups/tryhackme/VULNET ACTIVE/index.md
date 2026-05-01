@@ -1,5 +1,5 @@
 ---
-title: "Vulnet Active"
+title: "Vulnet Active - TryHackMe Writeup"
 date: 2025-08-13
 draft: false
 summary: "Writeup for Vulnet Active CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Vulnet Active TryHackMe Challenge"
   alt: "Vulnet Active cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 VulnNet Entertainment just moved their entire infrastructure... Check this out...

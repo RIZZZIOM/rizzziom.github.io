@@ -1,5 +1,5 @@
 ---
-title: "Infosec OSCP prep"
+title: "Infosec OSCP prep - VulnHub Writeup"
 date: 2024-06-12
 draft: false
 summary: "Writeup for Infosec OSCP prep CTF challenge on VulnHub."
@@ -12,6 +12,7 @@ cover:
   caption: "Infosec OSCP prep VulnHub Challenge"
   alt: "Infosec OSCP prep cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 *Infosec OSCP prep* is a boot to root box that contains 1 flag in the */root/* directory.

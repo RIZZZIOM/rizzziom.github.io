@@ -1,5 +1,5 @@
 ---
-title: "Lofi"
+title: "Lofi - TryHackMe Writeup"
 date: 2025-01-28
 draft: false
 summary: "Writeup for Lofi CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Lofi TryHackMe Challenge"
   alt: "Lofi cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Want to hear some lo-fi beats, to relax or study to? We've got you covered!

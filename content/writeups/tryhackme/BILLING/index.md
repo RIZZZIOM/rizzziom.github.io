@@ -1,5 +1,5 @@
 ---
-title: "Billing"
+title: "Billing - TryHackMe Writeup"
 date: 2025-04-23
 draft: false
 summary: "Writeup for Billing CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Billing TryHackMe Challenge"
   alt: "Billing cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Some mistakes can be costly. Gain a shell, find the way and escalate your privileges!

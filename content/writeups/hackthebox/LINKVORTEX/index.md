@@ -1,5 +1,5 @@
 ---
-title: "Linkvortex"
+title: "Linkvortex - HackTheBox Writeup"
 date: 2024-12-25
 draft: false
 summary: "Writeup for Linkvortex HackTheBox challenge."
@@ -12,6 +12,7 @@ cover:
   caption: "Linkvortex HackTheBox Challenge"
   alt: "Linkvortex cover"
 platform: "HackTheBox"
+author: "Moiz Bootwala"
 ---
 
 LinkVortex is an easy-difficulty Linux machine with various ways to leverage symbolic link files (symlinks). This machine contains 2 flags.

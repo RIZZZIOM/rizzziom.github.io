@@ -1,5 +1,5 @@
 ---
-title: "Wonderland"
+title: "Wonderland - TryHackMe Writeup"
 date: 2024-04-17
 draft: false
 summary: "Writeup for Wonderland CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Wonderland TryHackMe Challenge"
   alt: "Wonderland cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Fall down the rabbit hole and enter wonderland.

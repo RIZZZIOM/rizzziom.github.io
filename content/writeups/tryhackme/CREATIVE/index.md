@@ -1,5 +1,5 @@
 ---
-title: "Creative"
+title: "Creative - TryHackMe Writeup"
 date: 2025-09-13
 draft: false
 summary: "Writeup for Creative CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Creative TryHackMe Challenge"
   alt: "Creative cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Exploit a vulnerable web application and some misconfigurations to gain root privileges.

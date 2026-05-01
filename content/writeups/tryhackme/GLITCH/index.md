@@ -1,5 +1,5 @@
 ---
-title: "Glitch"
+title: "Glitch - TryHackMe Writeup"
 date: 2025-11-02
 draft: false
 summary: "Writeup for Glitch CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Glitch TryHackMe Challenge"
   alt: "Glitch cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Challenge showcasing a web app and simple privilege escalation. Can you find the glitch?

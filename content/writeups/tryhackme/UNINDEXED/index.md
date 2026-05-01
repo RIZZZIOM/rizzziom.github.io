@@ -1,5 +1,5 @@
 ---
-title: "Unindexed"
+title: "Unindexed - TryHackMe Writeup"
 date: 2026-03-25
 draft: false
 summary: "Writeup for Unindexed CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Unindexed TryHackMe Challenge"
   alt: "Unindexed cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 An AI assistant was given access to everything. Nobody checked what "everything" included.

@@ -1,5 +1,5 @@
 ---
-title: "Root Me"
+title: "Root Me - TryHackMe Writeup"
 date: 2024-03-31
 draft: false
 summary: "Writeup for Root Me CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Root Me TryHackMe Challenge"
   alt: "Root Me cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 A ctf for beginners, can you root me?

@@ -1,5 +1,5 @@
 ---
-title: "Boiler CTF"
+title: "Boiler CTF - TryHackMe Writeup"
 date: 2025-02-02
 draft: false
 summary: "Writeup for 'Boiler CTF' CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Boiler CTF TryHackMe Challenge"
   alt: "Boiler CTF cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Intermediate level CTF. Just enumerate, you'll get there

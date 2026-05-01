@@ -1,5 +1,5 @@
 ---
-title: "Cmess"
+title: "Cmess - TryHackMe Writeup"
 date: 2024-03-09
 draft: false
 summary: "Writeup for Cmess CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Cmess TryHackMe Challenge"
   alt: "Cmess cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Can you root this Gila CMS box?

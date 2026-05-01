@@ -1,5 +1,5 @@
 ---
-title: "UA High School"
+title: "UA High School - TryHackMe Writeup"
 date: 2024-08-30
 draft: false
 summary: "Writeup for UA High School CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "UA High School TryHackMe Challenge"
   alt: "UA High School cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Welcome to the web application of U.A., the Superhero Academy.

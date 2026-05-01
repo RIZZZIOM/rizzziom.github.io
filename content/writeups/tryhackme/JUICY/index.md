@@ -1,5 +1,5 @@
 ---
-title: "Juicy"
+title: "Juicy - TryHackMe Writeup"
 date: 2026-01-15
 draft: false
 summary: "Writeup for Juicy CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Juicy TryHackMe Challenge"
   alt: "Juicy cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 A friendly golden retriever who answers your questions.

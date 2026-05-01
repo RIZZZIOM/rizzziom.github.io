@@ -1,5 +1,5 @@
 ---
-title: "Agent Sudo"
+title: "Agent Sudo - TryHackMe Writeup"
 date: 2024-07-02
 draft: false
 summary: "Writeup for Agent Sudo CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Agent Sudo TryHackMe Challenge"
   alt: "Agent Sudo cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 We found a secret server located under the deep sea. Our task is to hack inside the server and reveal the truth.

@@ -1,5 +1,5 @@
 ---
-title: "Opacity"
+title: "Opacity - TryHackMe Writeup"
 date: 2024-04-05
 draft: false
 summary: "Writeup for Opacity CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Opacity TryHackMe Challenge"
   alt: "Opacity cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Opacity is a Boot2Root made for pentesters and cybersecurity enthusiasts.

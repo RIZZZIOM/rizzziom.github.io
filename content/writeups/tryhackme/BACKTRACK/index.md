@@ -1,5 +1,5 @@
 ---
-title: "Backtrack"
+title: "Backtrack - TryHackMe Writeup"
 date: 2025-11-29
 draft: false
 summary: "Writeup for Backtrack CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Backtrack TryHackMe Challenge"
   alt: "Backtrack cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Daring to set foot where no one has.

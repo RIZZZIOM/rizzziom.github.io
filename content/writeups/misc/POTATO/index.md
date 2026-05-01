@@ -1,5 +1,5 @@
 ---
-title: "Potato"
+title: "Potato - Proving Grounds Writeup"
 date: 2024-11-10
 draft: false
 summary: "Writeup for the Potato proving grounds CTF challenge."
@@ -12,6 +12,7 @@ cover:
   caption: "Potato Proving Grounds Challenge"
   alt: "Potato cover"
 platform: "Misc"
+author: "Moiz Bootwala"
 ---
 
 Potato is a CTF challenge on **proving grounds** that require us to get root access on the system and capture the flag from the *root* directory.

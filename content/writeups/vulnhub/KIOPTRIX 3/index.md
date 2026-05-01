@@ -1,5 +1,5 @@
 ---
-title: "Kioptrix 3"
+title: "Kioptrix 3 - VulnHub Writeup"
 date: 2024-05-10
 draft: false
 summary: "Writeup for Kioptrix level 3 of the Kioptrix series challenge on VulnHub."
@@ -12,6 +12,7 @@ cover:
   caption: "Kioptrix 3 VulnHub Challenge"
   alt: "Kioptrix 3 cover"
 platform: "VulnHub"
+author: "Moiz Bootwala"
 ---
 
 Kioptrix-3 is the third challenge in the Kioptrix series and similar to others, there’s more than one way to “pwn” this.

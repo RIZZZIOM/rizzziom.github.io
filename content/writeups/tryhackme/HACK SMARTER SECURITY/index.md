@@ -1,5 +1,5 @@
 ---
-title: "Hack Smarter Security"
+title: "Hack Smarter Security - TryHackMe Writeup"
 date: 2025-07-02
 draft: false
 summary: "Writeup for Hack Smarter Security CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "Hack Smarter Security TryHackMe Challenge"
   alt: "Hack Smarter Security cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 Can you hack the hackers?

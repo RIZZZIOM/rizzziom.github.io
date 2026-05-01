@@ -1,5 +1,5 @@
 ---
-title: "LLMborghini"
+title: "LLMborghini - TryHackMe Writeup"
 date: 2026-04-15
 draft: false
 summary: "Writeup for LLMborghini CTF challenge on TryHackMe."
@@ -12,6 +12,7 @@ cover:
   caption: "LLMborghini TryHackMe Challenge"
   alt: "LLMborghini cover"
 platform: "TryHackMe"
+author: "Moiz Bootwala"
 ---
 
 LLMborghini, the car company that's in hot water, has deployed CalBot: an internal calendar assistant designed to help staff manage their schedules.

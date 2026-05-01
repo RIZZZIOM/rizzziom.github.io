@@ -63,22 +63,6 @@ canonifyURLs = false
     name = "rss"
     url = "/index.xml"
   
-  [[params.socialIcons]]
-    name = "github"
-    url = "https://github.com/RIZZZIOM"
-
-  [[params.socialIcons]]
-    name = "x"
-    url = "https://x.com/rizzziom"
-
-  [[params.socialIcons]]
-    name = "linkedin"
-    url = "https://www.linkedin.com/in/moiz-bootwala"
-
-  [[params.socialIcons]]
-    name = "email"
-    url = "mailto:rizzziom@gmail.com"
-
   [params.analytics]
     [params.analytics.google]
       SiteVerificationTag = ""

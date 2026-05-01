@@ -35,7 +35,7 @@ For enough rights, I enabled developer mode by clicking on:
 User Settings → Advanced → Developer Mode
 ```
 
-![](https://cdn.ziomsec.com/discord-c2/1.webp)
+![enable developer mode on discord](https://cdn.ziomsec.com/discord-c2/1.webp)
 
 Then, I visited https://discord.com/developers/applications/ to create a new application
 
@@ -43,11 +43,11 @@ Then, I visited https://discord.com/developers/applications/ to create a new app
 New Application → Give it a name → Create → add pfp/description
 ```
 
-![](https://cdn.ziomsec.com/discord-c2/2.webp)
+![create a new discord application](https://cdn.ziomsec.com/discord-c2/2.webp)
 
 In the **Bot** menu, I selected all `intents`
 
-![](https://cdn.ziomsec.com/discord-c2/3.webp)
+![select all intents for the application](https://cdn.ziomsec.com/discord-c2/3.webp)
 
 Finally, I clicked on **`Reset Token`** and saved the new token.
 
@@ -62,7 +62,7 @@ Bot Permissions → Administrator
 
 This will generate a **Guild URL** that can be opened in a new tab to select the server we want to add the bot to.
 
-![](https://cdn.ziomsec.com/discord-c2/4.webp)
+![Adding bot to our application](https://cdn.ziomsec.com/discord-c2/4.webp)
 
 ## Creating A Basic Prototype
 
@@ -75,7 +75,7 @@ The code for the bot can be found on my **[Github](https://github.com/RIZZZIOM/p
 
 After compiling the code and running it one the victim machine (Kali), I was able to execute shell commands through my private server.
 
-![](https://cdn.ziomsec.com/discord-c2/5.webp)
+![getting a c&c connection via discord](https://cdn.ziomsec.com/discord-c2/5.webp)
 
 ### Forensics Issues
 
@@ -116,11 +116,11 @@ The code can be found on my **[Github](https://github.com/RIZZZIOM/phishfolio/bl
 !selfdestruct → spawns a seperate process and deletes itself
 ```
 
-![](https://cdn.ziomsec.com/discord-c2/6.webp)
+![running the bot](https://cdn.ziomsec.com/discord-c2/6.webp)
 
-![](https://cdn.ziomsec.com/discord-c2/7.webp)
+![running os commands and self destructing the bot](https://cdn.ziomsec.com/discord-c2/7.webp)
 
-![](https://cdn.ziomsec.com/discord-c2/8.webp)
+![the new bot gets deleted](https://cdn.ziomsec.com/discord-c2/8.webp)
 
 This **does not** make the bot **OPSEC** safe in itself. To make it suitable to evade detections it would have to generate traffic similar to a human. Some features that would make it OPSEC safe are:
 - **Heartbeat packets** : Discord uses a WebSocket Gateway protocol. Discord clients maintain persistent connects and send regular *heartbeat* packets to keep the connection alive and prove they are still active.

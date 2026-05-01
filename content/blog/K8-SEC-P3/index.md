@@ -28,7 +28,7 @@ Privilege escalation has 2 main forms:
 - **Vertical** - moving up the hierarchy ( pod → node → cluster )
 - **Horizontal** - moving sideways into other namespaces or roles ( user account → another user account in the same / different namespace )
 
-![](https://cdn.ziomsec.com/k8-sec-p3/1.webp)
+![types of privilege escalation](https://cdn.ziomsec.com/k8-sec-p3/1.webp)
 
 Some of the usual suspects for privilege escalation are:
 - **Privileged Containers** - When you run a pod with `privileged: true` or with host mounts, that container can literally see and change the host filesystem.
@@ -316,7 +316,7 @@ After gaining elevated privileges, we can extract credentials. Kubernetes store 
 
 Every pod also has a service account token automatically mounted inside `/var/run/secrets/...`. If our RBAC is too loose, that token might give admin-level access. Even environment variables and cloud metadata endpoints can leak credentials if not locked down.
 
-![](https://cdn.ziomsec.com/k8-sec-p3/2.webp)
+![Gaining access to cloud secrets](https://cdn.ziomsec.com/k8-sec-p3/2.webp)
 
 ### Practical 3 - Using Pod Token For Privilege Escalation
 

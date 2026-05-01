@@ -141,7 +141,7 @@ Namespaces can also be isolated by adding a default-deny ingress and egress poli
 
 Within a Kubernetes cluster, there are many components. These components need to communicate; Kubernetes is entirely API driven. One way in which we can secure API traffic is through encryption.
 
-![](https://cdn.ziomsec.com/k8-sec-p4/1.webp)
+![Communication in Kubernetes](https://cdn.ziomsec.com/k8-sec-p4/1.webp)
 
 > Kubernetes expects all API communication in the cluster to be encrypted by default, with most installation methods supporting the creation and distribution of certificates to cluster components. Before implementing TLS encryption and distributing the certificates, we should establish if a component acts as a client or a server (or both) when communicating in the cluster.
 
@@ -205,7 +205,7 @@ Security runtime enforcement tools allow you to define policies that can minimiz
 
 ***`Falcosidekick`** is a companion project to Falco that can be enabled during / after configuration. `Falcosidekick` enables the forwarding of Falco events/alerts to 60+ services. This allows for integration to ChatOps tools like Slack and Microsoft Teams when events happen, as well as custom forwarding rules to allow for granular control over this so messages are only sent out for critical events and not spammed in various channels.*
 
-![](https://cdn.ziomsec.com/k8-sec-p4/3.webp)
+![Falcosidekick](https://cdn.ziomsec.com/k8-sec-p4/3.webp)
 
 ## Cluster-Level Best Practices
 

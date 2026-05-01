@@ -25,7 +25,7 @@ So, before diving into the technicality of security testing, it is important for
 
 The easiest way to think about it is like an operating system for containerized applications. It decides where things run, keeps them healthy and exposes them to the network automatically.
 
-![source: https://www.atlassian.com/microservices/microservices-architecture/kubernetes-vs-docker](https://cdn.ziomsec.com/k8-sec-p1/1.webp)
+![difference between vm, docker and kubernetes](https://cdn.ziomsec.com/k8-sec-p1/1.webp)
 
 This might bring a question in our mind, why is it required? Isn't docker enough? Doesn't it allow us to pack applications along with their dependencies and ensure better management and scalability?
 
@@ -204,7 +204,7 @@ There are various components that make up a Kubernetes cluster. These are object
 
 ### Architecture
 
-![source: https://kubernetes.io/docs/concepts/architecture/](https://cdn.ziomsec.com/k8-sec-p1/2.webp)
+![kubernetes architecture](https://cdn.ziomsec.com/k8-sec-p1/2.webp)
 
 Now that we have an idea of what Kubernetes is and why is it required, let's understand how it operates. As shown above, a Kubernetes cluster can be divided into 2 main components:
 1. **Control Plane** : this is the brain of the cluster. It exposes the API server, runs tasks and stores information related to the cluster.

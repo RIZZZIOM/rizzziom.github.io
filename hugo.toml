@@ -3,7 +3,7 @@ languageCode = "en-us"
 title = "ziomsec"
 theme = "PaperMod"
 enableRobotsTXT = true
-canonifyURLs = true
+canonifyURLs = false
 
 [pagination]
   pagerSize = 15
@@ -24,8 +24,8 @@ canonifyURLs = true
   search = true
   disableThemeToggle = false
   ShowBreadCrumbs = true
-  ShowReadingTime = false
-  ShowPostNavLinks = false
+  ShowReadingTime = true
+  ShowPostNavLinks = true
   ShowCodeCopyButtons = true
   ShowToc = true
   ShowRssButtonInSectionTermList = true
@@ -33,6 +33,10 @@ canonifyURLs = true
   comments = false
   hideFooter = true
   assets = {favicon = "/favicon.png"}
+  
+  description = "Cybersecurity CTF writeups and red team research by Moiz Bootwala. Step-by-step HackTheBox, TryHackMe, VulnHub and Misc ctf walkthroughs with enumeration, exploitation, and privilege escalation guides."
+  author = "Moiz Bootwala"
+  keywords = ["CTF writeups", "HackTheBox writeups", "TryHackMe writeups", "VulnHub walkthroughs", "cybersecurity blog", "penetration testing", "red team", "purple team", "offensive security", "privilege escalation", "CTF solutions", "infosec", "information security", "security research"]
 
   [params.cover]
     linkFullImages = true
@@ -42,13 +46,44 @@ canonifyURLs = true
     hiddenInSingle = false
     responsiveImages = true
 
+  [params.schema]
+    publisherType = "Person"
+    sameAs = [
+      "https://github.com/RIZZZIOM",
+      "https://www.linkedin.com/in/moiz-bootwala",
+      "https://x.com/rizzziom",
+      "https://ziomsec.com/index.xml"
+    ]
+
   [params.homeInfoParams]
-    Title = "hello friend"
-    Content = ""
+    Title = "CTF Writeups & Cybersecurity Research"
+    Content = "Step-by-step walkthroughs of HackTheBox, TryHackMe, and VulnHub challenges. Offensive security research and tools."
 
   [[params.socialIcons]]
     name = "rss"
     url = "/index.xml"
+  
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/RIZZZIOM"
+
+  [[params.socialIcons]]
+    name = "x"
+    url = "https://x.com/rizzziom"
+
+  [[params.socialIcons]]
+    name = "linkedin"
+    url = "https://www.linkedin.com/in/moiz-bootwala"
+
+  [[params.socialIcons]]
+    name = "email"
+    url = "mailto:rizzziom@gmail.com"
+
+  [params.analytics]
+    [params.analytics.google]
+      SiteVerificationTag = ""
+    [params.analytics.bing]
+      SiteVerificationTag = ""
 
 [menu]
   [[menu.main]]

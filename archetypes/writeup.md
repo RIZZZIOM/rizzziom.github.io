@@ -12,6 +12,7 @@ cover:
   caption: ""
   alt: ""
 platform: "" # e.g., TryHackMe, HackTheBox, VulnHub, Misc
+author: "Moiz Bootwala"
 ---
 
 Document the attack path. Screens go in `images/` next to this file:

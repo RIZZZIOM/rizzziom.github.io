@@ -11,8 +11,7 @@ cover:
   image: ""
   caption: ""
   alt: ""
+author: "Moiz Bootwala"
 ---
 
-Write your post here. Place screenshots in an `images/` folder next to this file and embed like:
-
-`![alt text](images/1.png)`
+Write your post here.

@@ -34,13 +34,13 @@ nmap -A -p- TARGET -oN dc1.nmap --min-rate 10000
 | 111      | rpcbinder              |
 | 50881    | *dynamically assigned* |
 
-![](https://cdn.ziomsec.com/dc1/1.webp)
+![performing an nmap scan on DC1 machine](https://cdn.ziomsec.com/dc1/1.webp)
 
 ## Initial Foothold
 
 I visited the web application running on port 80 and found a **Drupal** Login page.
 
-![](https://cdn.ziomsec.com/dc1/2.webp)
+![accessing the drupal site](https://cdn.ziomsec.com/dc1/2.webp)
 
 Since **nmap** was able to identify the version of **Drupal**, I searched **Exploit-DB** to identify exploits. Since there were some listed on **Metasploit**, I could use the **Metasploit Framework** for exploitation.
 
@@ -50,9 +50,9 @@ $ msfconsole
 > search drupal
 ```
 
-![](https://cdn.ziomsec.com/dc1/3.webp)
+![searching for drupal exploits](https://cdn.ziomsec.com/dc1/3.webp)
 
-![](https://cdn.ziomsec.com/dc1/4.webp)
+![searching for drupal exploits](https://cdn.ziomsec.com/dc1/4.webp)
 
 I selected the `unix/webapp/drupal_drupalgeddon2` exploit and configured parameters like `RHOSTS` (target), `LHOST` (listener IP). Finally, I ran the exploit and got shell access on the target.
 
@@ -62,13 +62,13 @@ I selected the `unix/webapp/drupal_drupalgeddon2` exploit and configured paramet
 > run
 ```
 
-![](https://cdn.ziomsec.com/dc1/5.webp)
+![configuring the drupal exploit on metasploit](https://cdn.ziomsec.com/dc1/5.webp)
 
-![](https://cdn.ziomsec.com/dc1/6.webp)
+![configuring the drupal exploit on metasploit](https://cdn.ziomsec.com/dc1/6.webp)
 
 I entered shell mode by typing `shell` and navigated to the `/home` directory to capture the first flag.
 
-![](https://cdn.ziomsec.com/dc1/7.webp)
+![capturing the user flag](https://cdn.ziomsec.com/dc1/7.webp)
 
 ## Privilege Escalation
 
@@ -78,7 +78,7 @@ I then listed binaries owned by root and with an **SUID** bit and found the **fi
 find / -user root -perm -u=s -ls 2>/dev/null
 ```
 
-![](https://cdn.ziomsec.com/dc1/8.webp)
+![performing suid bit enumeration](https://cdn.ziomsec.com/dc1/8.webp)
 
 I visited **GTFObins** and found a way to escalate my privilege  by exploiting this misconfiguration.
 - https://gtfobins.github.io
@@ -87,11 +87,11 @@ I visited **GTFObins** and found a way to escalate my privilege  by exploiting t
 find local.txt -exec /bin/sh -p \; -quit
 ```
 
-![](https://cdn.ziomsec.com/dc1/9.webp)
+![suid exploit description on gtfobins](https://cdn.ziomsec.com/dc1/9.webp)
 
 Finally I captured the final flag from the `/root` directory.
 
-![](https://cdn.ziomsec.com/dc1/10.webp)
+![capturing the root flag](https://cdn.ziomsec.com/dc1/10.webp)
 
 ## Closure
 

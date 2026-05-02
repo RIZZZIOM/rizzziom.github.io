@@ -33,13 +33,13 @@ nmap -A -p- TARGET -oN gaara.nmap --min-rate 10000
 | 22       | ssh                    |
 | 80       | http                   |
 
-![](https://cdn.ziomsec.com/gaara/1.webp)
+![performing an nmap scan on gaara machine](https://cdn.ziomsec.com/gaara/1.webp)
 
 ## Initial Foothold
 
 The **nmap** scan discovered an **http** server running on the target. So I accessed the site on browser.
 
-![](https://cdn.ziomsec.com/gaara/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/gaara/2.webp)
 
 The website had nothing interesting so I used **ffuf** to perform web directory fuzzing. Through this, I discovered a new directory.
 
@@ -47,27 +47,27 @@ The website had nothing interesting so I used **ffuf** to perform web directory 
 ffuf -u http://TARGET/FUZZ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -mc 200,302,301
 ```
 
-![](https://cdn.ziomsec.com/gaara/3.webp)
+![running ffuf to find directories](https://cdn.ziomsec.com/gaara/3.webp)
 
 Upon accessing the directory, I found 3 new paths.
 
-![](https://cdn.ziomsec.com/gaara/4.webp)
+![accessing discovered directory](https://cdn.ziomsec.com/gaara/4.webp)
 
 I accessed them one after the other but they all had the same extract. Upon closer inspection, I found that `/iamGaara` had an encoded string.
 
-![](https://cdn.ziomsec.com/gaara/5.webp)
+![accessing discovered path](https://cdn.ziomsec.com/gaara/5.webp)
 
-![](https://cdn.ziomsec.com/gaara/6.webp)
+![accessing discovered path](https://cdn.ziomsec.com/gaara/6.webp)
 
-![](https://cdn.ziomsec.com/gaara/7.webp)
+![accessing discovered path](https://cdn.ziomsec.com/gaara/7.webp)
 
 To decode this, I visited **cyberchef** and tried multiple encoding formats, out of which **base58** worked. 
 
-![](https://cdn.ziomsec.com/gaara/8.webp)
+![decoding encoded text](https://cdn.ziomsec.com/gaara/8.webp)
 
 This looked like a pair of credentials so I tried logging in through **ssh**. However, it turned out to be a rabbit hole. The password was incorrect.
 
-![](https://cdn.ziomsec.com/gaara/9.webp)
+![trying to log in as gaara](https://cdn.ziomsec.com/gaara/9.webp)
 
 Since I had no other leads, I tried brute-forcing the password of  *gaara* using **hydra** and **rockyou.txt** wordlist.
 
@@ -75,7 +75,7 @@ Since I had no other leads, I tried brute-forcing the password of  *gaara* using
 hydra -l 'gaara' -P /usr/share/wordlists/rockyou.txt ssh://TARGET
 ```
 
-![](https://cdn.ziomsec.com/gaara/10.webp)
+![bruteforcing gaara's credential with hydra](https://cdn.ziomsec.com/gaara/10.webp)
 
 After finding the valid password, I logged in through **ssh** and found the flag in my home directory.
 
@@ -83,21 +83,21 @@ After finding the valid password, I logged in through **ssh** and found the flag
 ssh gaara@TARGET
 ```
 
-![](https://cdn.ziomsec.com/gaara/11.webp)
+![logging in as gaara](https://cdn.ziomsec.com/gaara/11.webp)
 
 ## Privilege Escalation
 
 After getting initial access, I downloaded **linux smart enumeration** script on the target to look for misconfigurations that could lead to privilege escalation.
 
-![](https://cdn.ziomsec.com/gaara/12.webp)
+![downloading the linux smart enumerations script](https://cdn.ziomsec.com/gaara/12.webp)
 
 I ran the script and found an interesting set of binaries with **setuid** bit. I also found that I could write into the `/usr/local/games` directory.
 
-![](https://cdn.ziomsec.com/gaara/13.webp)
+![running lse](https://cdn.ziomsec.com/gaara/13.webp)
 
-![](https://cdn.ziomsec.com/gaara/14.webp)
+![running lse](https://cdn.ziomsec.com/gaara/14.webp)
 
-![](https://cdn.ziomsec.com/gaara/15.webp)
+![running lse](https://cdn.ziomsec.com/gaara/15.webp)
 
 I started off with the **setuid** bit binaries and searched **gtfobins** for ways to exploit them. I found a way to escalate privilege with **gdb** so I repeated the steps mentioned on the site.
 
@@ -105,13 +105,13 @@ I started off with the **setuid** bit binaries and searched **gtfobins** for way
 gdb -nx -ex 'python import os; os.execl("/bin/sh", "sh", "-p")' -ex quit
 ```
 
-![](https://cdn.ziomsec.com/gaara/16.webp)
+![checking gdb exploits](https://cdn.ziomsec.com/gaara/16.webp)
 
-![](https://cdn.ziomsec.com/gaara/17.webp)
+![exploiting gdb](https://cdn.ziomsec.com/gaara/17.webp)
 
 After getting **root** access, I captured the final flag from the `/root` directory.
 
-![](https://cdn.ziomsec.com/gaara/18.webp)
+![capturing root flag](https://cdn.ziomsec.com/gaara/18.webp)
 
 ## Closure
 

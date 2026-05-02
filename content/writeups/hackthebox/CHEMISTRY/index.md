@@ -33,27 +33,27 @@ nmap -A -p- TARGET --min-rate 10000 -oN chemistry.nmap
 | 22       | ssh         |
 | 5000     | http        |
 
-![](https://cdn.ziomsec.com/chemistry/1.webp)
+![nmap scan on chemistry to identify open ports and services](https://cdn.ziomsec.com/chemistry/1.webp)
 
 ## Foothold
 
 The **nmap** scan revealed only 2 ports, hence I accessed the port running **http** service using **firefox**.
 
-![](https://cdn.ziomsec.com/chemistry/2.webp)
+![accessing the web application running](https://cdn.ziomsec.com/chemistry/2.webp)
 
 I registered using `test`:`test` 
 
-![](https://cdn.ziomsec.com/chemistry/3.webp)
+![registering with test credentials](https://cdn.ziomsec.com/chemistry/3.webp)
 
 The application allowed to upload a **CIF** file.
 
-![](https://cdn.ziomsec.com/chemistry/4.webp)
+![file upload functionality](https://cdn.ziomsec.com/chemistry/4.webp)
 
 Since the **nmap** scan revealed the backend to be running on **python**, I tried uploading a **python** script but failed.
 
-![](https://cdn.ziomsec.com/chemistry/5.webp)
+![uploading a python script](https://cdn.ziomsec.com/chemistry/5.webp)
 
-![](https://cdn.ziomsec.com/chemistry/6.webp)
+![error message on upload](https://cdn.ziomsec.com/chemistry/6.webp)
 
 I then uploaded a **CIF** file to analyze the behavior using burp suite but found nothing interesting. The application also contained a dummy CIF file for us to download, so I downloaded it.
 
@@ -61,19 +61,19 @@ I then uploaded a **CIF** file to analyze the behavior using burp suite but foun
 
 Since I found nothing of interest, I googled vulnerabilities that could be exploited and found interesting articles.
 
-![](https://cdn.ziomsec.com/chemistry/8.webp)
+![downloading example cif file](https://cdn.ziomsec.com/chemistry/8.webp)
 
 I visited **revshells** and generated a simple **bash** payload.
 
-![](https://cdn.ziomsec.com/chemistry/9.webp)
+![searching for cif rce](https://cdn.ziomsec.com/chemistry/9.webp)
 
 I modified the **CIF** file and added the payload in it.
 
-![](https://cdn.ziomsec.com/chemistry/10.webp)
+![configuring reverse shell with revshells](https://cdn.ziomsec.com/chemistry/10.webp)
 
 Finally I uploaded the malicious CIF file.
 
-![](https://cdn.ziomsec.com/chemistry/11.webp)
+![modifying test cif](https://cdn.ziomsec.com/chemistry/11.webp)
 
 I started a reverse shell listener using **netcat** and when I executed the CIF file, I got a reverse shell. I spawned a **tty** shell and exported my terminal for better shell functionality.
 
@@ -83,7 +83,7 @@ $ python3 -c "import pty;pty.spawn('/bin/bash')"
 $ export TERM=xterm
 ```
 
-![](https://cdn.ziomsec.com/chemistry/12.webp)
+![reverse shell from the server](https://cdn.ziomsec.com/chemistry/12.webp)
 
 I discovered the existence of an sqlite file along with a password.
 
@@ -91,13 +91,13 @@ I discovered the existence of an sqlite file along with a password.
 cat app.py
 ```
 
-![](https://cdn.ziomsec.com/chemistry/13.webp)
+![found hardcoded credentials](https://cdn.ziomsec.com/chemistry/13.webp)
 
-![](https://cdn.ziomsec.com/chemistry/14.webp)
+![found potential users](https://cdn.ziomsec.com/chemistry/14.webp)
 
 Then I tried looking for the flag. I found it in the home directory of another user called **rosa**. However, since I did not have enough permissions, I could not access it.
 
-![](https://cdn.ziomsec.com/chemistry/16.webp)
+![tried accessing the user flag](https://cdn.ziomsec.com/chemistry/16.webp)
 
 ### Shell As `rosa`
 
@@ -107,11 +107,11 @@ I then viewed the sqlite database file and found the md5 hashes of different use
 sqlite3 instance/database.db
 ```
 
-![](https://cdn.ziomsec.com/chemistry/15.webp)
+![connecting to sqlite instance and viewing password hashes](https://cdn.ziomsec.com/chemistry/15.webp)
 
 I visited **crackstation** and cracked the password hash.
 
-![](https://cdn.ziomsec.com/chemistry/17.webp)
+![cracking rosa hash with crackstation](https://cdn.ziomsec.com/chemistry/17.webp)
 
 Finally, I used the credentials to log in as **rosa** and captured the user flag from the home directory.
 
@@ -120,9 +120,9 @@ ssh rosa@TARGET
 # enter password
 ```
 
-![](https://cdn.ziomsec.com/chemistry/18.webp)
+![ssh as rosa](https://cdn.ziomsec.com/chemistry/18.webp)
 
-![](https://cdn.ziomsec.com/chemistry/19.webp)
+![capturing user flag](https://cdn.ziomsec.com/chemistry/19.webp)
 
 ## Privilege Escalation
 
@@ -132,7 +132,7 @@ After capturing the user flag, I downloaded and ran **linux smart enumeration** 
 netstat -antp
 ```
 
-![](https://cdn.ziomsec.com/chemistry/20.webp)
+![listing listening ports](https://cdn.ziomsec.com/chemistry/20.webp)
 
 To access the internally bounded port, I performed port forwarding, binding port 1234 to the localhost port 8080 of the target.
 
@@ -140,11 +140,11 @@ To access the internally bounded port, I performed port forwarding, binding port
 ssh -L 1234:127.0.0.1:8080 rosa@TARGET
 ```
 
-![](https://cdn.ziomsec.com/chemistry/21.webp)
+![local port forwarding to access internal service](https://cdn.ziomsec.com/chemistry/21.webp)
 
 After that, I was able to access the service running on port 8080.
 
-![](https://cdn.ziomsec.com/chemistry/22.webp)
+![accessing the internal service](https://cdn.ziomsec.com/chemistry/22.webp)
 
 I performed an **nmap** scan on the service and found the service version.
 
@@ -152,11 +152,11 @@ I performed an **nmap** scan on the service and found the service version.
 nmap -A -p 1234 127.0.0.1
 ```
 
-![](https://cdn.ziomsec.com/chemistry/23.webp)
+![performing nmap scan on the internal service](https://cdn.ziomsec.com/chemistry/23.webp)
 
 further footprinting revealed a **path traversal** vulnerability associated with this particular service version.
 
-![](https://cdn.ziomsec.com/chemistry/24.webp)
+![finding path traversal vulnerability](https://cdn.ziomsec.com/chemistry/24.webp)
 
 Since the vulnerability was path traversal, I looked for directories on the target using **ffuf**.
 
@@ -164,7 +164,7 @@ Since the vulnerability was path traversal, I looked for directories on the targ
 ffuf -u http://127.0.0.1:1234/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-directories.txt -fc 404
 ```
 
-![](https://cdn.ziomsec.com/chemistry/25.webp)
+![performing fuzz scan on internal service](https://cdn.ziomsec.com/chemistry/25.webp)
 
 I then found a PoC of the CVE on **github** and got a reference on how the vulnerability could be exploited. 
 - https://github.com/jhonnybonny/CVE-2024-23334
@@ -175,7 +175,7 @@ I then used **curl** and tried accessing the **/etc/passwd** file by exploiting 
 curl --path-as-is 'http://127.0.0.1:1234/assets/../../../../etc/passwd'
 ```
 
-![](https://cdn.ziomsec.com/chemistry/26.webp)
+![accessing /etc/passwd](https://cdn.ziomsec.com/chemistry/26.webp)
 
 Since I was able to confirm the vulnerability, I exploited it to access the root flag from the **/root** directory.
 
@@ -183,7 +183,7 @@ Since I was able to confirm the vulnerability, I exploited it to access the root
 curl --path-as-is 'http://127.0.0.1:1234/assets/../../../../root/root.txt'
 ```
 
-![](https://cdn.ziomsec.com/chemistry/27.webp)
+![accessing the root flag](https://cdn.ziomsec.com/chemistry/27.webp)
 
 ## Closure
 

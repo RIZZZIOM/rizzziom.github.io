@@ -33,21 +33,21 @@ nmap -A IP -oN twomillion.nmap
 | 22   | ssh     |
 | 80   | http    |
 
-![](https://cdn.ziomsec.com/twomillion/1.webp)
+![nmap scan on two million machine](https://cdn.ziomsec.com/twomillion/1.webp)
 
 ## Initial Foothold
 
 Since the target was running an http server, I accessed it through my browser and found **HackTheBox**'s old landing page.
 
-![](https://cdn.ziomsec.com/twomillion/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/twomillion/2.webp)
 
 Inspecting the page source revealed an endpoint called `/invite`.
 
-![](https://cdn.ziomsec.com/twomillion/3.webp)
+![accessing the invite endpoint](https://cdn.ziomsec.com/twomillion/3.webp)
 
 I used the **network** tab from the browser's developer options to inspect which files were being loaded by refreshing the page. Here, I found a **javascript** file that had something to do with `invite`.
 
-![](https://cdn.ziomsec.com/twomillion/4.webp)
+![inspecting the files that were being loaded](https://cdn.ziomsec.com/twomillion/4.webp)
 
 This file contained obsfuscated javascript. Deobfuscating it revealed api endpoints to verify/generate invite codes. 
 
@@ -90,7 +90,7 @@ I then used curl to try and generate a code by making a request to `/api/v1/invi
 curl -X POST http://2million.htb/api/v1/invite/generate
 ```
 
-![](https://cdn.ziomsec.com/twomillion/5.webp)
+![generating an invite code](https://cdn.ziomsec.com/twomillion/5.webp)
 
 This code was base64 encoded, so I decoded it using the **base64** command.
 
@@ -98,85 +98,85 @@ This code was base64 encoded, so I decoded it using the **base64** command.
 echo 'RExSQlctRDU5S08tTlVXWUEtRlpZOEI=' | base64 -d
 ```
 
-![](https://cdn.ziomsec.com/twomillion/6.webp)
+![decoding the invite code](https://cdn.ziomsec.com/twomillion/6.webp)
 
 Finally, I entered this code on the `/invite` page.
 
-![](https://cdn.ziomsec.com/twomillion/7.webp)
+![entering the invite code on the page](https://cdn.ziomsec.com/twomillion/7.webp)
 
 I then registered using some fake credentials.
 
-![](https://cdn.ziomsec.com/twomillion/8.webp)
+![registering using fake credentials](https://cdn.ziomsec.com/twomillion/8.webp)
 
 The page source of `/access` revealed more `api` paths...
 
-![](https://cdn.ziomsec.com/twomillion/9.webp)
+![api path revealed in page source](https://cdn.ziomsec.com/twomillion/9.webp)
 
 To analyze thenm, I turned on **Burp Suite** and made a request to `http://2million.htb/api`.
 
-![](https://cdn.ziomsec.com/twomillion/10.webp)
+![querying api endpoints](https://cdn.ziomsec.com/twomillion/10.webp)
 
 It returned the version of the API. I then looked inside */api/v1*.
 
-![](https://cdn.ziomsec.com/twomillion/11.webp)
+![querying api](https://cdn.ziomsec.com/twomillion/11.webp)
 
 I saw a couple of paths that had *admin* in them. So I tried each one of them. Upon sending a request to `/api/v1/admin/vpn/generate` and `/api/v1/admin/settings/update`, I got a response code of **405**.
 
-![](https://cdn.ziomsec.com/twomillion/12.webp)
+![trying different api endpoints](https://cdn.ziomsec.com/twomillion/12.webp)
 
-![](https://cdn.ziomsec.com/twomillion/13.webp)
+![trying different api endpoints](https://cdn.ziomsec.com/twomillion/13.webp)
 
 This indicated that the **GET** request wasn't allowed for this request. So I tried other requests on both the endpoints. I got a different response in `/api/v1/admin/vpn/generate` when I tried the **POST** method.
 
-![](https://cdn.ziomsec.com/twomillion/14.webp)
+![trying POST method](https://cdn.ziomsec.com/twomillion/14.webp)
 
 I tried different methods on both the endpoints and finally got a status **200** by using **PUT** method on `/api/v1/admin/settings/update`.
 
-![](https://cdn.ziomsec.com/twomillion/15.webp)
+![trying PUT method](https://cdn.ziomsec.com/twomillion/15.webp)
 
 I received a response saying "`invalid content-type.`" , so I added a `Content-Type` header to my request with the value **`application/json`**.
 
-![](https://cdn.ziomsec.com/twomillion/16.webp)
+![adding content type](https://cdn.ziomsec.com/twomillion/16.webp)
 
 I then added the `email` parameter to my request body.
 
-![](https://cdn.ziomsec.com/twomillion/17.webp)
+![added email body](https://cdn.ziomsec.com/twomillion/17.webp)
 
 The response mentioned another parameter to be added - `is_admin`. So I added the parameter and forwarded the request to get details about my account. The response revealed I had escalated my privileges to `admin`.
 
-![](https://cdn.ziomsec.com/twomillion/18.webp)
+![added is_admin field to the json body](https://cdn.ziomsec.com/twomillion/18.webp)
 
 I verified the same using `/api/v1/admin/auth`
 
-![](https://cdn.ziomsec.com/twomillion/19.webp)
+![verification](https://cdn.ziomsec.com/twomillion/19.webp)
 
 I now tried to generate a VPN file as admin by sending a POST request  to `/api/v1/admin/vpn/generate`
 
-![](https://cdn.ziomsec.com/twomillion/20.webp)
+![generating vpn](https://cdn.ziomsec.com/twomillion/20.webp)
 
 I added the missing `username` parameter and forwarded the request.
 
-![](https://cdn.ziomsec.com/twomillion/21.webp)
+![adding username parameter](https://cdn.ziomsec.com/twomillion/21.webp)
 
 This returned a status code of *200*. Since the *username* value was being sent as JSON, I checked for command injection vulnerability by adding a command along with the username.
 
-![](https://cdn.ziomsec.com/twomillion/22.webp)
+![testing for command injection](https://cdn.ziomsec.com/twomillion/22.webp)
 
 By injecting `;pwd`, I found out the directory I was in.
 
-![](https://cdn.ziomsec.com/twomillion/23.webp)
+![identifying what directory we are in](https://cdn.ziomsec.com/twomillion/23.webp)
 
 I viewed the `database.php` file and found the names of some environment variables.
 
-![](https://cdn.ziomsec.com/twomillion/24.webp)
+![viewing the database.php file](https://cdn.ziomsec.com/twomillion/24.webp)
 
 I tried to view all the files in the `/var/www/html` directory and found the hidden `.env` file
 
-![](https://cdn.ziomsec.com/twomillion/25.webp)
+![viewing hidden file](https://cdn.ziomsec.com/twomillion/25.webp)
 
 I read the file and found user credentials.
 
-![](https://cdn.ziomsec.com/twomillion/26.webp)
+![finding user creds](https://cdn.ziomsec.com/twomillion/26.webp)
 
 I used the username and password to access the machine through **ssh**.
 
@@ -184,11 +184,11 @@ I used the username and password to access the machine through **ssh**.
 ssh admin@TARGET
 ```
 
-![](https://cdn.ziomsec.com/twomillion/27.webp)
+![logging in as admin](https://cdn.ziomsec.com/twomillion/27.webp)
 
 I found the first flag in *admin* user's home directory.
 
-![](https://cdn.ziomsec.com/twomillion/28.webp)
+![capturing the user flag](https://cdn.ziomsec.com/twomillion/28.webp)
 
 ## Privilege Escalation
 
@@ -199,7 +199,7 @@ $ cd /var/mail
 $ cat admin
 ```
 
-![](https://cdn.ziomsec.com/twomillion/29.webp)
+![viewing admin mail](https://cdn.ziomsec.com/twomillion/29.webp)
 
 Since the mail mentioned a kernel CVE, I found my kernel information and looked for CVE's related to it.
 
@@ -207,9 +207,9 @@ Since the mail mentioned a kernel CVE, I found my kernel information and looked 
 uname -a
 ```
 
-![](https://cdn.ziomsec.com/twomillion/30.webp)
+![getting kernel info](https://cdn.ziomsec.com/twomillion/30.webp)
 
-![](https://cdn.ziomsec.com/twomillion/31.webp)
+![searching for kernel exploits](https://cdn.ziomsec.com/twomillion/31.webp)
 
 I looked for ways to exploit this and found this **C** code:
 - [https://github.com/xkaneiki/CVE-2023-0386](https://github.com/xkaneiki/CVE-2023-0386).
@@ -221,7 +221,7 @@ $ which gcc
 $ which wget
 ```
 
-![](https://cdn.ziomsec.com/twomillion/32.webp)
+![verifying gcc installation](https://cdn.ziomsec.com/twomillion/32.webp)
 
 II then downloaded the exploit on the target, compiled and executed it:
 
@@ -233,15 +233,15 @@ $ ./fuse ./ovlcap/lower ./gc
 $ ./exp
 ```
 
-![](https://cdn.ziomsec.com/twomillion/33.webp)
+![compiling the exploit](https://cdn.ziomsec.com/twomillion/33.webp)
 
-![](https://cdn.ziomsec.com/twomillion/34.webp)
+![compiling the exploit](https://cdn.ziomsec.com/twomillion/34.webp)
 
-![](https://cdn.ziomsec.com/twomillion/35.webp)
+![running the exploit](https://cdn.ziomsec.com/twomillion/35.webp)
 
 Finally, I moved into the *root* directory and captured the last flag.
 
-![](https://cdn.ziomsec.com/twomillion/36.webp)
+![capturing the root flag on twomillion](https://cdn.ziomsec.com/twomillion/36.webp)
 
 ## Closure
 

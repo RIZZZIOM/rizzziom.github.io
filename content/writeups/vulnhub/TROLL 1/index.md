@@ -40,14 +40,14 @@ nmap -A -p- TARGET --min-rate 10000 -oN troll1.nmap
 | 22       | ssh         |
 | 80       | http        |
 
-![](https://cdn.ziomsec.com/troll1/1.webp)
-![](https://cdn.ziomsec.com/troll1/2.webp)
+![performing nmap scan on the troll-1 machine](https://cdn.ziomsec.com/troll1/1.webp)
+![performing nmap scan on the troll-1 machine](https://cdn.ziomsec.com/troll1/2.webp)
 
 ## Initial Access
 
 Since port 80 was open, I accessed the web application through my browser.
 
-![](https://cdn.ziomsec.com/troll1/3.webp)
+![accessing the web application](https://cdn.ziomsec.com/troll1/3.webp)
 
 I had also identified *robots.txt* in the aggressive scan so I accessed the endpoint mentioned in it.
 
@@ -56,7 +56,7 @@ $ curl http://TARGET/robots.txt
 $ curl http://TARGET/secret
 ```
 
-![](https://cdn.ziomsec.com/troll1/4.webp)
+![accessing the web application endpoints](https://cdn.ziomsec.com/troll1/4.webp)
 
 I fuzzed for hidden files and directories but did not get anything - so I moved onto the **FTP** server. Since it allowed *anonymous* login, I logged in and found a packet capture file. For further inspection, I downloaded the packet capture on my local system.
 
@@ -66,19 +66,19 @@ ls
 get lolpcap
 ```
 
-![](https://cdn.ziomsec.com/troll1/5.webp)
+![accessing the ftp server](https://cdn.ziomsec.com/troll1/5.webp)
 
 I then opened the packet capture file using **wireshark**.
 
-![](https://cdn.ziomsec.com/troll1/6.webp)
+![investigating the packet capture](https://cdn.ziomsec.com/troll1/6.webp)
 
 While going through the packets, I found a message from the data of **secret_stuff.txt** revealing a directory called `sup3rs3cr3tdirlol`.
 
-![](https://cdn.ziomsec.com/troll1/7.webp)
+![investigating the packet capture](https://cdn.ziomsec.com/troll1/7.webp)
 
-I tried accessing it on my browser browser and got a directory listing.
+I tried accessing it on my browser and got a directory listing.
 
-![](https://cdn.ziomsec.com/troll1/8.webp)
+![accessing the hidden directory](https://cdn.ziomsec.com/troll1/8.webp)
 
 I downloaded the file and found that this was an executable.
 
@@ -87,7 +87,7 @@ $ wget 'http://TARGET/sup3rs3cr3tdirlol/roflmao'
 $ file roflmao
 ```
 
-![](https://cdn.ziomsec.com/troll1/9.webp)
+![downloading the binary](https://cdn.ziomsec.com/troll1/9.webp)
 
 I then executed the binary and received a wierd response.
 
@@ -96,19 +96,19 @@ $ chmod +x roflmao
 $ ./roflmao
 ```
 
-![](https://cdn.ziomsec.com/troll1/10.webp)
+![running the binary](https://cdn.ziomsec.com/troll1/10.webp)
 
 At this point, I was confused what the message meant- does it have anything to do with my memory address? 
 
 To keep things simple, I tried accessing the provided address on my browser and found another directory listing...
 
-![](https://cdn.ziomsec.com/troll1/11.webp)
+![accessing directory listing](https://cdn.ziomsec.com/troll1/11.webp)
 
 I accessed both directories thereafter.
 
-![](https://cdn.ziomsec.com/troll1/12.webp)
+![accessing hidden directories](https://cdn.ziomsec.com/troll1/12.webp)
 
-![](https://cdn.ziomsec.com/troll1/13.webp)
+![accessing hidden directories](https://cdn.ziomsec.com/troll1/13.webp)
 
 Since both of them contained a text file, I viewed them both using **curl**.
 
@@ -117,7 +117,7 @@ $ curl http://TARGET/0x0856BF/this_folder_contains_the_password/Pass.txt
 $ curl http://TARGET/0x0856BF/good_luck/which_one_lol.txt
 ```
 
-![](https://cdn.ziomsec.com/troll1/14.webp)
+![reading the wordlist](https://cdn.ziomsec.com/troll1/14.webp)
 
 I created a wordlist using all the words, filenames that were provided/displayed.
 
@@ -125,11 +125,11 @@ I created a wordlist using all the words, filenames that were provided/displayed
 curl http://TARGET/0x0856BF/good_luck/which_one_lol.txt
 ```
 
-![](https://cdn.ziomsec.com/troll1/15.webp)
+![downloading the wordlist](https://cdn.ziomsec.com/troll1/15.webp)
 
 > I also removed the **`Definitely not this one`** comment from the list.
 
-![](https://cdn.ziomsec.com/troll1/16.webp)
+![adding more words to the wordlist](https://cdn.ziomsec.com/troll1/16.webp)
 
 I then used **hydra** to bruteforce the **ssh** credentials.
 
@@ -137,7 +137,7 @@ I then used **hydra** to bruteforce the **ssh** credentials.
 hydra -L WORDLIST -P WORDLIST ssh://TARGET
 ```
 
-![](https://cdn.ziomsec.com/troll1/17.webp)
+![bruteforcing the login credentials](https://cdn.ziomsec.com/troll1/17.webp)
 
 Finally, I logged in as **overflow**.
 
@@ -145,20 +145,20 @@ Finally, I logged in as **overflow**.
 ssh overflow@TARGET
 ```
 
-![](https://cdn.ziomsec.com/troll1/18.webp)
+![gaining shell access](https://cdn.ziomsec.com/troll1/18.webp)
 
 ## Privilege Escalation
 
 I proceeded to navigate to the */tmp* directory and downloaded the **Linux Smart Enumeration** script to explore methods for escalating my privileges.
 - https://github.com/diego-treitos/linux-smart-enumeration
 
-![](https://cdn.ziomsec.com/troll1/19.webp)
+![downloading and running linux smart enumeration script](https://cdn.ziomsec.com/troll1/19.webp)
 
 I executed the script but did not get anything useful. Since, I had the distribution info, I looked for kernel exploits using **searchsploit**.
 
-![](https://cdn.ziomsec.com/troll1/20.webp)
+![running linux smart enumeration script](https://cdn.ziomsec.com/troll1/20.webp)
 
-![](https://cdn.ziomsec.com/troll1/21.webp)
+![searching for exploit](https://cdn.ziomsec.com/troll1/21.webp)
 
 After finding an exploit, I downloaded it onto my system and transferred it to the target. Then I executed the exploit and got **root** access.
 
@@ -168,7 +168,7 @@ $ searchsploit -m linux/local/37292.c
 $ python -m http.server 8080
 ```
 
-![](https://cdn.ziomsec.com/troll1/22.webp)
+![downloading the exploit and hosting it](https://cdn.ziomsec.com/troll1/22.webp)
 
 ```shell
 # on Target
@@ -177,7 +177,7 @@ $ gcc 37292.c
 $ ./a.out
 ```
 
-![](https://cdn.ziomsec.com/troll1/23.webp)
+![downloading and running exploit on the target](https://cdn.ziomsec.com/troll1/23.webp)
 
 I spawned a tty shell and captured the final flag from the */root* directory.
 
@@ -187,7 +187,7 @@ $ python -c 'import pty;pty.spawn("/bin/bash")'
 $ cd /root;cat proof.txt
 ```
 
-![](https://cdn.ziomsec.com/troll1/24.webp)
+![capturing the root flag](https://cdn.ziomsec.com/troll1/24.webp)
 
 ## Closure
 

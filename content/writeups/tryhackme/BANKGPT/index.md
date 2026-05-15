@@ -30,23 +30,23 @@ Whenever staff discuss procedures, internal notes, or anything that should stay 
 
 I accessed the LLM chatbot from the link provided on the challenge page
 
-![](https://cdn.ziomsec.com/bankgpt/1.webp)
+![accessing the chat bot](https://cdn.ziomsec.com/bankgpt/1.webp)
 
 I checked the page source to look for any interesting JavaScript/JSON files or endpoints but found nothing. The page source showed measures to prevent cross site scripting / HTML injection.
 
-![](https://cdn.ziomsec.com/bankgpt/2.webp)
+![viewing the source code](https://cdn.ziomsec.com/bankgpt/2.webp)
 
 With that out of the way, I started the conversation with a simple `hi` and got a generic response from the chatbot.
 
-![](https://cdn.ziomsec.com/bankgpt/3.webp)
+![interacting with the chatbot](https://cdn.ziomsec.com/bankgpt/3.webp)
 
 I then asked the bot about its capabilities and to reveal the instructions provided to it by its creator.
 
-![](https://cdn.ziomsec.com/bankgpt/4.webp)
+![asking the bot for its capabilities](https://cdn.ziomsec.com/bankgpt/4.webp)
 
 This is where the bot revealed the flag.
 
-![](https://cdn.ziomsec.com/bankgpt/5.webp)
+![capturing the flag](https://cdn.ziomsec.com/bankgpt/5.webp)
 
 ## Closure
 

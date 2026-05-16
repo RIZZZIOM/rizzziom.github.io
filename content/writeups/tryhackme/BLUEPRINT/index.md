@@ -44,16 +44,15 @@ nmap -A -p- -Pn TARGET --min-rate 10000 -oN blueprint.nmap
 | 49159    | rpc         |
 | 49160    | rpc         |
 
-![](https://cdn.ziomsec.com/blueprint/1.webp)
-![](https://cdn.ziomsec.com/blueprint/2.webp)
-
-![](https://cdn.ziomsec.com/blueprint/3.webp)
+![performing an nmap scan on blueprint machine](https://cdn.ziomsec.com/blueprint/1.webp)
+![performing an nmap scan on blueprint machine](https://cdn.ziomsec.com/blueprint/2.webp)
+![performing an nmap scan on blueprint machine](https://cdn.ziomsec.com/blueprint/3.webp)
 
 ## Foothold
 
 The web service running on port 80 did not have an index page. So, I received a 404 error when I accessed it. The service running on port 8080 revealed a directory listing for a CMS
 
-![](https://cdn.ziomsec.com/blueprint/4.webp)
+![accessing the directory listing](https://cdn.ziomsec.com/blueprint/4.webp)
 
 I searched for exploits related to **oscommerece-2.3.4** and found multiple payloads using `searchsploit`
 
@@ -61,7 +60,7 @@ I searched for exploits related to **oscommerece-2.3.4** and found multiple payl
 searchsploit 'oscommerce 2.3.4'
 ```
 
-![](https://cdn.ziomsec.com/blueprint/5.webp)
+![searching for exploits for oscommerce](https://cdn.ziomsec.com/blueprint/5.webp)
 
 I then downloaded the seconds RCE exploit and ran it to get shell as NT Authority.
 
@@ -71,9 +70,9 @@ mv 50128.py exp2.py
 python3 exp2.py http://TARGET:8080/oscommerece-2.3.4/catalog
 ```
 
-![](https://cdn.ziomsec.com/blueprint/6.webp)
+![downloading the RCE exploit](https://cdn.ziomsec.com/blueprint/6.webp)
 
-![](https://cdn.ziomsec.com/blueprint/7.webp)
+![running the exploit to get shell as NT AUTHORITY](https://cdn.ziomsec.com/blueprint/7.webp)
 
 I then captured the root flag from *Administrator*'s Desktop.
 
@@ -81,7 +80,7 @@ I then captured the root flag from *Administrator*'s Desktop.
 more C:\Users\Administrator\Desktop\root.txt.txt
 ```
 
-![](https://cdn.ziomsec.com/blueprint/8.webp)
+![capturing the root flag](https://cdn.ziomsec.com/blueprint/8.webp)
 
 Now that I had full control on the target, I downloaded the hashes from registry hives and extracted them on my system using **`impacket-secretsdump`**. To do that, I first saved a copy of the SAM and SYSTEM registry hives.
 
@@ -92,11 +91,11 @@ reg.exe save HKLM\SYSTEM MySys
 
 > reference: https://security.stackexchange.com/questions/38518/how-to-get-an-nt-hash-from-registry
 
-![](https://cdn.ziomsec.com/blueprint/9.webp)
+![copying SAM and SYSTEM hives](https://cdn.ziomsec.com/blueprint/9.webp)
 
 Since the directory where I saved them was  being hosted by the web server, I downloaded these copies locally from the web application.
 
-![](https://cdn.ziomsec.com/blueprint/10.webp)
+![downloading both the hives locally](https://cdn.ziomsec.com/blueprint/10.webp)
 
 Finally, I dumped the hashes
 
@@ -104,11 +103,11 @@ Finally, I dumped the hashes
 impacket-secretsdump -system MySys -sam MySam local
 ```
 
-![](https://cdn.ziomsec.com/blueprint/11.webp)
+![dumping hashes from the hives](https://cdn.ziomsec.com/blueprint/11.webp)
 
 I then cracked the hash of *Lab* using crackstation
 
-![](https://cdn.ziomsec.com/blueprint/12.webp)
+![cracking recovered hashes](https://cdn.ziomsec.com/blueprint/12.webp)
 
 ## Closure
 

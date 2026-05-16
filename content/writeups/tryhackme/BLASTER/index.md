@@ -28,13 +28,13 @@ I performed an **nmap** aggressive scan on the target to find open ports and the
 nmap -A -p- TARGET --min-rate 10000 -oN blaster.nmap -Pn
 ```
 
-![](https://cdn.ziomsec.com/blaster/1.webp)
+![performing an nmap scan on blaster machine](https://cdn.ziomsec.com/blaster/1.webp)
 
 ## Initial Foothold
 
 The nmap scan revealed a web application running on port 80, so I accessed it on my browser.
 
-![](https://cdn.ziomsec.com/blaster/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/blaster/2.webp)
 
 It was a default IIS landing page so I fuzzed for hidden directories and found one called *retro*.
 
@@ -42,19 +42,19 @@ It was a default IIS landing page so I fuzzed for hidden directories and found o
 ffuf -u http://TARGET/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-directories.txt
 ```
 
-![](https://cdn.ziomsec.com/blaster/3.webp)
+![fuzzing hidden directories on the web application](https://cdn.ziomsec.com/blaster/3.webp)
 
 I visited the directory and found a blogging application.
 
-![](https://cdn.ziomsec.com/blaster/4.webp)
+![visiting the blog](https://cdn.ziomsec.com/blaster/4.webp)
 
 The author of the blog could be a user in the system so I kept note of it.
 
-![](https://cdn.ziomsec.com/blaster/5.webp)
+![viewing the blog to find the author info](https://cdn.ziomsec.com/blaster/5.webp)
 
 A comment on one of the blogs had a potential password.
 
-![](https://cdn.ziomsec.com/blaster/6.webp)
+![inspecting the comment of the blog](https://cdn.ziomsec.com/blaster/6.webp)
 
 I checked if the username and password were valid and found that I could use them to access the target through **rdp**.
 
@@ -62,7 +62,7 @@ I checked if the username and password were valid and found that I could use the
 hydra -l wade -p parzival TARGET rdp
 ```
 
-![](https://cdn.ziomsec.com/blaster/7.webp)
+![verifying the credentials against the rdp](https://cdn.ziomsec.com/blaster/7.webp)
 
 I used **xfreerdp** to access the machine.
 
@@ -70,17 +70,17 @@ I used **xfreerdp** to access the machine.
 xfreerdp /u:'Wade' p: 'parzival' /v:TARGET
 ```
 
-![](https://cdn.ziomsec.com/blaster/8.webp)
+![accessing the target via RDP](https://cdn.ziomsec.com/blaster/8.webp)
 
 I found user.txt in the Desktop.
 
-![](https://cdn.ziomsec.com/blaster/9.webp)
+![capturing the user flag](https://cdn.ziomsec.com/blaster/9.webp)
 
 ## Privilege Escalation
 
 The Desktop had another application called hhupd.
 
-![](https://cdn.ziomsec.com/blaster/10.webp)
+![inspecting the second application on the desktop](https://cdn.ziomsec.com/blaster/10.webp)
 
 I searched online for exploits and found articles for privilege escalation through UAC bypass.
 - https://justinsaechao23.medium.com/cve-2019-1388-windows-certificate-dialog-elevation-of-privilege-4d247df5b4d7
@@ -89,13 +89,13 @@ I followed the steps given in the article to escalate my privilege to administra
 - Right click on the application and select run as Administrator
 - A dialogue box appears. Click the *show information...* link.
 
-![](https://cdn.ziomsec.com/blaster/11.webp)
+![activating the UAC](https://cdn.ziomsec.com/blaster/11.webp)
 
 - A web browser will automatically open after clicking on the hyperlink. If not, click on the link again. The url should be of Verisign.
 
-![](https://cdn.ziomsec.com/blaster/12.webp)
+![verisign url on browser](https://cdn.ziomsec.com/blaster/12.webp)
 
-![](https://cdn.ziomsec.com/blaster/13.webp)
+![verisign url on browser](https://cdn.ziomsec.com/blaster/13.webp)
 
 - Save the page in the following way:
 	- click on save
@@ -103,15 +103,15 @@ I followed the steps given in the article to escalate my privilege to administra
 	- a dialogue box will appear 
 	- within the file explorer, navigate to `C:\Windows\System32` and open `cmd.exe`
 
-![](https://cdn.ziomsec.com/blaster/14.webp)
+![opening cmd.exe](https://cdn.ziomsec.com/blaster/14.webp)
 
-![](https://cdn.ziomsec.com/blaster/15.webp)
+![opening cmd.exe](https://cdn.ziomsec.com/blaster/15.webp)
 
-![](https://cdn.ziomsec.com/blaster/16.webp)
+![opening cmd.exe](https://cdn.ziomsec.com/blaster/16.webp)
 
 - I spawned a shell as NT Authority System.
 
-![](https://cdn.ziomsec.com/blaster/17.webp)
+![shell as NT AUTHORITY](https://cdn.ziomsec.com/blaster/17.webp)
 
 - I then captured the root flag from Administrator's Desktop.
 
@@ -119,7 +119,7 @@ I followed the steps given in the article to escalate my privilege to administra
 more C:\Users\Administrator\Desktop\root.txt
 ```
 
-![](https://cdn.ziomsec.com/blaster/18.webp)
+![capturing the root flag](https://cdn.ziomsec.com/blaster/18.webp)
 
 I wanted to get a meterpreter shell. So I started the **metasploit** framework.
 
@@ -133,11 +133,11 @@ I used the following exploit to get a reverse meterpreter shell by executing a p
 use exploit/multi/script/web_delivery
 ```
 
-![](https://cdn.ziomsec.com/blaster/19.webp)
+![spawning a meterpreter shell](https://cdn.ziomsec.com/blaster/19.webp)
 
-![](https://cdn.ziomsec.com/blaster/20.webp)
+![spawning a meterpreter shell](https://cdn.ziomsec.com/blaster/20.webp)
 
-![](https://cdn.ziomsec.com/blaster/21.webp)
+![spawning a meterpreter shell](https://cdn.ziomsec.com/blaster/21.webp)
 
 ## Closure
 

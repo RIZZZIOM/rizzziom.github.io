@@ -48,17 +48,17 @@ nmap -A -p- -Pn TARGET --min-rate 10000 -oN cyberlens.nmap
 | 49675 | rpc     |
 | 61777 | http    |
 
-![](https://cdn.ziomsec.com/cyberlens/1.webp)
+![performing an nmap scan for cyberlens machine](https://cdn.ziomsec.com/cyberlens/1.webp)
 
-![](https://cdn.ziomsec.com/cyberlens/2.webp)
+![performing an nmap scan for cyberlens machine](https://cdn.ziomsec.com/cyberlens/2.webp)
 
 ## Initial Foothold
 
 The **nmap** scan revealed an **http** server running on port 80 and 61777 so I accessed them from my browser.
 
-![](https://cdn.ziomsec.com/cyberlens/3.webp)
+![accessing the web application](https://cdn.ziomsec.com/cyberlens/3.webp)
 
-![](https://cdn.ziomsec.com/cyberlens/4.webp)
+![accessing tika server](https://cdn.ziomsec.com/cyberlens/4.webp)
 
 The server running on port 61777 revealed the apache version being used. A simple google search revealed an **RCE** vulnerability.
 
@@ -68,7 +68,7 @@ I looked for exploits using **searchsploit** and found one on **metasploit**.
 searchsploit 'tika 1.17'
 ```
 
-![](https://cdn.ziomsec.com/cyberlens/5.webp)
+![searching for tika exploits](https://cdn.ziomsec.com/cyberlens/5.webp)
 
 I booted the **metasploit** framework and selected the exploit.
 
@@ -86,7 +86,7 @@ set RPORT 61777
 run
 ```
 
-![](https://cdn.ziomsec.com/cyberlens/6.webp)
+![spawning a meterpreter shell](https://cdn.ziomsec.com/cyberlens/6.webp)
 
 I then captured the user flag from the `C:\Users\CyberLens\Desktop\`.
 
@@ -95,13 +95,13 @@ cd C:\Users\CyberLens\Desktop
 more user.txt
 ```
 
-![](https://cdn.ziomsec.com/cyberlens/7.webp)
+![capturing the user flag](https://cdn.ziomsec.com/cyberlens/7.webp)
 
 ## Privilege Escalation
 
 I then ran privilege escalation checks using **PowerUp** and **winPEAS** but found nothing interesting.
 
-![](https://cdn.ziomsec.com/cyberlens/8.webp)
+![running winpreas](https://cdn.ziomsec.com/cyberlens/8.webp)
 
 Since both of them revealed nothing of interest, I ran the local exploit suggester module in metasploit.
 
@@ -111,17 +111,17 @@ use post/multi/recon/local_exploit_suggester
 set SESSION <Number>
 ```
 
-![](https://cdn.ziomsec.com/cyberlens/9.webp)
+![running local exploit suggester post module](https://cdn.ziomsec.com/cyberlens/9.webp)
 
 I after getting a bunch of recommendations, I tried each one of them one after the other. Starting with the first exploit, I configured the required options.
 
 Running it got me root access on the target.
 
-![](https://cdn.ziomsec.com/cyberlens/10.webp)
+![running suggested exploit for SYSTEM access](https://cdn.ziomsec.com/cyberlens/10.webp)
 
 Finally I captured the root flag from the *Administrator's* Desktop.
 
-![](https://cdn.ziomsec.com/cyberlens/11.webp)
+![capturing the admin flag](https://cdn.ziomsec.com/cyberlens/11.webp)
 
 ## Closure
 

@@ -29,7 +29,7 @@ I connected to the AI bot using **netcat**.
 nc TARGET 1337
 ```
 
-![](https://cdn.ziomsec.com/evilgpt/1.webp)
+![connecting to the bot via netcat](https://cdn.ziomsec.com/evilgpt/1.webp)
 
 The bot asked for a command, so I asked it to list the contents in my current working directory. It came up with the appropriate command and asked me if I wanted to execute it. I said yest and was able to view the contents.
 
@@ -37,7 +37,7 @@ The bot asked for a command, so I asked it to list the contents in my current wo
 print contents of current working directory
 ```
 
-![](https://cdn.ziomsec.com/evilgpt/2.webp)
+![listing current working directory contents](https://cdn.ziomsec.com/evilgpt/2.webp)
 
 The bot allowed me to execute system commands, so I asked it to list files in the root directory in hopes of finding the flag.
 
@@ -45,7 +45,7 @@ The bot allowed me to execute system commands, so I asked it to list files in th
 list all contents inside / directory
 ```
 
-![](https://cdn.ziomsec.com/evilgpt/3.webp)
+![listing all contents inside root directory](https://cdn.ziomsec.com/evilgpt/3.webp)
 
 Since the root did not contain the flag, the next possible location would be the `/root` directory. Since access to that directory is restricted, I verified my current user.
 
@@ -53,7 +53,7 @@ Since the root did not contain the flag, the next possible location would be the
 what is my current user
 ```
 
-![](https://cdn.ziomsec.com/evilgpt/4.webp)
+![checking current user](https://cdn.ziomsec.com/evilgpt/4.webp)
 
 Since the bot was running as root, I could view the contents inside the `/root` directory where I found the flag.
 
@@ -61,23 +61,23 @@ Since the bot was running as root, I could view the contents inside the `/root` 
 list all contents inside /root directory
 ```
 
-![](https://cdn.ziomsec.com/evilgpt/5.webp)
+![listing contents inside root directory](https://cdn.ziomsec.com/evilgpt/5.webp)
 
 ```
 read contents of flag.txt inside /root directory
 ```
 
-![](https://cdn.ziomsec.com/evilgpt/6.webp)
+![capturing the flag](https://cdn.ziomsec.com/evilgpt/6.webp)
 
 ## Evil-GPT v2
 
 This time, I was provided with a web based chatbot.
 
-![](https://cdn.ziomsec.com/evilgpt/7.webp)
+![accessing the web application](https://cdn.ziomsec.com/evilgpt/7.webp)
 
 When I asked the bot to reveal the flag, it said that revealing the flag violated its rules. So, I asked it to list down its rules where I discovered the flag.
 
-![](https://cdn.ziomsec.com/evilgpt/8.webp)
+![tricking the bot into revealing the flag](https://cdn.ziomsec.com/evilgpt/8.webp)
 
 That's it from my side, until next time :)
 

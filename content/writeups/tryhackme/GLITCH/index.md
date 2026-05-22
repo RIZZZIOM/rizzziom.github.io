@@ -28,45 +28,45 @@ I performed an **nmap** aggressive scan to identify open ports and the services 
 nmap -A -p- TARGET --min-rate 10000 -oN glitch.nmap
 ```
 
-![](https://cdn.ziomsec.com/glitch/1.webp)
+![performing an nmap scan on glitch machine](https://cdn.ziomsec.com/glitch/1.webp)
 
 ## Initial Foothold
 
 I visited the website running on the target and found nothing interesting at first.
 
-![](https://cdn.ziomsec.com/glitch/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/glitch/2.webp)
 
 It's source code revealed an interesting endpoint.
 
-![](https://cdn.ziomsec.com/glitch/3.webp)
+![inspecting the source code of the web app](https://cdn.ziomsec.com/glitch/3.webp)
 
 I used **Burp**'s **Repeater** to then send a `GET` request to the endpoint and received a base64 encoded token.
 
-![](https://cdn.ziomsec.com/glitch/4.webp)
+![receiving a base64 encoded token](https://cdn.ziomsec.com/glitch/4.webp)
 
 I used the **Decoder** tab to then decode this token and added this as the cookie value on the web page.
 
-![](https://cdn.ziomsec.com/glitch/5.webp)
+![decoding the cypher token](https://cdn.ziomsec.com/glitch/5.webp)
 
 Refreshing the site now revealed the actual web content.
 
-![](https://cdn.ziomsec.com/glitch/6.webp)
+![injecting the cookie](https://cdn.ziomsec.com/glitch/6.webp)
 
 However, again there was nothing special. The source code of this page used a **javascript** file which could contain new endpoints.
 
-![](https://cdn.ziomsec.com/glitch/7.webp)
+![inspecting the javascript file](https://cdn.ziomsec.com/glitch/7.webp)
 
 I viewed the file and found another endpoint.
 
-![](https://cdn.ziomsec.com/glitch/8.webp)
+![inspecting the javascript file](https://cdn.ziomsec.com/glitch/8.webp)
 
 Then I used **Repeater** to send a request to this endpoint and got another list of items.
 
-![](https://cdn.ziomsec.com/glitch/9.webp)
+![sending a request to the discovered endpoint](https://cdn.ziomsec.com/glitch/9.webp)
 
 I then switched the HTTP method to **POST** and received something unusual, maybe we could send some value through an argument...
 
-![](https://cdn.ziomsec.com/glitch/10.webp)
+![switching HTTP method](https://cdn.ziomsec.com/glitch/10.webp)
 
 I used **ffuf** and found the argument that could be used to send the value.
 
@@ -74,15 +74,15 @@ I used **ffuf** and found the argument that could be used to send the value.
 ffuf -u http://TARGET/api/item?FUZZ=a -w /usr/share/wordlists/seclists/Fuzzing/1-4_all_letters_a-z.txt -X POST
 ```
 
-![](https://cdn.ziomsec.com/glitch/11.webp)
+![fuzzing url arguments](https://cdn.ziomsec.com/glitch/11.webp)
 
 Next I sent a value with the argument and received an interesting message.
 
-![](https://cdn.ziomsec.com/glitch/12.webp)
+![sending a value with the discovered argument](https://cdn.ziomsec.com/glitch/12.webp)
 
 When I switched the number value to an alphabet, the application threw an error. The error was thrown by the **eval** function of **node.js**.
 
-![](https://cdn.ziomsec.com/glitch/13.webp)
+![causing a stack trace error](https://cdn.ziomsec.com/glitch/13.webp)
 
 A simple **google** search revealed a way to exploit this and execute our commands.
 - https://blog.appsecco.com/nodejs-and-a-simple-rce-exploit-d79001837cc6
@@ -92,7 +92,7 @@ I then used **revshells** to generate a reverse shell payload.
 
 Finally, I started a **netcat** listener and exploited the vulnerability to get a reverse shell.
 
-![](https://cdn.ziomsec.com/glitch/14.webp)
+![exploiting vulnerability for reverse shell](https://cdn.ziomsec.com/glitch/14.webp)
 
 After gaining shell, I stabilized it.
 
@@ -101,7 +101,7 @@ export TERM=xterm
 python -c "import pty;pty.spawn('/bin/bash')"
 ```
 
-![](https://cdn.ziomsec.com/glitch/15.webp)
+![spawning a tty shell](https://cdn.ziomsec.com/glitch/15.webp)
 
 Finally, I captured the user flag from *user*'s home directory.
 
@@ -109,7 +109,7 @@ Finally, I captured the user flag from *user*'s home directory.
 cat /home/user/user.txt
 ```
 
-![](https://cdn.ziomsec.com/glitch/16.webp)
+![capturing the user flag](https://cdn.ziomsec.com/glitch/16.webp)
 
 ## Privilege Escalation
 
@@ -121,18 +121,18 @@ I checked for binaries with **SUID** bits. I noticed the **pkexec** binary and t
 find / -user root -perm -u=s -ls 2>/dev/null
 ```
 
-![](https://cdn.ziomsec.com/glitch/17.webp)
+![searching for files with SUID bit](https://cdn.ziomsec.com/glitch/17.webp)
 
 I downloaded the exploit code on the target system and provided it executable permission.
 - https://github.com/ly4k/PwnKit
 
 Upon executing it, I received root access.
 
-![](https://cdn.ziomsec.com/glitch/18.webp)
+![exploiting pkexec with SUID bit using PwnKit](https://cdn.ziomsec.com/glitch/18.webp)
 
 I then captured the root flag from *root*'s home directory.
 
-![](https://cdn.ziomsec.com/glitch/19.webp)
+![capturing the root flag](https://cdn.ziomsec.com/glitch/19.webp)
 
 ### Gaining Shell As Root By Exploiting SUID On Doas
 
@@ -142,17 +142,17 @@ The exploitation of **pkexec** was most likely an unintended way of gaining root
 find / -user root -perm -u=s -ls 2>/dev/null
 ```
 
-![](https://cdn.ziomsec.com/glitch/20.webp)
+![searching for files with SUID bit](https://cdn.ziomsec.com/glitch/20.webp)
 
 Before using the `doas` binary, I decided to go through the existing information in my directory. I found a folder for **firefox**. This folder could contain user credentials.
 
-![](https://cdn.ziomsec.com/glitch/21.webp)
+![inspecting firefox directory](https://cdn.ziomsec.com/glitch/21.webp)
 
 When I listed the contents of the directory, I found the credential files:
 - **key4.db**
 - **logins.json**
 
-![](https://cdn.ziomsec.com/glitch/22.webp)
+![inspecting firefox directory](https://cdn.ziomsec.com/glitch/22.webp)
 
 I transferred both the files using **netcat**.
 
@@ -174,11 +174,11 @@ After transferring both the files to my local system, I used the **firepwd** too
 python firepwd.py ./
 ```
 
-![](https://cdn.ziomsec.com/glitch/23.webp)
+![extracting user credentials](https://cdn.ziomsec.com/glitch/23.webp)
 
 The files revealed *v0id*'s password. So, I used it to switch to the *v0id* user.
 
-![](https://cdn.ziomsec.com/glitch/24.webp)
+![switching to the user v0id](https://cdn.ziomsec.com/glitch/24.webp)
 
 After switching to *v0id*, I ran the `doas` binary to spawn a **bash** shell as *root*.
 
@@ -186,7 +186,7 @@ After switching to *v0id*, I ran the `doas` binary to spawn a **bash** shell as 
 /usr/local/bin/doas -u r/usr/local/bin/doas -u root /bin/bash
 ```
 
-![](https://cdn.ziomsec.com/glitch/25.webp)
+![spawning a bash shell by exploiting suid bit on doas](https://cdn.ziomsec.com/glitch/25.webp)
 
 That's it from my end! Until next time :)
 

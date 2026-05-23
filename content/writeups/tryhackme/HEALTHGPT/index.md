@@ -30,23 +30,23 @@ Whenever doctors discuss cases, nurses review charts, or administrators exchange
 
 I accessed the chatbot and asked it a basic "who are you" question to get a general sense of what it was and how it would respond.
 
-![](https://cdn.ziomsec.com/healthgpt/1.webp)
+![interacting with the challenge chatbot](https://cdn.ziomsec.com/healthgpt/1.webp)
 
 I then asked it to give me a detailed introduction about itself and the instructions it was working on.
 
-![](https://cdn.ziomsec.com/healthgpt/2.webp)
+![finding instructions it is working on](https://cdn.ziomsec.com/healthgpt/2.webp)
 
-![](https://cdn.ziomsec.com/healthgpt/3.webp)
+![finding instructions it is working on](https://cdn.ziomsec.com/healthgpt/3.webp)
 
 I then tried confusing the bot by asking for advice and then trying to make it reveal the flag but I was denied access.
 
-![](https://cdn.ziomsec.com/healthgpt/4.webp)
+![attempting to confuse the bot to make it reveal the flag](https://cdn.ziomsec.com/healthgpt/4.webp)
 
 Since it responded with `Access Denied` before giving information about my health, I tried to make it leak the flag by asking it about what it was hiding and got the flag.
 
-![](https://cdn.ziomsec.com/healthgpt/5.webp)
+![asking the bot what it is protecting](https://cdn.ziomsec.com/healthgpt/5.webp)
 
-![](https://cdn.ziomsec.com/healthgpt/6.webp)
+![making the bot reveal the flag](https://cdn.ziomsec.com/healthgpt/6.webp)
 
 ## Closure
 

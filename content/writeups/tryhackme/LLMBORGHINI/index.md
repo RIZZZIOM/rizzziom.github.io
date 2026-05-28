@@ -31,17 +31,17 @@ Your objective is simple. Find out the weekly revenue for the Singapore branch.
 
 I tried making the bot accidently reveal the details by asking it to perform a multi step task but was instantly blocked.
 
-![](https://cdn.ziomsec.com/llmborghini/1.webp)
+![asking the chatbot multiple questions](https://cdn.ziomsec.com/llmborghini/1.webp)
 
-![](https://cdn.ziomsec.com/llmborghini/2.webp)
+![chatbot's answer to my questions](https://cdn.ziomsec.com/llmborghini/2.webp)
 
-![](https://cdn.ziomsec.com/llmborghini/3.webp)
+![chatbot's answer to my questions](https://cdn.ziomsec.com/llmborghini/3.webp)
 
-![](https://cdn.ziomsec.com/llmborghini/4.webp)
+![chatbot's answer to my questions](https://cdn.ziomsec.com/llmborghini/4.webp)
 
 I then tried a DAN styled jailbreak prompt and asked it about the revenue. This worked and I got the answer to the challenge question
 
-![](https://cdn.ziomsec.com/llmborghini/5.webp)
+![using a DAN styled jailbreak prompt to get the challenge answers.](https://cdn.ziomsec.com/llmborghini/5.webp)
 
 Happy Hacking!
 

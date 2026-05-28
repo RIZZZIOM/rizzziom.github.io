@@ -28,37 +28,37 @@ I performed an nmap aggressive scan to identify open ports and services running 
 nmap -A -p- TARGET --min-rate 10000 -oN ll.nmap
 ```
 
-![](https://cdn.ziomsec.com/lessonlearned/1.webp)
+![scanning the target with nmap](https://cdn.ziomsec.com/lessonlearned/1.webp)
 
 ## Capturing The Flag
 
 I found port 80 to be up and running. Hence I visited the page through my browser.
 
-![](https://cdn.ziomsec.com/lessonlearned/2.webp)
+![accessing the login panel](https://cdn.ziomsec.com/lessonlearned/2.webp)
 
 I entered a default credential to check the response.
 
-![](https://cdn.ziomsec.com/lessonlearned/3.webp)
+![trying default creds](https://cdn.ziomsec.com/lessonlearned/3.webp)
 
 The error mentioned that both my username and password were invalid. Since this was a login panel, I tried performing SQL injection. I entered a username, password and captured the request on Burp proxy. I then forwarded this to Burp intruder and added the username field to scope.
 
-![](https://cdn.ziomsec.com/lessonlearned/4.webp)
+![forwarding the request to intruder](https://cdn.ziomsec.com/lessonlearned/4.webp)
 
 I looked for some common sql injection payloads and added them in my payloads section. I then launched the attack.
 
-![](https://cdn.ziomsec.com/lessonlearned/5.webp)
+![adding sql injection payloads](https://cdn.ziomsec.com/lessonlearned/5.webp)
 
 The following payload returned an error: `' OR '1'='1'--`
 
-![](https://cdn.ziomsec.com/lessonlearned/6.webp)
+![viewing the sql error](https://cdn.ziomsec.com/lessonlearned/6.webp)
 
 I learnt a valuable lesson. Moving on, I reset the box and tried other ways to bypass the login.
 
 This time I tried to brute force a valid username using seclists.
 
-![](https://cdn.ziomsec.com/lessonlearned/7.webp)
+![adding username list](https://cdn.ziomsec.com/lessonlearned/7.webp)
 
-![](https://cdn.ziomsec.com/lessonlearned/8.webp)
+![bruteforcing a valid user](https://cdn.ziomsec.com/lessonlearned/8.webp)
 
 Using Burp I found a valid username i.e **`martin`**
 
@@ -74,7 +74,7 @@ martin' -- -
 
 The above payload allowed me to log into the system and get the flag.
 
-![](https://cdn.ziomsec.com/lessonlearned/9.webp)
+![capturing the flag](https://cdn.ziomsec.com/lessonlearned/9.webp)
 
 ## Closure
 

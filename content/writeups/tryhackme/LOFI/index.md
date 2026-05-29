@@ -24,27 +24,27 @@ To access the machine, click on the link given below:
 
 I started Burp Suite and accessed the target using Burp's browser. The web application loaded a Youtube video and had links to other videos on the side.
 
-![](https://cdn.ziomsec.com/lofi/1.webp)
+![accessing the web applicaton](https://cdn.ziomsec.com/lofi/1.webp)
 
 I clicked on a link and analyzed the request on **Burp Suite** by sending it to the **Repeater** tab.
 
-![](https://cdn.ziomsec.com/lofi/2.webp)
+![clicking on the available links](https://cdn.ziomsec.com/lofi/2.webp)
 
 The page was being fetched by passing the name of the page in the URL.
 
-![](https://cdn.ziomsec.com/lofi/3.webp)
+![analyzing the request on Burp](https://cdn.ziomsec.com/lofi/3.webp)
 
 I tried traversing the directory by providing a relative path and managed to read the `/etc/passwd` file.
 
-![](https://cdn.ziomsec.com/lofi/4.webp)
+![attempting directory traversal](https://cdn.ziomsec.com/lofi/4.webp)
 
 When I attempted the same using an absolute path, I was blocked.
 
-![](https://cdn.ziomsec.com/lofi/5.webp)
+![attempting directory traversal](https://cdn.ziomsec.com/lofi/5.webp)
 
 This confirmed that I could traverse directories by providing a relative path. Since the instructions mentioned that the flag was present in the *root* of the filesystem, I captured it by providing the appropriate path and solved the box.
 
-![](https://cdn.ziomsec.com/lofi/6.webp)
+![capturing the flag](https://cdn.ziomsec.com/lofi/6.webp)
 
 That's it from my side,
 Until next time :)

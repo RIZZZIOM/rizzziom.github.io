@@ -26,22 +26,22 @@ I downloaded the image file and viewed its metadata using **exiftool**.
 exiftool WindowsXP_1551719014755.jpg
 ```
 
-![](https://cdn.ziomsec.com/ohsint/1.webp)
+![reading exif data of the image](https://cdn.ziomsec.com/ohsint/1.webp)
 
 The Copyright seemed to have the owner name, So I googled it and found 3 things:
 - Github account
 - X account
 - Wordpress Blog
 
-![](https://cdn.ziomsec.com/ohsint/2.webp)
+![seaching for the owner](https://cdn.ziomsec.com/ohsint/2.webp)
 
 I accessed all of them for further inspection.
 
-![](https://cdn.ziomsec.com/ohsint/3.webp)
+![inspecting github](https://cdn.ziomsec.com/ohsint/3.webp)
 
-![](https://cdn.ziomsec.com/ohsint/4.webp)
+![inspecting twitter/x](https://cdn.ziomsec.com/ohsint/4.webp)
 
-![](https://cdn.ziomsec.com/ohsint/5.webp)
+![inspecting website](https://cdn.ziomsec.com/ohsint/5.webp)
 
 ## What is this user's avatar of?
 
@@ -55,7 +55,7 @@ The **README** of *people_finder* repository contained the answer to this questi
 
 **Ans: London**
 
-![](https://cdn.ziomsec.com/ohsint/6.webp)
+![finding city details on Github](https://cdn.ziomsec.com/ohsint/6.webp)
 
 ## What is the SSID of the WAP he connected to?
 
@@ -63,11 +63,11 @@ I copied the BSSID from the post made on **X** and used **wigle.net** to find th
 
 **Ans: UnileverWiFi**
 
-![](https://cdn.ziomsec.com/ohsint/7.webp)
+![determining SSID via twitter post](https://cdn.ziomsec.com/ohsint/7.webp)
 
-![](https://cdn.ziomsec.com/ohsint/8.webp)
+![searching on wigle](https://cdn.ziomsec.com/ohsint/8.webp)
 
-![](https://cdn.ziomsec.com/ohsint/9.webp)
+![searching on wigle](https://cdn.ziomsec.com/ohsint/9.webp)
 
 ## What is his personal email address?
 
@@ -79,7 +79,7 @@ The personal email can be found in the **Github** repository.
 
 **Ans: github**
 
-![](https://cdn.ziomsec.com/ohsint/10.webp)
+![finding email address on github](https://cdn.ziomsec.com/ohsint/10.webp)
 
 ## Where has he gone on holiday?
 
@@ -87,7 +87,7 @@ The answer to this question can be found on the **Wordpress** site.
 
 **Ans: New york**
 
-![](https://cdn.ziomsec.com/ohsint/11.webp)
+![finding holiday informaiton on wordpress site](https://cdn.ziomsec.com/ohsint/11.webp)
 
 ## What is the person's password?
 
@@ -95,6 +95,6 @@ The **Wordpress** site contains this person's password. It has a white font colo
 
 **Ans: pennYDr0pper.!**
 
-![](https://cdn.ziomsec.com/ohsint/12.webp)
+![finding the password on wordpress](https://cdn.ziomsec.com/ohsint/12.webp)
 
 ---

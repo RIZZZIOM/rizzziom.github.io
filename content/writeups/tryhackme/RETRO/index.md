@@ -28,13 +28,13 @@ I performed an **nmap** aggressive scan to find open ports and services running 
 nmap -A -p- TARGET -Pn -oN retro.nmap --min-rate 10000
 ```
 
-![](https://cdn.ziomsec.com/retro/1.webp)
+![performing an nmap scan on retro machine](https://cdn.ziomsec.com/retro/1.webp)
 
 ## Initial Foothold
 
 The machine had an http service and rdp running on it. I started of by visiting the webpage through my browser.
 
-![](https://cdn.ziomsec.com/retro/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/retro/2.webp)
 
 It was just a default landing page. So I performed directory bruteforce using **ffuf** to find other directories and files.
 
@@ -42,11 +42,11 @@ It was just a default landing page. So I performed directory bruteforce using **
 ffuf -u http://TARGET/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-directories.txt
 ```
 
-![](https://cdn.ziomsec.com/retro/3.webp)
+![fuzzing to find hidden directories](https://cdn.ziomsec.com/retro/3.webp)
 
 The **ffuf** scan revealed a page called `/retro`. So I visited it. This page looked like a blog on retro games.
 
-![](https://cdn.ziomsec.com/retro/4.webp)
+![accessing the discovered endpoint](https://cdn.ziomsec.com/retro/4.webp)
 
 I fuzzed `/retro` using **ffuf** to find interesting files or directories.
 
@@ -54,23 +54,23 @@ I fuzzed `/retro` using **ffuf** to find interesting files or directories.
 ffuf -u http://TARGET/retro/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-files.txt -fs 0 -mc 200,302,301
 ```
 
-![](https://cdn.ziomsec.com/retro/5.webp)
+![fuzzing the new endpoint to find more endpoints](https://cdn.ziomsec.com/retro/5.webp)
 
 The **ffuf** scan discovered a **wordpress** login panel. I tried logging in using a random username and password and got an error saying *invalid username*. 
 
-![](https://cdn.ziomsec.com/retro/6.webp)
+![accessing the wordpress login panel](https://cdn.ziomsec.com/retro/6.webp)
 
 This error mechanism made it easy to find valid users. I navigated to the `/retro`'s home page and looked for potential usernames. Since the blogs were written by **Wade**, I could try using it as a **username**. I clicked on **Wade** to find information about the author.
 
-![](https://cdn.ziomsec.com/retro/7.webp)
+![finding a potential username](https://cdn.ziomsec.com/retro/7.webp)
 
 I also tried using this username in the login panel. And received an error of *invalid password*.
 
-![](https://cdn.ziomsec.com/retro/8.webp)
+![trying logging in as wade](https://cdn.ziomsec.com/retro/8.webp)
 
 In the **author's** page, I found downloadable **RSS** data.
 
-![](https://cdn.ziomsec.com/retro/9.webp)
+![link to rss](https://cdn.ziomsec.com/retro/9.webp)
 
 I downloaded and viewed the data. One of the files revealed the password of **Wade**.
 
@@ -78,11 +78,11 @@ I downloaded and viewed the data. One of the files revealed the password of **Wa
 cat Zq1vjf2d
 ```
 
-![](https://cdn.ziomsec.com/retro/10.webp)
+![hardcoded password](https://cdn.ziomsec.com/retro/10.webp)
 
 I logged in and got access to the **wp-admin** panel.
 
-![](https://cdn.ziomsec.com/retro/11.webp)
+![logging into wordpress](https://cdn.ziomsec.com/retro/11.webp)
 
 I referred to **hacktricks** for ways to get an RCE from wp-admin.
 - https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/wordpress#panel-rce
@@ -93,7 +93,7 @@ I referred to **hacktricks** for ways to get an RCE from wp-admin.
 
 I added my reverse shell payload in the **404.php** template so that I could execute it by causing an error.
 
-![](https://cdn.ziomsec.com/retro/12.webp)
+![adding a reverse shell payload](https://cdn.ziomsec.com/retro/12.webp)
 
 After updating the php code, I started a reverse shell listener using **nc** and triggered the payload by trying to navigate to a non-existent path.
 
@@ -103,7 +103,7 @@ curl http://TARGET/retro/index.php/author/wade/dfds
 
 This gave me a reverse shell.
 
-![](https://cdn.ziomsec.com/retro/13.webp)
+![getting a reverse shell on netcat listener](https://cdn.ziomsec.com/retro/13.webp)
 
 Alternatively, I also found out that **wade** reused his password. So the same credentials could also be used with **rdp**.
 
@@ -111,7 +111,7 @@ Alternatively, I also found out that **wade** reused his password. So the same c
 hydra -l 'wade' -p 'parzival' rdp://TARGET
 ```
 
-![](https://cdn.ziomsec.com/retro/14.webp)
+![validating that the creds work for rdp](https://cdn.ziomsec.com/retro/14.webp)
 
 **rdp** would provide a graphical access to the system making interaction much easier. So I connected to the target using **xfreerdp**.
 
@@ -121,14 +121,14 @@ xfreerdp /u:wade /p:parzival /v:TARGET
 
 On the **Desktop**, I found the **user.txt** file.
 
-![](https://cdn.ziomsec.com/retro/15.webp)
+![capturing the user flag](https://cdn.ziomsec.com/retro/15.webp)
 
 ## Privilege Escalation
 
 The desktop had **chrome** so I opened it. It had a **cve** in bookmarks so I read about the vulnerability on my local system.
 - https://nvd.nist.gov/vuln/detail/CVE-2019-1388
 
-![](https://cdn.ziomsec.com/retro/16.webp)
+![browser bookmarked cve](https://cdn.ziomsec.com/retro/16.webp)
 
 This vulnerability allowed privilege escalation so I searched for POCs so that I could follow the steps to get administrator access. 
 
@@ -146,15 +146,15 @@ Here's the steps to reproduce the PoC
 
 The recycle bin contained an application that could be vulnerable. So I restored it and followed the steps from the POC.
 
-![](https://cdn.ziomsec.com/retro/17.webp)
+![finding the application in recycle bin](https://cdn.ziomsec.com/retro/17.webp)
 
-![](https://cdn.ziomsec.com/retro/18.webp)
+![getting a UAC prompt](https://cdn.ziomsec.com/retro/18.webp)
 
-![](https://cdn.ziomsec.com/retro/19.webp)
+![clicking on "show more details"](https://cdn.ziomsec.com/retro/19.webp)
 
-![](https://cdn.ziomsec.com/retro/20.webp)
+![checking publisher cert data](https://cdn.ziomsec.com/retro/20.webp)
 
-![](https://cdn.ziomsec.com/retro/21.webp)
+![accessing url on explorer](https://cdn.ziomsec.com/retro/21.webp)
 
 I got stuck here as I didn't get an option to choose a browser. 
 - So I referred to https://muirlandoracle.co.uk/2020/01/06/retro-write-up/ and restarted the machine. 
@@ -167,7 +167,7 @@ As a last resort, I tried looking for kernel exploits.
 systeminfo
 ```
 
-![](https://cdn.ziomsec.com/retro/22.webp)
+![viewing system info](https://cdn.ziomsec.com/retro/22.webp)
 
 I found a couple of exploits for the windows build running on the target. I visited the **`COM Aggregate Priv Exec`** page on **exploit-db**.
 - https://www.exploit-db.com/exploits/42020
@@ -175,13 +175,13 @@ I found a couple of exploits for the windows build running on the target. I visi
 I looked for that particular cve's POC and found a **github** repo that contained a binary that could escalate my privileges.
 - https://github.com/WindowsEploits/Exploits/tree/master/CVE-2017-0213
 
-![](https://cdn.ziomsec.com/retro/23.webp)
+![finding kernel exploit on github](https://cdn.ziomsec.com/retro/23.webp)
 
 So I downloaded the binary on my local system and transferred it to the target machine. Upon execution, the exploit spawned another instance of **cmd** as **administrator**.
 
-![](https://cdn.ziomsec.com/retro/24.webp)
+![running the kernel exploit](https://cdn.ziomsec.com/retro/24.webp)
 
-![](https://cdn.ziomsec.com/retro/25.webp)
+![gaining nt authority/system access](https://cdn.ziomsec.com/retro/25.webp)
 
 I captured the **root** flag from **Administrator's** Desktop.
 
@@ -189,7 +189,7 @@ I captured the **root** flag from **Administrator's** Desktop.
 more C:\Users\Administrator\Desktop\root.txt.txt
 ```
 
-![](https://cdn.ziomsec.com/retro/26.webp)
+![capturing the root flag](https://cdn.ziomsec.com/retro/26.webp)
 
 ## Closure
 

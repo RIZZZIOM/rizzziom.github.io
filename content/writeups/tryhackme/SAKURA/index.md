@@ -24,7 +24,7 @@ To access the machine, click on the link given below:
 
 The *OSINT Dojo* recently found themselves the victim of a cyber attack. Forensic analysis revealed an image that was left behind by the cybercriminals.
 
-![](https://cdn.ziomsec.com/sakura/1.webp)
+![image left behind by cybercriminals](https://cdn.ziomsec.com/sakura/1.webp)
 
 I downloaded the image locally and analyzed it using `exiftool` to find hidden metadata.
 
@@ -32,7 +32,7 @@ I downloaded the image locally and analyzed it using `exiftool` to find hidden m
 exiftool sakurapwnedletter.svg
 ```
 
-![](https://cdn.ziomsec.com/sakura/2.webp)
+![reading metadata with exiftool](https://cdn.ziomsec.com/sakura/2.webp)
 
 The `Export-filename` revealed the username for the attacker.
 
@@ -49,16 +49,16 @@ I did a google search on the username and found a github and X profile:
 
 The X profile revealed the full name of the attacker in one of the posts
 
-![](https://cdn.ziomsec.com/sakura/3.webp)
+![inspecting the x profile](https://cdn.ziomsec.com/sakura/3.webp)
 
 Moving on to Github, I found a repository with PGP keys,
 
-![](https://cdn.ziomsec.com/sakura/4.webp)
+![pgp keys on the github repo](https://cdn.ziomsec.com/sakura/4.webp)
 
 When I decoded this key, I found an email address.
 - https://cirw.in/gpg-decoder/
 
-![](https://cdn.ziomsec.com/sakura/5.webp)
+![decoding the key](https://cdn.ziomsec.com/sakura/5.webp)
 
 *What is the attacker's full real name?*
 → Aiko Abe
@@ -79,15 +79,15 @@ I noticed repositories related to cryptocurrency and analyzed them:
 
 The first repository had 1 script that was updated. This is where I found something related to Ethereum
 
-![](https://cdn.ziomsec.com/sakura/6.webp)
+![viewing the script](https://cdn.ziomsec.com/sakura/6.webp)
 
 I did a google search with this string and found information about the wallet on https://etherscan.io
 
-![](https://cdn.ziomsec.com/sakura/7.webp)
+![investigating etherium string](https://cdn.ziomsec.com/sakura/7.webp)
 
 This is where I was able to view all the incoming and outgoing transactions of this wallet. This revealed the mining pool being used by the criminal and the type of cryptocurrency being used : Ethereum and Tether.
 
-![](https://cdn.ziomsec.com/sakura/8.webp)
+![viewing the incoming and outgoing transactions of the wallet](https://cdn.ziomsec.com/sakura/8.webp)
 
 *What cryptocurrency does the attacker own a cryptocurrency wallet for?*
 → Ethereum
@@ -105,21 +105,21 @@ This is where I was able to view all the incoming and outgoing transactions of t
 
 The criminal has left a message for us using an alternate account. We need to discover additional information by following the leads from the account to the Dark web and other platforms.
 
-![](https://cdn.ziomsec.com/sakura/9.webp)
+![message left behind by the criminal](https://cdn.ziomsec.com/sakura/9.webp)
 
 Since I'd already discovered both the twitter/X accounts of the attacker, I started analyzing the SakuraLoverAiko profile for more information and found some interesting posts that hinted towards where the criminal was heading.
 
 **Clue 1**: An airport lounge for `Japan Airways`
 
-![](https://cdn.ziomsec.com/sakura/10.webp)
+![twitter post revealing an airport lounge](https://cdn.ziomsec.com/sakura/10.webp)
 
 **Clue 2**: Image of Japan
 
-![](https://cdn.ziomsec.com/sakura/11.webp)
+![twitter post revealing a map of japan](https://cdn.ziomsec.com/sakura/11.webp)
 
 **Clue 3**: SSID of the Wifi
 
-![](https://cdn.ziomsec.com/sakura/12.webp)
+![wifi ssids](https://cdn.ziomsec.com/sakura/12.webp)
 
 There was also a post made by the attacker where they hinted towards a dark web site:
 
@@ -143,7 +143,7 @@ Home WiFi: 					DK1F-G			Fsdf324T@@
 
 Since we required the BSSID, I navigated to wigle.net and searched the SSID shared by the criminal
 
-![](https://cdn.ziomsec.com/sakura/13.webp)
+![finding bssid on wigle](https://cdn.ziomsec.com/sakura/13.webp)
 
 *What is the attacker's current Twitter handle?*
 → SakuraLoverAiko
@@ -157,11 +157,11 @@ Since the target is heading home, we need to piece together their route back hom
 
 The attacker shared the following image before catching their flight to head home
 
-![](https://cdn.ziomsec.com/sakura/14.webp)
+![image shared by the attacker](https://cdn.ziomsec.com/sakura/14.webp)
 
 In a distance, I was able to view the **Capitol** (located in Washington DC). I did a google search and found that the closest airport to this monument was Ronald Reagan Washington National Airport (DCA). To find the location of layover, I did a reverse image search of the image shared on twitter and found that it was taken in Haneda (HND)
 
-![](https://cdn.ziomsec.com/sakura/10.webp)
+![image of another lounge](https://cdn.ziomsec.com/sakura/10.webp)
 
 To find the lake, I matched the image shared by the criminal with Google maps.
 - https://goo.gl/maps/6ooEJXdu7FwoZ25z5

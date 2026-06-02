@@ -28,13 +28,13 @@ I performed an **nmap** aggressive scan to find open ports and services running 
 nmap -A -p- TARGET -oN rootme.nmap --min-rate 10000 -Pn
 ```
 
-![](https://cdn.ziomsec.com/rootme/1.webp)
+![performing an nmap scan on rootme machine](https://cdn.ziomsec.com/rootme/1.webp)
 
 ## Foothold
 
 The **nmap** scan revealed an **http** server running on port 80. So I accessed it from my browser.
 
-![](https://cdn.ziomsec.com/rootme/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/rootme/2.webp)
 
 The web page didn't reveal anything interesting so I used **ffuf** to find hidden directories.
 
@@ -42,11 +42,11 @@ The web page didn't reveal anything interesting so I used **ffuf** to find hidde
 ffuf -u http://TARGET/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-directories.txt
 ```
 
-![](https://cdn.ziomsec.com/rootme/3.webp)
+![fuzzing for hidden directories with ffuf](https://cdn.ziomsec.com/rootme/3.webp)
 
 The directory bruteforce revealed a few directories. I accessed the `/css/` directory. It contained a **css** file for another page called **panel**. **Ffuf** had also discovered this directory. So I accessed `/panel` next.
 
-![](https://cdn.ziomsec.com/rootme/4.webp)
+![accessing the discovered endpoints](https://cdn.ziomsec.com/rootme/4.webp)
 
 This seemed like a **file upload** functionality. I created and uploaded a dummy file to try it out.
 
@@ -54,29 +54,29 @@ This seemed like a **file upload** functionality. I created and uploaded a dummy
 echo 'hello root' > test.txt
 ```
 
-![](https://cdn.ziomsec.com/rootme/5.webp)
+![uploading a txt file](https://cdn.ziomsec.com/rootme/5.webp)
 
 The directory bruteforce had revealed `/uploads` directory earlier. So I checked it to see if my file was uploaded.
 
-![](https://cdn.ziomsec.com/rootme/6.webp)
+![validating file upload](https://cdn.ziomsec.com/rootme/6.webp)
 
-![](https://cdn.ziomsec.com/rootme/7.webp)
+![validating file upload](https://cdn.ziomsec.com/rootme/7.webp)
 
 After confirming the upload functionality, I used the **php pentestmonkey** payload to get a reverse shell. I navigated to **revshells** to first configure a payload that would get me a reverse shell.
 - https://www.revshells.com
 
 I entered my IP and port and saved it in a file called **`revshell.php`**
 
-![](https://cdn.ziomsec.com/rootme/8.webp)
+![attempting to upload php](https://cdn.ziomsec.com/rootme/8.webp)
 
 It blocked my php file. So I looked for ways to bypass this security mechanism and tried a few ways given on **hacktricks**.
 - https://book.hacktricks.xyz/pentesting-web/file-upload
 
 I changed the extension of my code to `Php`, `php%20` and finally managed to bypass the security check using **`.php5`**. After the upload was successful, I started my **netcat** listener.
 
-![](https://cdn.ziomsec.com/rootme/9.webp)
+![starting netcat listener](https://cdn.ziomsec.com/rootme/9.webp)
 
-![](https://cdn.ziomsec.com/rootme/10.webp)
+![uploading reverse shell payload](https://cdn.ziomsec.com/rootme/10.webp)
 
 I then navigated to the `/uploads` folder and clicked on my payload to execute it and got a reverse shell. I spawned a **pty** shell and captured the first flag from `/var/www` directory.
 
@@ -86,7 +86,7 @@ python -c 'import pty;pty.spawn("/bin/bash")'
 cat /var/www/user.txt
 ```
 
-![](https://cdn.ziomsec.com/rootme/11.webp)
+![capturing the user flag](https://cdn.ziomsec.com/rootme/11.webp)
 
 ## Privilege Escalation
 
@@ -96,7 +96,7 @@ When I checked the binaries with **suid** bit, I found **python** which seemed u
 find / -user root -perm -u=s -ls 2>/dev/null
 ```
 
-![](https://cdn.ziomsec.com/rootme/12.webp)
+![listing files with suid bit](https://cdn.ziomsec.com/rootme/12.webp)
 
 I visited **gtfobins** and looked for a way to exploit this misconfiguration for a privileged access.
 - http://gtfobins.github.io/gtfobins/python/#suid
@@ -105,7 +105,7 @@ I visited **gtfobins** and looked for a way to exploit this misconfiguration for
 python -c 'import os; os.execl("/bin/bash", "bash", "-p")'
 ```
 
-![](https://cdn.ziomsec.com/rootme/13.webp)
+![exploiting the SUID bit on python](https://cdn.ziomsec.com/rootme/13.webp)
 
 After becoming the **root** user, I had complete control over the system. So I navigated to `/root` directory and captured the final flag.
 
@@ -113,7 +113,7 @@ After becoming the **root** user, I had complete control over the system. So I n
 cat /root/root.txt
 ```
 
-![](https://cdn.ziomsec.com/rootme/14.webp)
+![capturing the root flag](https://cdn.ziomsec.com/rootme/14.webp)
 
 ## Closure
 

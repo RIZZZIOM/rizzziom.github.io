@@ -34,17 +34,17 @@ nmap -A -p- TARGET --min-rate 1000 -oN silverplatter.nmap
 | 80       | http        |
 | 8080     | http        |
 
-![](https://cdn.ziomsec.com/silver-platter/1.webp)
+![performing an nmap scan on silver platter machine](https://cdn.ziomsec.com/silver-platter/1.webp)
 
 ## Initial Foothold
 
 The **nmap** scan discovered a web server running on the target. So I accessed it using my browser.
 
-![](https://cdn.ziomsec.com/silver-platter/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/silver-platter/2.webp)
 
 The contact page revealed a username that could be used later.
 
-![](https://cdn.ziomsec.com/silver-platter/3.webp)
+![inspecting the web application](https://cdn.ziomsec.com/silver-platter/3.webp)
 
 I then moved onto the other port where an **http** proxy was running. I looked for directories using **ffuf** and found 2 new endpoints.
 
@@ -52,11 +52,11 @@ I then moved onto the other port where an **http** proxy was running. I looked f
 ffuf -u http://TARGET:8080/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-directories.txt -mc 200,302
 ```
 
-![](https://cdn.ziomsec.com/silver-platter/4.webp)
+![fuzzing for hidden directories](https://cdn.ziomsec.com/silver-platter/4.webp)
 
 One endpoint wasn't accessible, however the other one redirected us to a login panel.
 
-![](https://cdn.ziomsec.com/silver-platter/5.webp)
+![accessing the cms login](https://cdn.ziomsec.com/silver-platter/5.webp)
 
 I used the username `scr1ptkiddy` from the contact page and tried logging in using default credentials but failed. I also tried *Get a new password* but found no interesting functionality.
 
@@ -64,27 +64,27 @@ I used the username `scr1ptkiddy` from the contact page and tried logging in usi
 
 I then looked for vulnerabilities associated with the name of the cms 'silverpeas' and found an **authentication bypass** vulnerability.
 
-![](https://cdn.ziomsec.com/silver-platter/6.webp)
+![finding an auth bypass vuln for the cms](https://cdn.ziomsec.com/silver-platter/6.webp)
 
 I could bypass authentication by simply removing the password field. So I captured the login request using **burp suite** and removed the password field to log into the web app.
 
-![](https://cdn.ziomsec.com/silver-platter/7.webp)
+![capturing the login request on burp and adding the bypass payload](https://cdn.ziomsec.com/silver-platter/7.webp)
 
-![](https://cdn.ziomsec.com/silver-platter/8.webp)
+![bypassing auth to log into the cms](https://cdn.ziomsec.com/silver-platter/8.webp)
 
 I had a notification of a message sent to me by my manager.
 
-![](https://cdn.ziomsec.com/silver-platter/9.webp)
+![checking the message](https://cdn.ziomsec.com/silver-platter/9.webp)
 
 ### Shell As Tim
 
 I recalled reading about a **broken access control** vulnerability on the cms so gave it a try.
 
-![](https://cdn.ziomsec.com/silver-platter/10.webp)
+![broken access control vulnerability reference](https://cdn.ziomsec.com/silver-platter/10.webp)
 
-![](https://cdn.ziomsec.com/silver-platter/11.webp)
+![opening a notification](https://cdn.ziomsec.com/silver-platter/11.webp)
 
-![](https://cdn.ziomsec.com/silver-platter/12.webp)
+![opening someone else's notification](https://cdn.ziomsec.com/silver-platter/12.webp)
 
 I managed to get the ssh credentials by exploiting **IDOR** vulnerability. I then used it to connect to the target using **ssh**.
 
@@ -92,11 +92,11 @@ I managed to get the ssh credentials by exploiting **IDOR** vulnerability. I the
 ssh tim@TARGET
 ```
 
-![](https://cdn.ziomsec.com/silver-platter/13.webp)
+![logging into the app as tim](https://cdn.ziomsec.com/silver-platter/13.webp)
 
 Finally, I captured the user flag.
 
-![](https://cdn.ziomsec.com/silver-platter/14.webp)
+![capturing the user flag](https://cdn.ziomsec.com/silver-platter/14.webp)
 
 ## Privilege Escalation
 
@@ -104,7 +104,7 @@ Finally, I captured the user flag.
 
 Running the **id** command revealed that the user *tim* was part of the **adm** group. This group is used for monitoring purpose.
 
-![](https://cdn.ziomsec.com/silver-platter/15.webp)
+![running id command](https://cdn.ziomsec.com/silver-platter/15.webp)
 
 Hence my user would have access to the system **logs**. I looked at the authentication logs in */var/log/* directory and extracted passwords from it.
 
@@ -112,7 +112,7 @@ Hence my user would have access to the system **logs**. I looked at the authenti
 cat /var/log/auth* | grep -ai "password"
 ```
 
-![](https://cdn.ziomsec.com/silver-platter/16.webp)
+![inspecting authentication logs to get the password](https://cdn.ziomsec.com/silver-platter/16.webp)
 
 I checked if the password that I found was a valid user credential of `tyler` using **hydra**.
 
@@ -120,7 +120,7 @@ I checked if the password that I found was a valid user credential of `tyler` us
 hydra -l 'tyler' -p '_Zd_zx7N823/' ssh://TARGET
 ```
 
-![](https://cdn.ziomsec.com/silver-platter/17.webp)
+![validating the password works](https://cdn.ziomsec.com/silver-platter/17.webp)
 
 I then logged in as Tyler.
 
@@ -128,7 +128,7 @@ I then logged in as Tyler.
 ssh tyler@TARGET
 ```
 
-![](https://cdn.ziomsec.com/silver-platter/18.webp)
+![logging in as tyler](https://cdn.ziomsec.com/silver-platter/18.webp)
 
 ### Shell As Root
 
@@ -138,7 +138,7 @@ I then viewed my `sudo` privs and found that I could run all commands.
 sudo -l
 ```
 
-![](https://cdn.ziomsec.com/silver-platter/19.webp)
+![checking sudo privs](https://cdn.ziomsec.com/silver-platter/19.webp)
 
 Hence I spawned a **bash** shell as root using **sudo** and captured the root flag from */root* directory.
 
@@ -147,7 +147,7 @@ sudo /bin/bash
 cat /root/root.txt
 ```
 
-![](https://cdn.ziomsec.com/silver-platter/20.webp)
+![capturing the root flag](https://cdn.ziomsec.com/silver-platter/20.webp)
 
 That's it from my side!
 Happy hacking :)

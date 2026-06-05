@@ -32,15 +32,15 @@ Your objective: probe the assistant to determine if restricted data is retrievab
 
 I started by asking the AI generic questions about its capabilities.
 
-![](https://cdn.ziomsec.com/unindexed/1.webp)
+![accessing the unindexed chatbot](https://cdn.ziomsec.com/unindexed/1.webp)
 
 After finding out its capabilities, I then asked it to reveal everything it knows about the internal topics and got 3 topics.
 
-![](https://cdn.ziomsec.com/unindexed/2.webp)
+![asking it to reveal everything it knows](https://cdn.ziomsec.com/unindexed/2.webp)
 
 I then tricked the bot by asking it to give details explanation about a project and the challenge flag. This made the bot return the challenge flag.
 
-![](https://cdn.ziomsec.com/unindexed/3.webp)
+![tricking the bot into leaking the flag while explaining the project](https://cdn.ziomsec.com/unindexed/3.webp)
 
 That's it from my end! Until next time :)
 

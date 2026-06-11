@@ -6,7 +6,7 @@ author: "Moiz Bootwala"
 ShowBreadCrumbs: false
 ---
 
-Hi. I'm Moiz Bootwala.
+Hi. I'm Moiz Bootwala. I go by **rizzziom** online.
 
 I work in offensive security as a red and purple team operator — adversary simulation, penetration testing, and detection validation across web, network, cloud, and Active Directory environments.
 

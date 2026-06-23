@@ -171,6 +171,7 @@ $ su firefart
 ![shell as firefart](https://cdn.ziomsec.com/fristileaks/24.webp)
 
 Hence, I gained root access.
+
 ### Using Misconfigured CRON
 
 I found a note in the */var/www/* directory.
@@ -209,7 +210,7 @@ I found encrypted data in the */home/admin* directory along with a Python script
 > - `codes.encode(base64string[::-1], 'rot13')` : reverses the base64 encoded string and then encodes it with rot13.
 
 To decode this, I wrote a simple Python script. This script can be downloaded from my Github 
-- https://github.com/RIZZZIOM/fristidecoder.git 
+- https://github.com/RIZZZIOM/ctf-scripts/blob/main/vulnhub/FristiLeaks/fristidecoder.py 
 
 > The file owner also gave me a hint about whose password was stored in these files.
 

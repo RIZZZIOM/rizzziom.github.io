@@ -8,7 +8,7 @@ ShowBreadCrumbs: false
 
 Hi. I'm Moiz Bootwala. I go by **rizzziom** online.
 
-I work in offensive security as a red and purple team operator — adversary simulation, penetration testing, and detection validation across web, network, cloud, and Active Directory environments.
+I work in offensive security as a red and purple team operator — adversary simulation, penetration testing, and detection validation across enterprise environments, from identity and endpoints to cloud, virtualization, and everything in between.
 
 Outside of the day job, I like poking at security tools and tech to understand how they actually work — less about building everything from scratch and more about figuring out how to apply the right thing well. A lot of what I learn doing that ends up here.
 

@@ -26,6 +26,7 @@ Certifications: CEH · CRTP · CRTO
 Outside of security, I like gym, cars, bikes, music, and coffee.
 
 Find me elsewhere:
+- [Portfolio](https://portfolio.ziomsec.com)
 - [GitHub](https://github.com/RIZZZIOM)
 - [X / Twitter](https://x.com/rizzziom)
 - [LinkedIn](https://www.linkedin.com/in/moiz-bootwala)

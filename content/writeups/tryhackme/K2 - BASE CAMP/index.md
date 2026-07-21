@@ -3,7 +3,7 @@ title: "K2 - Base Camp - TryHackMe Writeup"
 date: 2025-07-25
 draft: false
 summary: "Writeup for K2 - Base Camp CTF challenge on TryHackMe."
-tags: ["linux", "hardcoded creds", "sqli"]
+tags: ["linux", "hardcoded creds", "sql injection"]
 categories: ["writeups"]
 series: []
 showToc: true

@@ -3,7 +3,7 @@ title: "K2 - Summit - TryHackMe Writeup"
 date: 2025-08-01
 draft: false
 summary: "Writeup for K2 - Summit CTF challenge on TryHackMe."
-tags: ["windows", "hashcrack", "brute force", "dc sync", "misconfigured privs", "cron"]
+tags: ["windows", "hash crack", "brute force", "dc sync", "misconfigured privs", "cron"]
 categories: ["writeups"]
 series: []
 showToc: true

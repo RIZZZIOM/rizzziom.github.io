@@ -3,7 +3,7 @@ title: "Jurassic Park - TryHackMe Writeup"
 date: 2024-01-08
 draft: false
 summary: "Writeup for Jurassic Park CTF challenge on TryHackMe."
-tags: ["linux", "sqli", "sudo"]
+tags: ["linux", "sql injection", "sudo"]
 categories: ["writeups"]
 series: []
 showToc: true

@@ -20,7 +20,7 @@ canonifyURLs = false
 
 [params]
   env = "production"
-  defaultTheme = "auto"
+  defaultTheme = "dark"
   search = true
   disableThemeToggle = false
   ShowBreadCrumbs = true
@@ -77,12 +77,6 @@ canonifyURLs = false
     weight = 10
 
   [[menu.main]]
-    identifier = "about"
-    name = "About"
-    url = "/about/"
-    weight = 20
-
-  [[menu.main]]
     identifier = "writeups"
     name = "Writeups"
     url = "/writeups/"
@@ -95,16 +89,28 @@ canonifyURLs = false
     weight = 40
 
   [[menu.main]]
+    identifier = "research"
+    name = "Research"
+    url = "/research/"
+    weight = 45
+
+  [[menu.main]]
     identifier = "search"
     name = "Search"
     url = "/search/"
     weight = 50
 
   [[menu.main]]
-    identifier = "tags"
-    name = "Tags"
-    url = "/tags/"
-    weight = 60
+    identifier = "archive"
+    name = "Archive"
+    url = "/archive/"
+    weight = 55
+
+  [[menu.main]]
+    identifier = "portfolio"
+    name = "Portfolio"
+    url = "https://portfolio.ziomsec.com"
+    weight = 70
 
   [[menu.main]]
     identifier = "tryhackme"

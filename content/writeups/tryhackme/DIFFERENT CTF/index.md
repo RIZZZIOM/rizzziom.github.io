@@ -3,7 +3,7 @@ title: "Different CTF - TryHackMe Writeup"
 date: 2026-06-22
 draft: false
 summary: "Writeup for Different CTF challenge on TryHackMe."
-tags: ["linux", "brute-force", "suid", "steganography"]
+tags: ["linux", "brute force", "suid", "steganography"]
 categories: ["writeups"]
 series: []
 showToc: true

@@ -3,7 +3,7 @@ title: "SoupeDecode - TryHackMe Writeup"
 date: 2026-07-05
 draft: false
 summary: "Writeup for SoupeDecode challenge on TryHackMe."
-tags: ["Active Directory", "brute-force", "kerberoast", "smb", "misconfigured privs", "pass the hash", "Windows"]
+tags: ["Active Directory", "brute force", "kerberoast", "smb", "misconfigured privs", "pass the hash", "windows"]
 categories: ["writeups"]
 series: []
 showToc: true

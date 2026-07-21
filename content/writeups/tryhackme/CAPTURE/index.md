@@ -3,7 +3,7 @@ title: "Capture - TryHackMe Writeup"
 date: 2026-06-23
 draft: false
 summary: "Writeup for Capture challenge on TryHackMe."
-tags: ["linux", "brute-force", "captcha bypass"]
+tags: ["linux", "brute force", "captcha bypass"]
 categories: ["writeups"]
 series: []
 showToc: true

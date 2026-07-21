@@ -3,7 +3,7 @@ title: "Kubernetes For Everyone - TryHackMe Writeup"
 date: 2025-12-07
 draft: false
 summary: "Writeup for Kubernetes For Everyone CTF challenge on TryHackMe."
-tags: ["linux", "hardcoded creds", "lfi", "sudo", "kubernetes", "bruteforce"]
+tags: ["linux", "hardcoded creds", "lfi", "sudo", "kubernetes", "brute force"]
 categories: ["writeups"]
 series: []
 showToc: true

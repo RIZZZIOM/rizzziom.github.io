@@ -601,7 +601,7 @@ These are some of the most common vectors that I have seen or read about:
 4. **Secrets in version control**: Hardcoded tokens, API keys, passwords.
 5. **Weak credentials or default admin accounts**: Common in dev clusters or early setups.
 
-We can use tools like **[Trivy](https://trivy.dev/)** or **[Grype](https://github.com/anchore/grype)** to flag known CVE's and hardcoded secrets before deployment. Similarly, we can scan codebases for leaked credentials using tools like **[Gitleaks](https://github.com/gitleaks/gitleaks)** and **[Trufflehog](https://github.com/trufflesecurity/trufflehog)**. Registries and dashboards can be restricted to authenticated users only to prevent unauthorized access.
+We can use tools like **[Trivy](https://trivy.dev/)** or **[Grype](https://github.com/anchore/grype)** to flag known CVE's and hardcoded secrets before deployment. Similarly, we can scan codebases for leaked credentials using tools like **[Gitleaks](https://github.com/gitleaks/gitleaks)** / **[Betterleaks]**(https://github.com/betterleaks/betterleaks) and **[Trufflehog](https://github.com/trufflesecurity/trufflehog)**. Registries and dashboards can be restricted to authenticated users only to prevent unauthorized access.
 
 ### Practical 2 - Scanning With Trivy
 
@@ -648,6 +648,8 @@ Hence, using it we scanned the layers that make up the image. This includes the 
 ### Practical 3 - Scanning With Gitleaks
 
 Another common mechanism of gaining a foothold is by using creds left behind in CI/CD logs or git history. **Gitleaks** let's us find these sensitive credentials before it is pushed to the pipeline
+
+> Update: **Gitleaks** has been succeeded with **Betterleaks**.
 
 Let's explore this practically:
 - create repo with secrets

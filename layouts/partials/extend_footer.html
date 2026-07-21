@@ -2,3 +2,67 @@
 {{- if hugo.IsProduction | or (eq site.Params.env "production") }}
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "bbbe945040fa4f2ebe05f9ba22adfa68"}'></script>
 {{- end }}
+
+{{- /* Blog index: client-side filter + pagination over the full list. */ -}}
+<script>
+(function () {
+  document.querySelectorAll('.list-search').forEach(function (input) {
+    var list = document.getElementById(input.dataset.target);
+    if (!list) return;
+    var container = list.parentNode;
+    var rows = Array.prototype.slice.call(list.children);
+    var empty = container.querySelector('.filter-empty');
+    var pager = container.querySelector('.js-pagination');
+    var pageSize = parseInt(list.dataset.pageSize || '0', 10);
+    var page = 1;
+
+    function matched() {
+      var q = input.value.trim().toLowerCase();
+      return rows.filter(function (row) {
+        var hay = row.getAttribute('data-search') || row.textContent.toLowerCase();
+        return !q || hay.indexOf(q) !== -1;
+      });
+    }
+
+    function render() {
+      var m = matched();
+      var pages = pageSize ? Math.max(1, Math.ceil(m.length / pageSize)) : 1;
+      if (page > pages) { page = pages; }
+      if (page < 1) { page = 1; }
+      rows.forEach(function (r) { r.hidden = true; });
+      var start = pageSize ? (page - 1) * pageSize : 0;
+      var end = pageSize ? start + pageSize : m.length;
+      m.slice(start, end).forEach(function (r) { r.hidden = false; });
+      if (empty) { empty.hidden = m.length !== 0; }
+      renderPager(pages);
+    }
+
+    function renderPager(pages) {
+      if (!pager) { return; }
+      pager.innerHTML = '';
+      if (pages <= 1) { pager.hidden = true; return; }
+      pager.hidden = false;
+      var add = function (label, target, active, disabled) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'page-btn' + (active ? ' active' : '');
+        b.textContent = label;
+        if (disabled) { b.disabled = true; }
+        else {
+          b.addEventListener('click', function () {
+            page = target; render();
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        }
+        pager.appendChild(b);
+      };
+      add('←', page - 1, false, page === 1);
+      for (var i = 1; i <= pages; i++) { add(String(i), i, i === page, false); }
+      add('→', page + 1, false, page === pages);
+    }
+
+    input.addEventListener('input', function () { page = 1; render(); });
+    render();
+  });
+})();
+</script>

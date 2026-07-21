@@ -3,7 +3,7 @@ title: "AllSignsPoint2Pwnage - TryHackMe Writeup"
 date: 2025-11-20
 draft: false
 summary: "Writeup for AllSignsPoint2Pwnage CTF challenge on TryHackMe."
-tags: ["windows", "file upload", "hardcoded creds", "misconfigured privileges"]
+tags: ["windows", "file upload", "hardcoded creds", "misconfigured privs"]
 categories: ["writeups"]
 series: []
 showToc: true

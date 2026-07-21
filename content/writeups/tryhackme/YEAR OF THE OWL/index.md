@@ -3,7 +3,7 @@ title: "Year Of The Owl - TryHackMe Writeup"
 date: 2025-05-01
 draft: false
 summary: "Writeup for Year Of The Owl CTF challenge on TryHackMe."
-tags: ["windows", "bruteforce", "hash crack"]
+tags: ["windows", "brute force", "hash crack"]
 categories: ["writeups"]
 series: []
 showToc: true

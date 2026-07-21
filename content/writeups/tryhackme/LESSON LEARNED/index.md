@@ -3,7 +3,7 @@ title: "Lesson Learned? - TryHackMe Writeup"
 date: 2025-01-03
 draft: false
 summary: "Writeup for Lesson Learned CTF challenge on TryHackMe."
-tags: ["linux", "sql", "injection"]
+tags: ["linux", "sql injection", "injection"]
 categories: ["writeups"]
 series: []
 showToc: true

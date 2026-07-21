@@ -1,0 +1,37 @@
+{{- /* Unified index row for blog + writeups section pages.
+       Call with a page context: {{ partial "post-row.html" . }} */ -}}
+{{- $page := . -}}
+{{- $tags := "" -}}
+{{- with .Params.tags }}{{ $tags = delimit . " " }}{{ end -}}
+<li class="post-row" data-search="{{ (printf "%s %s %s" .Title (.Params.platform | default "") $tags) | lower }}">
+  <a href="{{ .RelPermalink }}" class="post-row-link">
+    {{- with .Params.cover.image }}
+    <span class="post-row-thumb">
+      {{- if hasPrefix . "https" }}
+      <img src="{{ . }}" alt="{{ $page.Params.cover.alt }}" loading="lazy">
+      {{- else }}
+        {{- $image := $page.Resources.Get . }}
+        {{- if $image }}
+      <img src="{{ $image.RelPermalink }}" alt="{{ $page.Params.cover.alt }}" loading="lazy">
+        {{- else }}
+      <img src="{{ printf "%s%s" $page.RelPermalink . }}" alt="{{ $page.Params.cover.alt }}" loading="lazy">
+        {{- end }}
+      {{- end }}
+    </span>
+    {{- end }}
+    <span class="post-row-body">
+      <span class="post-row-head">
+        <span class="post-row-title">{{ .Title }}</span>
+        <span class="post-row-date">{{ .Date.Format "Jan 2, 2006" }}</span>
+      </span>
+      {{- with .Summary }}
+      <span class="post-row-summary">{{ . | plainify | truncate 160 }}</span>
+      {{- end }}
+      {{- with .Params.tags }}
+      <span class="post-row-tags">
+        {{- range first 5 . }}<span class="row-tag">{{ . }}</span>{{ end }}
+      </span>
+      {{- end }}
+    </span>
+  </a>
+</li>

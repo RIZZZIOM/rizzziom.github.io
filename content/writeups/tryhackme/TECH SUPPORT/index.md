@@ -3,7 +3,7 @@ title: "Tech Support - TryHackMe Writeup"
 date: 2026-07-17
 draft: false
 summary: "Writeup for Tech Support challenge on TryHackMe."
-tags: ["Web", "Hardcoded Credentials", "Linux", "file upload", "rce", "sudo"]
+tags: ["web", "hardcoded creds", "linux", "file upload", "rce", "sudo"]
 categories: ["writeups"]
 series: []
 showToc: true

@@ -1,294 +1,302 @@
 /* =================================================================
-   HOMEPAGE STYLES
+   ziomsec — custom styles (extended over PaperMod)
+   PaperMod itself (themes/PaperMod submodule) is never modified.
+
+   Sections:
+     1. Identity layer (portfolio parity: palette, accent, mono type)
+     2. Home page
+     3. Index pages (shared width + headers)
+     4. Category cards (writeups landing)
+     5. Latest writeups (section spacing)
+     6. Platform tag chip
+     7. Post rows (unified blog + writeups indexes)
+     8. Single-page cover (constrained)
+     9. Buttons (RSS / series / pagination)
+    10. Pagination
+    11. Responsive
    ================================================================= */
 
-.homepage-greeting {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 60vh;
-    text-align: center;
+/* =================================================================
+   1. IDENTITY LAYER  —  portfolio.ziomsec.com parity
+   Tokens pulled verbatim from the portfolio's stylesheet.
+   ================================================================= */
+:root {
+    --accent: #ff4d5e;                        /* portfolio --accent      */
+    --accent-dim: #7a1f2b;                    /* portfolio --accent-dim  */
+    --accent-glow: rgba(255, 77, 94, 0.12);   /* portfolio --accent-glow */
+    --zs-mono: ui-monospace, "Cascadia Code", "Cascadia Mono",
+        "JetBrains Mono", "Fira Code", Consolas, "Courier New", monospace;
+    --zs-link: #d11d33;                        /* accessible red on light bg */
+    --index-width: 1100px;                     /* one width for all index pages */
 }
 
-.homepage-greeting p {
-    font-size: clamp(3rem, 8vw, 6rem);
-    font-weight: 300;
-    letter-spacing: 0.1em;
-    margin: 0;
-    line-height: 1.2;
-    color: var(--primary);
-    font-family: var(--font-mono, 'Times New Roman', 'Cambria', monospace);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    animation: fadeInUp 2s ease-out;
+/* Dark theme = portfolio near-black palette */
+:root[data-theme="dark"] {
+    --theme: #0a0a0d;                          /* portfolio --bg   */
+    --entry: #131318;                          /* portfolio --card */
+    --primary: #e8e6e3;                        /* portfolio --text */
+    --secondary: #8b8b93;                      /* portfolio --muted */
+    --tertiary: rgba(255, 255, 255, 0.14);
+    --content: #c9c7c3;
+    --border: rgba(255, 255, 255, 0.08);       /* portfolio --border */
+    --zs-link: #ff5d6b;                        /* brighter red on near-black */
 }
 
-.dark .homepage-greeting p {
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+/* Monospace identity: nav, wordmark, metadata, chips */
+.logo a,
+#menu,
+.post-meta,
+.breadcrumbs,
+.platform-tag,
+.terms-tags a,
+.category-count,
+.post-row-date,
+.pagination-info,
+.home-prompt {
+    font-family: var(--zs-mono);
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Wordmark: lowercase mono + red terminal cursor (echoes moiz.bootwala) */
+.logo a {
+    text-transform: lowercase;
+    letter-spacing: 0.02em;
+}
+.logo a::after {
+    content: "_";
+    color: var(--accent);
+    margin-left: 1px;
+}
+
+/* Accent on navigation */
+#menu a:hover,
+#menu .active {
+    color: var(--accent);
+}
+#menu .active {
+    border-bottom-color: var(--accent);
+}
+
+/* Accent on in-content links */
+.post-content a,
+.home-intro a {
+    color: var(--zs-link);
+    box-shadow: 0 1px 0 currentColor;
 }
 
 /* =================================================================
-   WRITEUPS LAYOUT STYLES
+   2. HOME PAGE
    ================================================================= */
-
-/* Full-width writeups container */
-.writeups-full-container {
-    max-width: 1400px;
+.home-container {
+    max-width: var(--index-width);
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 1.5rem;
 }
 
-/* Latest writeups section */
-.latest-writeups-fullwidth {
-    margin-top: 3rem;
-    margin-bottom: 4rem;
+.home-hero {
+    padding: 3rem 0 2.25rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
 }
 
-.latest-writeups-fullwidth h2 {
-    margin-bottom: 25px;
-    font-size: 1.8rem;
+.home-prompt {
+    color: var(--secondary);
+    font-size: 0.95rem;
+    margin: 0 0 1rem;
+}
+.home-prompt::after {
+    content: "";
+    display: inline-block;
+    width: 0.55ch;
+    height: 1em;
+    background: var(--accent);
+    margin-left: 3px;
+    vertical-align: -0.15em;
+    animation: zs-blink 1s step-start infinite;
+}
+@keyframes zs-blink { 50% { opacity: 0; } }
+
+.home-intro {
+    font-size: 1.12rem;
+    line-height: 1.7;
+    max-width: 760px;
+    color: var(--content);
+}
+.home-intro p { margin: 0 0 1rem; }
+.home-intro p:last-child { margin-bottom: 0; }
+.home-intro ul { list-style: disc; padding-left: 1.3rem; margin: 0 0 1rem; }
+.home-intro li { margin: 0.3rem 0; }
+
+.home-link {
+    font-family: var(--zs-mono);
+    font-size: 0.9rem;
+    color: var(--accent);
+    border: 1px solid var(--accent-dim);
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+.home-link:hover {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    box-shadow: 0 8px 24px -12px var(--accent-glow);
+    transform: translateY(-2px);
+}
+
+/* Find me elsewhere — mono chips */
+.home-elsewhere { margin-bottom: 3rem; }
+.home-links { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+/* Section title shared by home + index pages */
+.index-title {
+    font-family: var(--zs-mono);
+    font-size: 1.35rem;
     color: var(--primary);
-    border-bottom: 2px solid var(--border);
+    margin: 0 0 1.5rem;
     padding-bottom: 0.5rem;
-    text-align: center;
-}
-
-/* Writeups grid - dynamic layout that adjusts to content */
-.writeups-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2.5rem;
-    margin-bottom: 3rem;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* Override for when we want equal distribution with up to 3 cards */
-.writeups-grid .writeup-card {
-    width: 100%;
-    max-width: 380px;
-    justify-self: center;
+    border-bottom: 1px solid var(--accent-dim);
 }
 
 /* =================================================================
-   CARD COMPONENTS
+   3. INDEX PAGES (shared container width + header row)
    ================================================================= */
-
-/* Writeup cards */
-.writeup-card {
-    background: var(--entry);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.writeups-full-container,
+.blog-full-container,
+.subcategory-container,
+.index-container {
+    max-width: var(--index-width);
+    margin: 0 auto;
+    padding: 0 1.5rem;
 }
 
-.writeup-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    border-color: var(--primary);
-}
-
-.card-cover img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.card-content {
-    padding: 1.5rem;
-}
-
-.card-header {
-    margin-bottom: 1rem;
-}
-
-.card-header h3 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.2rem;
-    line-height: 1.3;
-}
-
-.card-header h3 a {
-    color: var(--primary);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.card-header h3 a:hover {
-    color: var(--primary-hover);
-}
-
-.card-summary p {
-    margin: 0 0 1rem 0;
-    color: var(--secondary);
-    line-height: 1.5;
-    font-size: 0.9rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.card-footer {
+.header-content {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 1rem;
 }
+.header-left,
+.header-center { flex: 1; text-align: left; }
+.header-right { flex-shrink: 0; margin-top: 0.25rem; }
 
-.card-footer .date {
-    color: var(--secondary);
-    font-size: 0.85rem;
+.categories-section h2,
+.latest-writeups-fullwidth h2,
+.category-writeups h2 {
+    font-family: var(--zs-mono);
+    font-size: 1.35rem;
+    color: var(--primary);
+    margin: 0 0 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--accent-dim);
 }
 
 /* =================================================================
-   CATEGORIES & NAVIGATION
+   4. CATEGORY CARDS (writeups landing)
    ================================================================= */
-
-/* Categories section - full width layout */
-.categories-section {
-    margin-top: 4rem;
-    margin-bottom: 3rem;
-}
-
-.categories-section h2 {
-    margin-bottom: 2rem;
-    font-size: 1.6rem;
-    color: var(--primary);
-    border-bottom: 2px solid var(--border);
-    padding-bottom: 0.5rem;
-    text-align: center;
-}
-
+.categories-section { margin: 2.5rem 0; }
 .categories-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
 }
-
 .category-card {
     background: var(--entry);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 1.5rem;
     text-decoration: none;
-    transition: all 0.3s ease;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
-
 .category-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    border-color: var(--primary);
+    transform: translateY(-4px);
+    border-color: var(--accent-dim);
+    box-shadow: 0 24px 48px -24px var(--accent-glow);
 }
+.category-card-content h3 { margin: 0 0 0.5rem; font-size: 1.15rem; color: var(--primary); }
+.category-name { font-weight: 600; }
+.category-count { color: var(--secondary); font-size: 0.85rem; }
 
-.category-card-content h3 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.2rem;
-    color: var(--primary);
+/* =================================================================
+   5. LATEST WRITEUPS (section spacing; cards use .writeup-mini-* below)
+   ================================================================= */
+.latest-writeups-fullwidth { margin: 2.5rem 0 3rem; }
+
+/* =================================================================
+   6. PLATFORM TAG (accent chip)
+   ================================================================= */
+.platform-tag {
+    display: inline-block;
+    flex-shrink: 0;
+    background: var(--accent-glow);
+    color: var(--accent);
+    border: 1px solid var(--accent-dim);
+    padding: 0.15rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
     font-weight: 600;
-}
-
-.category-name {
-    font-weight: 500;
-}
-
-.category-count {
-    color: var(--secondary);
-    font-size: 0.9rem;
-    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
 }
 
 /* =================================================================
-   SUBCATEGORY PAGES LAYOUT
+   7. POST ROWS (unified: blog index + writeups subcategory index)
    ================================================================= */
+.category-writeups,
+.post-index { margin-top: 2.5rem; }
 
-.subcategory-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
-
-.category-writeups {
-    margin-top: 3rem;
-}
-
-.category-writeups h2 {
-    margin-bottom: 2rem;
-    font-size: 1.8rem;
-    color: var(--primary);
-    border-bottom: 2px solid var(--border);
-    padding-bottom: 0.5rem;
-}
-
-/* Simple writeups list */
-.writeups-simple-list {
+.post-rows {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 0 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.post-row { margin: 0; }
+.post-row-link {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
     background: var(--entry);
     border: 1px solid var(--border);
     border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.post-row-link:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-dim);
+    box-shadow: 0 16px 32px -20px var(--accent-glow);
+}
+.post-row-thumb { flex-shrink: 0; width: 84px; }
+.post-row-thumb img { width: 84px; height: 84px; object-fit: cover; border-radius: 6px; display: block; }
+.post-row-body { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; flex: 1; }
+.post-row-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+.post-row-title { color: var(--primary); font-weight: 600; font-size: 1.05rem; }
+.post-row-link:hover .post-row-title { color: var(--accent); }
+.post-row-date { color: var(--secondary); font-size: 0.8rem; white-space: nowrap; }
+.post-row-summary {
+    color: var(--secondary);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
 }
-
-.writeup-list-item-link {
-    text-decoration: none;
-    display: block;
-    color: inherit;
-}
-
-.writeup-list-item-link:last-child .writeup-list-item {
-    border-bottom: none;
-}
-
-.writeup-list-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-    transition: background-color 0.2s ease;
-}
-
-.writeup-list-item-link:hover .writeup-list-item {
-    background: var(--theme);
-}
-
-.writeup-link {
-    color: var(--primary);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1.1rem;
-    transition: color 0.2s ease;
-}
-
-.writeup-list-item-link:hover .writeup-link {
-    color: var(--primary-hover);
-    text-decoration: underline;
-}
-
-.writeup-date {
+.post-row-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.1rem; }
+.row-tag {
+    font-family: var(--zs-mono);
+    font-size: 0.7rem;
     color: var(--secondary);
-    font-size: 0.9rem;
-    font-weight: 400;
-    white-space: nowrap;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.1rem 0.45rem;
 }
 
 .empty-category {
@@ -299,522 +307,281 @@
 }
 
 /* =================================================================
-   PLATFORM TAGS & METADATA
+   8. SINGLE-PAGE COVER (constrained so content stays near the top)
    ================================================================= */
-
-.platform-tag {
-    display: inline-block;
-    background: var(--theme);
-    color: var(--primary);
-    padding: 0.2rem 0.6rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-/* =================================================================
-   BLOG LAYOUT STYLES
-   ================================================================= */
-
-/* Blog full-width container */
-.blog-full-container {
-    max-width: 1400px;
+.post-single .entry-cover img,
+.post-single .entry-cover svg {
+    max-height: 360px;
+    width: auto;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 0 2rem;
-}
-
-/* Blog header with centered title and RSS button on right */
-.blog-full-container .header-content {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 2rem;
-    margin-bottom: 1rem;
-    position: relative;
-}
-
-.blog-full-container .header-center {
-    flex: 1;
-    text-align: center;
-    max-width: 800px;
-}
-
-.blog-full-container .header-right {
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-.blog-full-container .post-content {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-/* Blog index section */
-.blog-index-section {
-    margin-top: 4rem;
-    margin-bottom: 3rem;
-}
-
-.blog-index-section h2 {
-    margin-bottom: 2rem;
-    font-size: 1.8rem;
-    color: var(--primary);
-    border-bottom: 2px solid var(--border);
-    padding-bottom: 0.5rem;
-    text-align: center;
-}
-
-.blog-index-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 auto 2rem;
-    background: var(--entry);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    max-width: 1000px;
-}
-
-.blog-index-item-link {
-    text-decoration: none;
     display: block;
-    color: inherit;
-}
-
-.blog-index-item-link:last-child .blog-index-item {
-    border-bottom: none;
-}
-
-.blog-index-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-    transition: background-color 0.2s ease;
-}
-
-.blog-index-item-link:hover .blog-index-item {
-    background: var(--theme);
-}
-
-.blog-index-title {
-    color: var(--primary);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1.1rem;
-    transition: color 0.2s ease;
-}
-
-.blog-index-item-link:hover .blog-index-title {
-    color: var(--primary-hover);
-    text-decoration: underline;
-}
-
-.blog-index-date {
-    color: var(--secondary);
-    font-size: 0.9rem;
-    font-weight: 400;
-    white-space: nowrap;
-}
-
-/* Center pagination for blog */
-.blog-index-section .pagination {
-    max-width: 1000px;
-    margin: 0 auto;
+    border-radius: 8px;
 }
 
 /* =================================================================
-   RSS BUTTON STYLES
+   9. BUTTONS (outline / accent — RSS, series, pagination)
    ================================================================= */
-
-/* Header RSS button */
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 2rem;
-    margin-bottom: 1rem;
-}
-
-.header-left {
-    flex: 1;
-}
-
-.header-right {
-    flex-shrink: 0;
-    margin-top: 0.5rem;
-}
-
 .rss-button-top {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.6rem 1.2rem;
-    background: var(--primary);
-    color: var(--theme);
-    text-decoration: none;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent-dim);
     border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    border: 1px solid var(--primary);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.rss-button-top:hover {
-    background: var(--theme);
-    color: var(--primary);
-    border-color: var(--primary);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.rss-button-top svg {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-}
-
-/* Full-width RSS button */
-.rss-button-fullwidth-container {
-    margin-top: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.rss-button-fullwidth {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.8rem;
-    width: 100%;
-    padding: 1rem 2rem;
-    background: var(--primary);
-    color: var(--theme);
+    font-family: var(--zs-mono);
+    font-size: 0.8rem;
     text-decoration: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border: 1px solid var(--primary);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
 }
+.rss-button-top:hover {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+}
+.rss-button-top svg { width: 15px; height: 15px; flex-shrink: 0; }
 
-.rss-button-fullwidth:hover {
-    background: var(--theme);
-    color: var(--primary);
-    border-color: var(--primary);
+.index-actions { display: flex; justify-content: center; margin: 2rem 0; }
+.browse-series-btn {
+    display: inline-block;
+    padding: 0.6rem 1.5rem;
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent-dim);
+    border-radius: 6px;
+    font-family: var(--zs-mono);
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.browse-series-btn:hover {
+    background: var(--accent-glow);
+    border-color: var(--accent);
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.rss-button-fullwidth svg {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-}
-
-/* Dark mode adjustments for RSS buttons */
-.dark .rss-button-top,
-.dark .rss-button-fullwidth {
-    background: var(--primary);
-    color: var(--theme);
-}
-
-.dark .rss-button-top:hover {
-    background: var(--theme);
-    color: var(--primary);
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
-}
-
-.dark .rss-button-fullwidth:hover {
-    background: var(--theme);
-    color: var(--primary);
-    box-shadow: 0 6px 12px rgba(255, 255, 255, 0.1);
 }
 
 /* =================================================================
-   PAGINATION STYLES
+   10. PAGINATION
    ================================================================= */
-
 .pagination {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1rem;
     margin-top: 2rem;
-    padding: 1.5rem;
+    padding: 1.25rem;
     background: var(--entry);
     border: 1px solid var(--border);
     border-radius: 8px;
-    gap: 1rem;
 }
-
 .pagination-prev,
 .pagination-next {
     display: inline-flex;
     align-items: center;
-    padding: 0.6rem 1.2rem;
-    background: var(--primary);
-    color: var(--theme);
-    text-decoration: none;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent-dim);
     border-radius: 6px;
+    font-family: var(--zs-mono);
     font-size: 0.9rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    border: 1px solid var(--primary);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    transition: all 0.2s ease;
 }
-
 .pagination-prev:hover,
 .pagination-next:hover {
-    background: var(--theme);
-    color: var(--primary);
-    border-color: var(--primary);
+    background: var(--accent-glow);
+    border-color: var(--accent);
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
+.pagination-info { color: var(--secondary); font-size: 0.85rem; text-align: center; flex-shrink: 0; }
 
-.pagination-info {
-    color: var(--secondary);
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-align: center;
-    flex-shrink: 0;
-}
-
-/* Dark mode adjustments for pagination */
-.dark .pagination-prev,
-.dark .pagination-next {
-    background: var(--primary);
-    color: var(--theme);
-}
-
-.dark .pagination-prev:hover,
-.dark .pagination-next:hover {
-    background: var(--theme);
+/* =================================================================
+   ALL-WRITEUPS / SEARCHABLE LISTS (client-side filter)
+   ================================================================= */
+.list-search {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 0 1.25rem;
+    padding: 0.7rem 1rem;
+    background: var(--entry);
     color: var(--primary);
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--zs-mono);
+    font-size: 0.9rem;
+}
+.list-search::placeholder { color: var(--secondary); }
+.list-search:focus {
+    outline: none;
+    border-color: var(--accent-dim);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.writeup-card-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+.writeup-mini-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 1.1rem;
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.writeup-mini-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-dim);
+    box-shadow: 0 16px 32px -20px var(--accent-glow);
+}
+.writeup-mini-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-height: 1.2rem;
+}
+.writeup-mini-date {
+    color: var(--secondary);
+    font-family: var(--zs-mono);
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+.writeup-mini-title {
+    color: var(--primary);
+    font-weight: 500;
+    font-size: 0.98rem;
+    line-height: 1.35;
+}
+.writeup-mini-card:hover .writeup-mini-title { color: var(--accent); }
+.filter-empty { color: var(--secondary); font-style: italic; text-align: center; padding: 1.5rem; }
+
+/* client-side pagination (blog index) */
+.js-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem;
+    margin: 1rem 0 2rem;
+}
+.page-btn {
+    min-width: 2.2rem;
+    padding: 0.4rem 0.7rem;
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent-dim);
+    border-radius: 6px;
+    font-family: var(--zs-mono);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.page-btn:hover:not(:disabled) {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+}
+.page-btn.active {
+    background: var(--accent);
+    color: var(--theme);
+    border-color: var(--accent);
+    font-weight: 600;
+}
+.page-btn:disabled { opacity: 0.4; cursor: default; }
+
+/* =================================================================
+   TERM PAGES (series / tags / categories) + ARCHIVE — accent hovers
+   Selector-based, so any number of terms / entries inherit these
+   automatically — adding new series, tags, or posts never breaks it.
+   ================================================================= */
+.terms-tags a {
+    border: 1px solid transparent;
+    transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+.terms-tags a:hover {
+    color: var(--accent);
+    background: var(--accent-glow);
+    border-color: var(--accent-dim);
+    transform: translateY(-2px);
+}
+
+/* tags on individual posts, kept consistent */
+.post-tags a:hover {
+    color: var(--accent);
+    background: var(--accent-glow);
+    border-color: var(--accent-dim);
+}
+
+/* archive entries */
+.archive-entry {
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 8px 10px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+.archive-entry:hover {
+    background: var(--entry);
+    border-color: var(--accent-dim);
+}
+.archive-entry:hover .archive-entry-title {
+    color: var(--accent);
+}
+
+/* term-listing cards (posts shown under a tag / series / category) */
+.post-entry {
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.post-entry:hover {
+    border-color: var(--accent-dim);
+    box-shadow: 0 24px 48px -24px var(--accent-glow);
+    transform: translateY(-4px);
+}
+.post-entry:hover .entry-header h2 {
+    color: var(--accent);
 }
 
 /* =================================================================
-   RESPONSIVE DESIGN
+   11. RESPONSIVE
    ================================================================= */
-
-/* Tablet and below */
 @media (max-width: 768px) {
-    /* Homepage */
-    .homepage-greeting {
-        min-height: 50vh;
-    }
-    
-    .homepage-greeting p {
-        font-size: clamp(2.5rem, 10vw, 4rem);
-        letter-spacing: 0.05em;
-    }
-    
-    /* Writeups layout */
-    .writeups-grid {
-        grid-template-columns: 1fr !important;
-        gap: 1.5rem;
-        max-width: none;
-    }
-    
-    .writeups-full-container {
-        padding: 0 1rem;
-    }
-    
-    /* Categories */
-    .categories-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-    }
-    
-    .category-card {
-        padding: 1rem;
-    }
-    
+    .home-container,
+    .writeups-full-container,
+    .blog-full-container,
+    .subcategory-container,
+    .index-container { padding: 0 1rem; }
+
+    .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+
+    .home-intro { font-size: 1.05rem; }
+    .home-hero { padding: 2rem 0 1.75rem; }
+
+    .header-content { flex-direction: column; gap: 1rem; }
+    .header-right { margin-top: 0; }
+
+    .post-row-head { flex-direction: column; gap: 0.15rem; }
+    .post-row-date { white-space: normal; }
+
+    .categories-section h2,
     .latest-writeups-fullwidth h2,
-    .categories-section h2 {
-        font-size: 1.5rem;
-    }
-    
-    /* Subcategory pages */
-    .subcategory-container {
-        padding: 0 1rem;
-    }
-    
-    /* Blog layout */
-    .blog-full-container {
-        padding: 0 1rem;
-    }
-    
-    .blog-full-container .header-content {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-    }
-    
-    .blog-full-container .header-right {
-        position: static;
-    }
-    
-    .blog-full-container .header-center {
-        max-width: 100%;
-    }
-    
-    .latest-blogs-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    .latest-blogs-section h2,
-    .blog-index-section h2 {
-        font-size: 1.5rem;
-    }
-    
-    .blog-index-list {
-        max-width: 100%;
-    }
-    
-    .blog-index-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-    }
-    
-    .blog-index-date {
-        font-size: 0.85rem;
-    }
-    
-    /* RSS buttons */
-    .header-content {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: stretch;
-    }
-    
-    .header-right {
-        margin-top: 0;
-        display: flex;
-        justify-content: flex-end;
-    }
-    
-    .rss-button-top {
-        font-size: 0.8rem;
-        padding: 0.5rem 1rem;
-    }
-    
-    .rss-button-top svg {
-        width: 14px;
-        height: 14px;
-    }
-    
-    .rss-button-fullwidth {
-        font-size: 0.9rem;
-        padding: 0.8rem 1.5rem;
-        letter-spacing: 0.3px;
-    }
-    
-    .rss-button-fullwidth svg {
-        width: 18px;
-        height: 18px;
-    }
-    
-    /* Pagination */
-    .pagination {
-        flex-direction: column;
-        gap: 0.8rem;
-        padding: 1rem;
-    }
-    
+    .category-writeups h2,
+    .index-title { font-size: 1.2rem; }
+
+    .pagination { flex-direction: column; gap: 0.75rem; padding: 1rem; }
     .pagination-prev,
-    .pagination-next {
-        width: 100%;
-        justify-content: center;
-        font-size: 0.85rem;
-    }
-    
-    .pagination-info {
-        font-size: 0.85rem;
-        order: -1;
-    }
+    .pagination-next { width: 100%; justify-content: center; }
+    .pagination-info { order: -1; }
 }
 
-/* Mobile */
 @media (max-width: 480px) {
-    /* Layout adjustments */
-    .writeups-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-    
-    .card-content {
-        padding: 1rem;
-    }
-    
-    .categories-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    /* RSS buttons */
-    .header-content {
-        gap: 0.8rem;
-    }
-    
-    .rss-button-top {
-        font-size: 0.75rem;
-        padding: 0.4rem 0.8rem;
-    }
-    
-    .rss-button-fullwidth-container {
-        margin-top: 1rem;
-        margin-bottom: 0.8rem;
-    }
-    
-    .rss-button-fullwidth {
-        font-size: 0.85rem;
-        padding: 0.7rem 1rem;
-        letter-spacing: 0.2px;
-    }
-    
-    .rss-button-fullwidth svg {
-        width: 16px;
-        height: 16px;
-    }
-}
-
-/* Browse by Series Button */
-.browse-series-btn {
-    display: inline-block;
-    padding: 0.8rem 2rem;
-    background: var(--primary);
-    color: var(--theme);
-    font-weight: 500;
-    font-size: 1.05rem;
-    border-radius: 6px;
-    text-decoration: none;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    border: 1px solid var(--primary);
-    transition: all 0.3s ease;
-}
-.browse-series-btn:hover {
-    background: var(--theme);
-    color: var(--primary);
-    border-color: var(--primary);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-.dark .browse-series-btn {
-    background: var(--primary);
-    color: var(--theme);
-}
-.dark .browse-series-btn:hover {
-    background: var(--theme);
-    color: var(--primary);
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+    .categories-grid { grid-template-columns: 1fr; }
+    .post-row-thumb,
+    .post-row-thumb img { width: 64px; }
+    .post-row-thumb img { height: 64px; }
 }

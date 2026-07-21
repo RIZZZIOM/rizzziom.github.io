@@ -3,7 +3,7 @@ title: "Lemonsqueezy - VulnHub Writeup"
 date: 2024-07-05
 draft: false
 summary: "Writeup for Lemonsqueezy CTF challenge on VulnHub."
-tags: ["linux", "wordpress", "sql", "cron"]
+tags: ["linux", "wordpress", "sql injection", "cron"]
 categories: ["writeups"]
 series: []
 showToc: true

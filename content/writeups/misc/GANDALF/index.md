@@ -3,7 +3,7 @@ title: "Gandalf - Prompt Injection Writeup"
 date: 2025-07-27
 draft: false
 summary: "Writeup for the Gandalf prompt injection challenge."
-tags: ["AI", "prompt injection"]
+tags: ["ai", "prompt injection"]
 categories: ["writeups"]
 series: []
 showToc: true

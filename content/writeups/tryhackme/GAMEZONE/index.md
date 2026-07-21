@@ -3,7 +3,7 @@ title: "Gamezone - TryHackMe Writeup"
 date: 2025-09-22
 draft: false
 summary: "Writeup for Gamezone CTF challenge on TryHackMe."
-tags: ["linux", "sqli", "rce"]
+tags: ["linux", "sql injection", "rce"]
 categories: ["writeups"]
 series: []
 showToc: true

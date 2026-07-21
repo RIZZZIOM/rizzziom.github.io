@@ -1,9 +1,26 @@
 {{ define "main" }}
 <main class="main">
-  <article class="post-single">
-    <div class="post-content">
-      <div class="homepage-greeting">{{ .Content }}</div>
-    </div>
-  </article>
+  <div class="home-container">
+
+    <!-- Identity: who + what (merged from the former About page) -->
+    <section class="home-hero">
+      <p class="home-prompt">moiz.bootwala@ziomsec:~$ whoami</p>
+      <div class="home-intro">
+        {{ .Content }}
+      </div>
+    </section>
+
+    <!-- Find me elsewhere -->
+    <section class="home-elsewhere">
+      <h2 class="index-title">find me elsewhere</h2>
+      <div class="home-links">
+        <a class="home-link" href="https://github.com/RIZZZIOM" target="_blank" rel="noopener">github</a>
+        <a class="home-link" href="https://x.com/rizzziom" target="_blank" rel="noopener">x / twitter</a>
+        <a class="home-link" href="https://www.linkedin.com/in/moiz-bootwala" target="_blank" rel="noopener">linkedin</a>
+        <a class="home-link" href="mailto:rizzziom@gmail.com">email</a>
+      </div>
+    </section>
+
+  </div>
 </main>
 {{ end }}

@@ -3,7 +3,7 @@ title: "Bounty Hacker - TryHackMe Writeup"
 date: 2025-06-20
 draft: false
 summary: "Writeup for Bounty Hacker CTF challenge on TryHackMe."
-tags: ["linux", "ftp anonymous", "sudo", "bruteforce"]
+tags: ["linux", "ftp anonymous", "sudo", "brute force"]
 categories: ["writeups"]
 series: []
 showToc: true

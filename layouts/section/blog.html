@@ -1,8 +1,6 @@
 {{ define "main" }}
 <main class="main">
-  <!-- Blog landing page layout -->
-  <div class="blog-full-container">
-    <!-- Header with centered title and RSS button on right -->
+  <div class="blog-full-container index-container">
     <article class="post-single">
       <header class="post-header">
         <div class="header-content">
@@ -11,7 +9,6 @@
             {{ with .Params.description }}<div class="post-description">{{ . }}</div>{{ end }}
           </div>
           <div class="header-right">
-            <!-- RSS Button for Blog -->
             <a href="{{ .RelPermalink }}index.xml" class="rss-button-top" title="Subscribe to {{ .Title }} RSS feed">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 11a9 9 0 0 1 9 9"></path>
@@ -28,40 +25,21 @@
       </div>
     </article>
 
-    {{ $paginator := .Paginate (.RegularPages.ByDate.Reverse) }}
-
-    <!-- Browse by Series Button -->
-    <div style="display: flex; justify-content: center; margin: 2rem 0;">
+    <div class="index-actions">
       <a href="/series/" class="browse-series-btn">Browse by Series</a>
     </div>
 
-    <!-- Index of all blogs with pagination -->
-    <section class="blog-index-section">
-      <h2>Index Of Blogs</h2>
-      <ul class="blog-index-list">
-        {{ range $paginator.Pages }}
-        <a href="{{ .RelPermalink }}" class="blog-index-item-link">
-          <li class="blog-index-item">
-            <span class="blog-index-title">{{ .Title }}</span>
-            <span class="blog-index-date">{{ .Date.Format "January 2, 2006" }}</span>
-          </li>
-        </a>
+    <section class="post-index">
+      <h2 class="index-title">Index of Blogs</h2>
+      <input type="search" class="list-search" data-target="blog-index-list"
+             placeholder="Search blogs by title or tag…" aria-label="Search blogs">
+      <ul class="post-rows" id="blog-index-list" data-page-size="10">
+        {{ range .RegularPages.ByDate.Reverse }}
+          {{ partial "post-row.html" . }}
         {{ end }}
       </ul>
-      <!-- Pagination Navigation -->
-      {{ if gt $paginator.TotalPages 1 }}
-      <nav class="pagination" role="navigation">
-        {{ if $paginator.HasPrev }}
-          <a class="pagination-prev" href="{{ $paginator.Prev.URL }}" rel="prev">← Previous</a>
-        {{ end }}
-        <span class="pagination-info">
-          Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}
-        </span>
-        {{ if $paginator.HasNext }}
-          <a class="pagination-next" href="{{ $paginator.Next.URL }}" rel="next">Next →</a>
-        {{ end }}
-      </nav>
-      {{ end }}
+      <p class="filter-empty" hidden>No blogs match your search.</p>
+      <nav class="js-pagination" aria-label="Blog pages" hidden></nav>
     </section>
   </div>
 </main>

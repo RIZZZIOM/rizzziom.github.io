@@ -3,7 +3,7 @@ title: "Kioptrix 3 - VulnHub Writeup"
 date: 2024-05-10
 draft: false
 summary: "Writeup for Kioptrix level 3 of the Kioptrix series challenge on VulnHub."
-tags: ["kioptrix", "linux", "CMS", "sudo"]
+tags: ["kioptrix", "linux", "cms", "sudo"]
 categories: ["writeups"]
 series: []
 showToc: true

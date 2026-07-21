@@ -3,7 +3,7 @@ title: "Hack Smarter Security - TryHackMe Writeup"
 date: 2025-07-02
 draft: false
 summary: "Writeup for Hack Smarter Security CTF challenge on TryHackMe."
-tags: ["windows", "lfr", "hardcoded creds", "unquoted service path"]
+tags: ["windows", "lfi", "hardcoded creds", "unquoted service path"]
 categories: ["writeups"]
 series: []
 showToc: true

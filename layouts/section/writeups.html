@@ -1,9 +1,8 @@
 {{ define "main" }}
 <main class="main">
   {{ if eq .RelPermalink "/writeups/" }}
-    <!-- Main writeups landing page layout -->
-    <div class="writeups-full-container">
-      <!-- Main content area - full width -->
+    <!-- Main writeups landing page -->
+    <div class="writeups-full-container index-container">
       <article class="post-single">
         <header class="post-header">
           <div class="header-content">
@@ -12,7 +11,6 @@
               {{ with .Params.description }}<div class="post-description">{{ . }}</div>{{ end }}
             </div>
             <div class="header-right">
-              <!-- RSS Button for Writeups -->
               <a href="{{ .RelPermalink }}index.xml" class="rss-button-top" title="Subscribe to {{ .Title }} RSS feed">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M4 11a9 9 0 0 1 9 9"></path>
@@ -29,9 +27,7 @@
         </div>
       </article>
 
-      {{ $all := (where site.RegularPages "Section" "writeups").ByDate.Reverse }}
-
-      <!-- Categories section - above latest writeups -->
+      <!-- Browse by category -->
       {{ if .Sections }}
         <section class="categories-section">
           <h2>Browse by Category</h2>
@@ -48,43 +44,22 @@
         </section>
       {{ end }}
 
-      <!-- Latest writeups section - full width -->
+      <!-- Latest writeups (text cards) -->
       <section class="latest-writeups-fullwidth">
         <h2>Latest Writeups</h2>
-        <div class="writeups-grid">
-          {{ range first 3 $all }}
-            {{ $page := . }}
-            <a href="{{ .RelPermalink }}">
-              <article class="writeup-card">
-                {{ with .Params.cover.image }}
-                  <figure class="card-cover">
-                    {{ if hasPrefix . "https" }}
-                      <img src="{{ . }}" alt="{{ $page.Params.cover.alt }}">
-                    {{ else }}
-                      {{ $image := $page.Resources.Get . }}
-                      {{ if $image }}
-                        <img src="{{ $image.RelPermalink }}" alt="{{ $page.Params.cover.alt }}">
-                      {{ else }}
-                        <img src="{{ printf "%s%s" $page.RelPermalink . }}" alt="{{ $page.Params.cover.alt }}">
-                      {{ end }}
-                    {{ end }}
-                  </figure>
-                {{ end }}
-                <div class="card-content">
-                  <header class="card-header">
-                    <h3>{{ .Title }}</h3>
-                    {{ with .Params.platform }}
-                      <span class="platform-tag">{{ . }}</span>
-                    {{ end }}
-                  </header>
-                  <div class="card-summary">
-                    <p>{{ .Summary }}</p>
-                  </div>
-                  <footer class="card-footer">
-                    <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>
-                  </footer>
-                </div>
-              </article>
+        <div class="writeup-card-grid">
+          {{ range first 5 (where site.RegularPages "Section" "writeups").ByDate.Reverse }}
+            <a href="{{ .RelPermalink }}" class="writeup-mini-card">
+              <span class="writeup-mini-head">
+                {{ with .Params.platform }}<span class="platform-tag">{{ . }}</span>{{ else }}<span></span>{{ end }}
+                <span class="writeup-mini-date">{{ .Date.Format "Jan 2, 2006" }}</span>
+              </span>
+              <span class="writeup-mini-title">{{ .Title }}</span>
+              {{ with .Params.tags }}
+              <span class="post-row-tags">
+                {{ range first 5 . }}<span class="row-tag">{{ . }}</span>{{ end }}
+              </span>
+              {{ end }}
             </a>
           {{ end }}
         </div>
@@ -92,7 +67,7 @@
     </div>
   {{ else }}
     <!-- Subcategory pages (tryhackme, hackthebox, vulnhub, misc) -->
-    <div class="subcategory-container">
+    <div class="subcategory-container index-container">
       <article class="post-single">
         <header class="post-header">
           <h1 class="post-title">{{ .Title }}</h1>
@@ -105,30 +80,20 @@
 
       {{ if .RegularPages }}
         <section class="category-writeups">
-          <h2>Index of {{ .Title }}</h2>
-          <ul class="writeups-simple-list">
-            {{ $paginator := .Paginate (.RegularPages.ByDate.Reverse) }}
+          <h2 class="index-title">Index of {{ .Title }}</h2>
+          {{ $paginator := .Paginate (.RegularPages.ByDate.Reverse) }}
+          <ul class="post-rows">
             {{ range $paginator.Pages }}
-            <a href="{{ .RelPermalink }}" class="writeup-list-item-link">
-                <li class="writeup-list-item">
-                  <span class="writeup-link">{{ .Title }}</span>
-                  <span class="writeup-date">{{ .Date.Format "January 2, 2006" }}</span>
-                </li>
-              </a>
+              {{ partial "post-row.html" . }}
             {{ end }}
           </ul>
-          
-          <!-- Pagination Navigation -->
+
           {{ if gt $paginator.TotalPages 1 }}
           <nav class="pagination" role="navigation">
             {{ if $paginator.HasPrev }}
               <a class="pagination-prev" href="{{ $paginator.Prev.URL }}" rel="prev">← Previous</a>
             {{ end }}
-            
-            <span class="pagination-info">
-              Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}
-            </span>
-            
+            <span class="pagination-info">Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}</span>
             {{ if $paginator.HasNext }}
               <a class="pagination-next" href="{{ $paginator.Next.URL }}" rel="next">Next →</a>
             {{ end }}

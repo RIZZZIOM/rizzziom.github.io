@@ -51,7 +51,6 @@
 .terms-tags a,
 .category-count,
 .post-row-date,
-.pagination-info,
 .home-prompt {
     font-family: var(--zs-mono);
 }
@@ -272,8 +271,6 @@
     border-color: var(--accent-dim);
     box-shadow: 0 16px 32px -20px var(--accent-glow);
 }
-.post-row-thumb { flex-shrink: 0; width: 84px; }
-.post-row-thumb img { width: 84px; height: 84px; object-fit: cover; border-radius: 6px; display: block; }
 .post-row-body { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; flex: 1; }
 .post-row-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
 .post-row-title { color: var(--primary); font-weight: 600; font-size: 1.05rem; }
@@ -376,27 +373,6 @@
     border: 1px solid var(--border);
     border-radius: 8px;
 }
-.pagination-prev,
-.pagination-next {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    background: transparent;
-    color: var(--accent);
-    border: 1px solid var(--accent-dim);
-    border-radius: 6px;
-    font-family: var(--zs-mono);
-    font-size: 0.9rem;
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-.pagination-prev:hover,
-.pagination-next:hover {
-    background: var(--accent-glow);
-    border-color: var(--accent);
-    transform: translateY(-1px);
-}
-.pagination-info { color: var(--secondary); font-size: 0.85rem; text-align: center; flex-shrink: 0; }
 
 /* =================================================================
    ALL-WRITEUPS / SEARCHABLE LISTS (client-side filter)
@@ -574,14 +550,8 @@
     .index-title { font-size: 1.2rem; }
 
     .pagination { flex-direction: column; gap: 0.75rem; padding: 1rem; }
-    .pagination-prev,
-    .pagination-next { width: 100%; justify-content: center; }
-    .pagination-info { order: -1; }
 }
 
 @media (max-width: 480px) {
     .categories-grid { grid-template-columns: 1fr; }
-    .post-row-thumb,
-    .post-row-thumb img { width: 64px; }
-    .post-row-thumb img { height: 64px; }
 }

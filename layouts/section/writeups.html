@@ -81,24 +81,15 @@
       {{ if .RegularPages }}
         <section class="category-writeups">
           <h2 class="index-title">Index of {{ .Title }}</h2>
-          {{ $paginator := .Paginate (.RegularPages.ByDate.Reverse) }}
-          <ul class="post-rows">
-            {{ range $paginator.Pages }}
+          <input type="search" class="list-search" data-target="cat-index-list"
+                 placeholder="Search {{ .Title }} by title or tag…" aria-label="Search {{ .Title }}">
+          <ul class="post-rows" id="cat-index-list" data-page-size="10">
+            {{ range .RegularPages.ByDate.Reverse }}
               {{ partial "post-row.html" . }}
             {{ end }}
           </ul>
-
-          {{ if gt $paginator.TotalPages 1 }}
-          <nav class="pagination" role="navigation">
-            {{ if $paginator.HasPrev }}
-              <a class="pagination-prev" href="{{ $paginator.Prev.URL }}" rel="prev">← Previous</a>
-            {{ end }}
-            <span class="pagination-info">Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}</span>
-            {{ if $paginator.HasNext }}
-              <a class="pagination-next" href="{{ $paginator.Next.URL }}" rel="next">Next →</a>
-            {{ end }}
-          </nav>
-          {{ end }}
+          <p class="filter-empty" hidden>No writeups match your search.</p>
+          <nav class="js-pagination" aria-label="Writeup pages" hidden></nav>
         </section>
       {{ else }}
         <div class="empty-category">

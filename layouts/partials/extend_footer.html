@@ -6,21 +6,21 @@
 {{- /* Blog index: client-side filter + pagination over the full list. */ -}}
 <script>
 (function () {
-  document.querySelectorAll('.list-search').forEach(function (input) {
-    var list = document.getElementById(input.dataset.target);
-    if (!list) return;
+  document.querySelectorAll('[data-page-size]').forEach(function (list) {
     var container = list.parentNode;
     var rows = Array.prototype.slice.call(list.children);
-    var empty = container.querySelector('.filter-empty');
+    var input = container.querySelector('.list-search');   // optional
+    var empty = container.querySelector('.filter-empty');  // optional
     var pager = container.querySelector('.js-pagination');
     var pageSize = parseInt(list.dataset.pageSize || '0', 10);
     var page = 1;
 
     function matched() {
-      var q = input.value.trim().toLowerCase();
+      var q = input ? input.value.trim().toLowerCase() : '';
       return rows.filter(function (row) {
+        if (!q) return true;
         var hay = row.getAttribute('data-search') || row.textContent.toLowerCase();
-        return !q || hay.indexOf(q) !== -1;
+        return hay.indexOf(q) !== -1;
       });
     }
 
@@ -61,7 +61,7 @@
       add('→', page + 1, false, page === pages);
     }
 
-    input.addEventListener('input', function () { page = 1; render(); });
+    if (input) { input.addEventListener('input', function () { page = 1; render(); }); }
     render();
   });
 })();

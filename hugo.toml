@@ -20,6 +20,7 @@ canonifyURLs = false
 
 [params]
   env = "production"
+  mainSections = ["writeups", "blog"]
   defaultTheme = "dark"
   search = true
   disableThemeToggle = false

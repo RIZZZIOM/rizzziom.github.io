@@ -15,3 +15,5 @@ Outside of work, I'm usually solving CTFs, building tools to make work or learni
 I also do vulnerability research on the side (CVEs, Exploit-DB PoCs and advisories). These live in [/research/](/research/).
 
 Besides being a geek, I'm into the gym, cars, bikes, music and coffee.
+
+> *Views are my own*

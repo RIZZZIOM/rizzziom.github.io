@@ -364,4 +364,10 @@ Some popular and common services that run on UDP are:
 | 137–138          | [NetBIOS](https://wirexsystems.com/resource/protocols/netbios/)                                   | Name resolution and connectionless network communication       |
 | 389              | [LDAP](https://ldap.com/)                                                                         | Directory services / directory queries                         |
 
+## Conclusion
+
+That covers the fundamentals: what infosec is and why it matters, the types of hackers and testing you'll encounter, the methodologies and frameworks that structure an engagement, key terminology, and the networking and protocol basics — including watching TCP and UDP behave in practice with Wireshark.
+
+With that foundation in place, we're ready to start actually *doing* something with it. The next post kicks off **Phase 1: Footprinting and Reconnaissance** — the information-gathering stage where an engagement really begins.
+
 ---

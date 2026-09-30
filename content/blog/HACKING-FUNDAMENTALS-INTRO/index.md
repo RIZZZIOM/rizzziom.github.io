@@ -82,11 +82,11 @@ Additionally, security testing can be categorized into 3 types based on how much
 
 Like other areas, hacking follows a loose methodology of how things are done. The steps of hacking can be loosely categorized into 5 broad phases, and each phase can involve multiple sub-activities that don't necessarily happen in strict order:
 
-**PHASE 1:** Footprinting and reconnaissance involves collecting as much information about the target as possible. The information gathered may include IP ranges, domain names, employee details, work patterns, business areas, customer base etc.
-**PHASE 2:** Scanning, enumeration and vulnerability analysis involves identifying active hosts, open ports and services, actively querying those services for more information, and evaluating the discovered versions, configurations and access controls for weaknesses.
-**PHASE 3:** Exploitation involves using a confirmed weakness to gain initial access to the target.
-**PHASE 4:** Post-exploitation covers the actions performed after gaining access. This includes escalating privileges, maintaining access through persistence and gathering additional information from the compromised system.
-**PHASE 5:** Reporting documents the scope, methodology, evidence, vulnerabilities, impact and recommended remediation from the engagement.
+- **PHASE 1:** Footprinting and reconnaissance involves collecting as much information about the target as possible. The information gathered may include IP ranges, domain names, employee details, work patterns, business areas, customer base etc.
+- **PHASE 2:** Scanning, enumeration and vulnerability analysis involves identifying active hosts, open ports and services, actively querying those services for more information, and evaluating the discovered versions, configurations and access controls for weaknesses.
+- **PHASE 3:** Exploitation involves using a confirmed weakness to gain initial access to the target.
+- **PHASE 4:** Post-exploitation covers the actions performed after gaining access. This includes escalating privileges, maintaining access through persistence and gathering additional information from the compromised system.
+- **PHASE 5:** Reporting documents the scope, methodology, evidence, vulnerabilities, impact and recommended remediation from the engagement.
 
 We will dive into these phases in the upcoming blogs but feel free to search and read about them online. Besides the above methodology, there is also the **[Cyber Kill Chain Methodology](https://www.lockheedmartin.com/en-us/capabilities/cyber/cyber-kill-chain.html)** which involves more stages and clearer distinction in each of the phases.
 
